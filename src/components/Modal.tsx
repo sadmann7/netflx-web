@@ -166,11 +166,7 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
                           className="bg-gray-700 rounded-full w-7 aspect-square grid place-items-center ring-1 ring-white hover:opacity-90 active:opacity-100 transition-opacity"
                           onClick={() => {
                             movieStore.addMovie(modalStore.movie!);
-                            movieStore.movies.some(
-                              (m) => m.id === modalStore.movie?.id
-                            )
-                              ? toast.error("Movie already in My List")
-                              : toast.success("Added to My List");
+                            toast.success("Added to My List");
                           }}
                         >
                           <PlusIcon
