@@ -2,11 +2,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 // imports: icons, types, stores
+import { useModalStore } from "@/stores/modal";
 import { useMovieStore } from "@/stores/movie";
-import { Movie } from "@/types/types";
+import { Movie } from "@/types/globals";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { PlayIcon } from "@heroicons/react/24/solid";
-import { useModalStore } from "@/stores/modal";
 
 type HeroProps = {
   movies: Movie[];

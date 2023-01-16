@@ -3,7 +3,9 @@ export type Genre = {
   name: string;
 };
 
-type VideoType =
+export type MediaType = "movie" | "tv";
+
+export type VideoType =
   | "Bloopers"
   | "Featurette"
   | "Behind the Scenes"

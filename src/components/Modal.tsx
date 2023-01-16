@@ -44,7 +44,6 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
             process.env.NEXT_PUBLIC_TMDB_API_KEY
           }&language=en-US&append_to_response=videos`
         ).then((res) => res.json());
-        console.log(data);
 
         if (data?.videos) {
           const trailerIndex = data.videos.results.findIndex(
