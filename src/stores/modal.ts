@@ -1,6 +1,4 @@
-import { Movie } from "@/types/types";
 import { create } from "zustand";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 type ModalState = {
   isOpen: boolean;

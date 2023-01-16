@@ -45,15 +45,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const persist = onAuthStateChanged(auth, (user) => {
-      setIsLoading(true);
-
       if (user) {
         setUser(user);
-        setIsLoading(false);
       } else {
-        // User is signed out
         setUser(null);
-        setIsLoading(true);
         router.push("/signin");
       }
       setIsInitialLoading(false);
@@ -66,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        // signed in
         const user = userCredential.user;
         setUser(user);
         router.push("/");
@@ -86,7 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        // signed in
         const user = userCredential.user;
         setUser(user);
         router.push("/");
@@ -106,12 +101,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     await signOut(auth)
       .then(() => {
-        // Sign-out successful.
+        // signed out
         setUser(null);
         setIsLoading(false);
       })
       .catch((e) => {
-        // An error happened.
         const errorMessage = formatError(e.message);
         setError(errorMessage);
         toast.error(error, { toastId: "signoutError" });

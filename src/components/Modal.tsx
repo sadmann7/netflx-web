@@ -3,6 +3,9 @@ import { Fragment, useEffect, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 
 // imports: icons, types, stores
+import { useMovieStore } from "@/stores/movie";
+import { Genre, MovieWithVideo } from "@/types/globals";
+import { HandThumbUpIcon } from "@heroicons/react/24/outline";
 import {
   PauseIcon,
   PlayIcon,
@@ -11,9 +14,6 @@ import {
   SpeakerXMarkIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { Genre, MovieWithVideo, Result } from "@/types/types";
-import { HandThumbUpIcon } from "@heroicons/react/24/outline";
-import { useMovieStore } from "@/stores/movie";
 
 type ModalProps = {
   isOpen: boolean;
@@ -44,10 +44,11 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
             process.env.NEXT_PUBLIC_TMDB_API_KEY
           }&language=en-US&append_to_response=videos`
         ).then((res) => res.json());
+        console.log(data);
 
         if (data?.videos) {
           const trailerIndex = data.videos.results.findIndex(
-            (item: Result) => item.type === "Trailer"
+            (item) => item.type === "Trailer"
           );
           setTrailer(data.videos?.results[trailerIndex]?.key);
         }

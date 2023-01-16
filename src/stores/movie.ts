@@ -1,4 +1,4 @@
-import { Movie } from "@/types/types";
+import { Movie } from "@/types/globals";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 

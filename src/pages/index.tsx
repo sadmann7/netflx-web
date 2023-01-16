@@ -7,7 +7,7 @@ import Modal from "@/components/Modal";
 import Row from "@/components/Row";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useModalStore } from "@/stores/modal";
-import { Movie } from "@/types/types";
+import { Movie } from "@/types/globals";
 import requests from "@/utils/requests";
 import { NextPageWithLayout } from "./_app";
 
