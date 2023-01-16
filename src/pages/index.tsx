@@ -3,49 +3,90 @@ import Head from "next/head";
 // imports: components, requests, hooks, stores, and types
 import Hero from "@/components/Hero";
 import DefaultLayout from "@/components/layout/DefaultLayout";
+import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
 import Row from "@/components/Row";
-import { useAuth } from "@/contexts/AuthProvider";
 import { useModalStore } from "@/stores/modal";
 import { Movie } from "@/types/globals";
-import requests from "@/utils/requests";
+import { queryFns } from "@/utils/queries";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { NextPageWithLayout } from "./_app";
+import { GetStaticProps } from "next";
 
-type HomeProps = {
-  netflixOriginals: Movie[];
-  trendingNow: Movie[];
-  topRated: Movie[];
-  actionMovies: Movie[];
-  comedyMovies: Movie[];
-  horrorMovies: Movie[];
-  romanceMovies: Movie[];
-  documentaries: Movie[];
-};
+const Home: NextPageWithLayout = () => {
+  const trendingQuery = useQuery<{ results: Movie[] }>(
+    ["trending"],
+    queryFns.getTrending
+  );
+  const netflixOriginalsQuery = useQuery<{ results: Movie[] }>(
+    ["netflixOriginals"],
+    queryFns.getNetflixOriginals
+  );
+  const topRatedQuery = useQuery<{ results: Movie[] }>(
+    ["topRated"],
+    queryFns.getTopRated
+  );
 
-const Home: NextPageWithLayout<HomeProps> = ({
-  netflixOriginals,
-  actionMovies,
-  comedyMovies,
-  documentaries,
-  horrorMovies,
-  romanceMovies,
-  topRated,
-  trendingNow,
-}) => {
-  const { isLoading } = useAuth();
+  const actionMoviesQuery = useQuery<{ results: Movie[] }>(
+    ["actionMovies"],
+    queryFns.getActionMovies
+  );
+  const comedyMoviesQuery = useQuery<{ results: Movie[] }>(
+    ["comedyMovies"],
+    queryFns.getComedyMovies
+  );
+  const horrorMoviesQuery = useQuery<{ results: Movie[] }>(
+    ["horrorMovies"],
+    queryFns.getHorrorMovies
+  );
+  const romanceMoviesQuery = useQuery<{ results: Movie[] }>(
+    ["romanceMovies"],
+    queryFns.getRomanceMovies
+  );
+  const documentariesQuery = useQuery<{ results: Movie[] }>(
+    ["documentaries"],
+    queryFns.getDocumentaries
+  );
+
   const modalStore = useModalStore((state) => state);
-  const subscription = true;
 
-  if (isLoading || subscription === null) return null;
+  if (
+    trendingQuery.isLoading ||
+    topRatedQuery.isLoading ||
+    netflixOriginalsQuery.isLoading ||
+    actionMoviesQuery.isLoading ||
+    comedyMoviesQuery.isLoading ||
+    horrorMoviesQuery.isLoading ||
+    romanceMoviesQuery.isLoading ||
+    documentariesQuery.isLoading
+  ) {
+    return <Loader />;
+  }
 
-  if (!subscription) return <div>plans</div>;
+  if (
+    trendingQuery.isError ||
+    topRatedQuery.isError ||
+    netflixOriginalsQuery.isError ||
+    actionMoviesQuery.isError ||
+    comedyMoviesQuery.isError ||
+    horrorMoviesQuery.isError ||
+    romanceMoviesQuery.isError ||
+    documentariesQuery.isError
+  ) {
+    return (
+      <div className="min-h-screen grid place-items-center">
+        <div className="text-black font-semibold text-xl md:text-3xl">
+          Error in fetching movies
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <Head>
         <title>Netflx</title>
       </Head>
-
       <main className="mb-16">
         {modalStore.isOpen && (
           <Modal
@@ -53,15 +94,21 @@ const Home: NextPageWithLayout<HomeProps> = ({
             toggleModal={modalStore.toggleModal}
           />
         )}
-        <Hero movies={netflixOriginals} />
+        <Hero movies={netflixOriginalsQuery.data.results} />
         <div className="w-full space-y-10">
-          <Row title="Trending Now" movies={trendingNow} />
-          <Row title="Top Rated" movies={topRated} />
-          <Row title="Action Thrillers" movies={actionMovies} />
-          <Row title="Comedies" movies={comedyMovies} />
-          <Row title="Scary Movies" movies={horrorMovies} />
-          <Row title="Romance Movies" movies={romanceMovies} />
-          <Row title="Documentaries" movies={documentaries} />
+          <Row title="Trending Now" movies={trendingQuery.data.results} />
+          <Row title="Top Rated" movies={topRatedQuery.data.results} />
+          <Row
+            title="Action Thrillers"
+            movies={actionMoviesQuery.data.results}
+          />
+          <Row title="Comedies" movies={comedyMoviesQuery.data.results} />
+          <Row title="Scary Movies" movies={horrorMoviesQuery.data.results} />
+          <Row
+            title="Romance Movies"
+            movies={romanceMoviesQuery.data.results}
+          />
+          <Row title="Documentaries" movies={documentariesQuery.data.results} />
         </div>
       </main>
     </>
@@ -72,37 +119,24 @@ export default Home;
 
 Home.getLayout = (page) => <DefaultLayout>{page}</DefaultLayout>;
 
-export const getServerSideProps = async () => {
-  const [
-    netflixOriginals,
-    trendingNow,
-    topRated,
-    actionMovies,
-    comedyMovies,
-    horrorMovies,
-    romanceMovies,
-    documentaries,
-  ] = await Promise.all([
-    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
-    fetch(requests.fetchTrending).then((res) => res.json()),
-    fetch(requests.fetchTopRated).then((res) => res.json()),
-    fetch(requests.fetchActionMovies).then((res) => res.json()),
-    fetch(requests.fetchComedyMovies).then((res) => res.json()),
-    fetch(requests.fetchHorrorMovies).then((res) => res.json()),
-    fetch(requests.fetchRomanceMovies).then((res) => res.json()),
-    fetch(requests.fetchDocumentaries).then((res) => res.json()),
-  ]);
+export const getStaticProps: GetStaticProps = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(["trending"], queryFns.getTrending);
+  await queryClient.prefetchQuery(["topRated"], queryFns.getTopRated);
+  await queryClient.prefetchQuery(
+    ["netflixOriginals"],
+    queryFns.getNetflixOriginals
+  );
+  await queryClient.prefetchQuery(["actionMovies"], queryFns.getActionMovies);
+  await queryClient.prefetchQuery(["comedyMovies"], queryFns.getComedyMovies);
+  await queryClient.prefetchQuery(["horrorMovies"], queryFns.getHorrorMovies);
+  await queryClient.prefetchQuery(["romanceMovies"], queryFns.getRomanceMovies);
+  await queryClient.prefetchQuery(["documentaries"], queryFns.getDocumentaries);
 
   return {
     props: {
-      netflixOriginals: netflixOriginals.results,
-      trendingNow: trendingNow.results,
-      topRated: topRated.results,
-      actionMovies: actionMovies.results,
-      comedyMovies: comedyMovies.results,
-      horrorMovies: horrorMovies.results,
-      romanceMovies: romanceMovies.results,
-      documentaries: documentaries.results,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

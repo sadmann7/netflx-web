@@ -9,11 +9,11 @@ import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "@/contexts/AuthProvider";
 
 const links = [
-  { name: "Home", uri: "/" },
-  { name: "TV Shows", uri: "/tv-shows" },
-  { name: "Movies", uri: "/movies" },
-  { name: "New & Popular", uri: "/new-and-popular" },
-  { name: "My List", uri: "/my-list" },
+  { name: "Home", path: "/" },
+  { name: "TV Shows", path: "/tv-shows" },
+  { name: "Movies", path: "/movies" },
+  { name: "New & Popular", path: "/new-and-popular" },
+  { name: "My List", path: "/my-list" },
 ];
 
 const Navbar = () => {
@@ -49,12 +49,12 @@ const Navbar = () => {
             />
           </Link>
           <ul className="hidden md:flex items-center justify-between gap-5">
-            {links.map((link, i) => (
+            {links.map((link) => (
               <li
-                key={i}
+                key={link.name}
                 className="text-sm md:text-base hover:opacity-75 active:opacity-100 transition-opacity"
               >
-                <Link href={link.uri}>{link.name}</Link>
+                <Link href={link.path}>{link.name}</Link>
               </li>
             ))}
           </ul>
