@@ -3,9 +3,10 @@ import { Fragment, useEffect, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 
 // imports: icons, types, stores
+import { useModalStore } from "@/stores/modal";
 import { useMovieStore } from "@/stores/movie";
 import { Genre, MovieWithVideo } from "@/types/globals";
-import { HandThumbUpIcon } from "@heroicons/react/24/outline";
+import { HandThumbUpIcon, MinusIcon } from "@heroicons/react/24/outline";
 import {
   PauseIcon,
   PlayIcon,
@@ -14,6 +15,7 @@ import {
   SpeakerXMarkIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
+import { toast } from "react-toastify";
 
 type ModalProps = {
   isOpen: boolean;
@@ -21,7 +23,9 @@ type ModalProps = {
 };
 
 const Modal = ({ isOpen, toggleModal }: ModalProps) => {
+  const modalStore = useModalStore((state) => state);
   const movieStore = useMovieStore((state) => state);
+
   const [trailer, setTrailer] = useState("");
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isMuted, setIsMuted] = useState(false);
@@ -29,18 +33,18 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
 
   const closeModal = () => {
     toggleModal();
-    movieStore.setMovie(null);
+    modalStore.setMovie(null);
   };
 
   useEffect(() => {
-    if (!movieStore.movie) return;
+    if (!modalStore.movie) return;
 
     const getMovie = async () => {
       try {
         const data: MovieWithVideo = await fetch(
           `https://api.themoviedb.org/3/${
-            movieStore.movie?.media_type === "tv" ? "tv" : "movie"
-          }/${movieStore.movie?.id}?api_key=${
+            modalStore.movie?.media_type === "tv" ? "tv" : "movie"
+          }/${modalStore.movie?.id}?api_key=${
             process.env.NEXT_PUBLIC_TMDB_API_KEY
           }&language=en-US&append_to_response=videos`
         ).then((res) => res.json());
@@ -59,7 +63,15 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
       }
     };
     getMovie();
-  }, [movieStore.movie]);
+  }, [modalStore.movie]);
+
+  useEffect(() => {
+    if (modalStore.shouldPlay) {
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
+  }, [modalStore.shouldPlay]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -132,15 +144,41 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
                           </>
                         )}
                       </button>
-                      <button
-                        aria-label="add to my list"
-                        className="bg-gray-700 rounded-full w-7 aspect-square grid place-items-center ring-1 ring-white hover:opacity-90 active:opacity-100 transition-opacity"
-                      >
-                        <PlusIcon
-                          aria-hidden="true"
-                          className="w-5 aspect-square text-white"
-                        />
-                      </button>
+                      {movieStore.movies.some(
+                        (m) => m.id === modalStore.movie?.id
+                      ) ? (
+                        <button
+                          aria-label="remove from my list"
+                          className="bg-gray-700 rounded-full w-7 aspect-square grid place-items-center ring-1 ring-white hover:opacity-90 active:opacity-100 transition-opacity"
+                          onClick={() => {
+                            movieStore.removeMovie(modalStore.movie!);
+                            toast.success("Removed from My List");
+                          }}
+                        >
+                          <MinusIcon
+                            aria-hidden="true"
+                            className="w-5 aspect-square text-white"
+                          />
+                        </button>
+                      ) : (
+                        <button
+                          aria-label="add to my list"
+                          className="bg-gray-700 rounded-full w-7 aspect-square grid place-items-center ring-1 ring-white hover:opacity-90 active:opacity-100 transition-opacity"
+                          onClick={() => {
+                            movieStore.addMovie(modalStore.movie!);
+                            movieStore.movies.some(
+                              (m) => m.id === modalStore.movie?.id
+                            )
+                              ? toast.error("Movie already in My List")
+                              : toast.success("Added to My List");
+                          }}
+                        >
+                          <PlusIcon
+                            aria-hidden="true"
+                            className="w-5 aspect-square text-white"
+                          />
+                        </button>
+                      )}
                       <button
                         aria-label="thumb up"
                         className="bg-gray-700 rounded-full w-7 aspect-square grid place-items-center ring-1 ring-white hover:opacity-90 active:opacity-100 transition-opacity"
@@ -175,20 +213,22 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
                     as="h1"
                     className="text-lg md:text-xl font-medium leading-6 text-white"
                   >
-                    {movieStore.movie?.title ?? movieStore.movie?.name}
+                    {modalStore.movie?.title ?? modalStore.movie?.name}
                   </Dialog.Title>
                   <div className="text-xs md:text-sm flex items-center space-x-2">
                     <p className=" text-green-600">
-                      {Number(movieStore.movie?.vote_average) * 10 ?? "-"}%
-                      Match
+                      {Math.round(
+                        (Number(modalStore.movie?.vote_average) / 10) * 100
+                      ) ?? "-"}
+                      % Match
                     </p>
-                    <p>{movieStore.movie?.release_date ?? "-"}</p>
+                    <p>{modalStore.movie?.release_date ?? "-"}</p>
                     <p>
-                      {movieStore.movie?.original_language.toUpperCase() ?? "-"}
+                      {modalStore.movie?.original_language.toUpperCase() ?? "-"}
                     </p>
                   </div>
                   <p className="text-xs md:text-sm line-clamp-3">
-                    {movieStore.movie?.overview ?? "-"}
+                    {modalStore.movie?.overview ?? "-"}
                   </p>
                   <div className="text-xs md:text-sm flex items-center gap-2">
                     <span className="text-gray-400">Genres:</span>
@@ -196,7 +236,7 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
                   </div>
                   <div className="text-xs md:text-sm flex items-center gap-2">
                     <span className="text-gray-400">Total Votes:</span>
-                    {movieStore.movie?.vote_count ?? "-"}
+                    {modalStore.movie?.vote_count ?? "-"}
                   </div>
                 </div>
               </Dialog.Panel>

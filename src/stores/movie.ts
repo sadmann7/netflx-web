@@ -3,17 +3,26 @@ import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 type MovieState = {
-  movie: null | Movie;
-  setMovie: (currentMovie: Movie | null) => void;
+  movies: Movie[];
+  addMovie: (movie: Movie) => void;
+  removeMovie: (movie: Movie) => void;
 };
 
 export const useMovieStore = create<MovieState>()(
   devtools(
     persist(
       (set) => ({
-        movie: null,
-        setMovie: (currentMovie: Movie | null) =>
-          set((state) => ({ movie: currentMovie })),
+        movies: [],
+        addMovie: (movie: Movie) =>
+          set((state) => ({
+            movies: state.movies.some((m) => m.id === movie.id)
+              ? state.movies
+              : [...state.movies, movie],
+          })),
+        removeMovie: (movie: Movie) =>
+          set((state) => ({
+            movies: state.movies.filter((m) => m.id !== movie.id),
+          })),
       }),
       {
         name: "movie",

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 // imports: icons, types, stores
 import { useModalStore } from "@/stores/modal";
-import { useMovieStore } from "@/stores/movie";
 import { Movie } from "@/types/globals";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { PlayIcon } from "@heroicons/react/24/solid";
@@ -20,13 +19,7 @@ const Hero = ({ movies }: HeroProps) => {
     setRandomMovie(movies[randomNumber]);
   }, [movies]);
 
-  const movieStore = useMovieStore((state) => state);
   const modalStore = useModalStore((state) => state);
-
-  const openModal = (movie: Movie) => {
-    movieStore.setMovie(movie);
-    modalStore.toggleModal();
-  };
 
   return (
     <section aria-label="hero section" className="w-full pt-10 pb-24 ">
@@ -63,6 +56,11 @@ const Hero = ({ movies }: HeroProps) => {
               <button
                 aria-label="play video"
                 className="px-3 py-1 bg-white rounded-sm flex items-center space-x-1.5 text-black text-sm md:text-base font-bold whitespace-nowrap hover:opacity-75 active:opacity-100 transition-opacity"
+                onClick={() => {
+                  modalStore.setMovie(randomMovie);
+                  modalStore.toggleModal();
+                  modalStore.setShouldPlay(true);
+                }}
               >
                 <PlayIcon className="w-4 aspect-square" />
                 <p>Play</p>
@@ -70,7 +68,11 @@ const Hero = ({ movies }: HeroProps) => {
               <button
                 aria-label="open modal"
                 className="px-3 py-1 bg-gray-400/40 rounded-sm flex items-center space-x-1.5 text-white text-sm md:text-base font-medium whitespace-nowrap hover:opacity-75 active:opacity-100 transition-opacity"
-                onClick={() => openModal(randomMovie)}
+                onClick={() => {
+                  modalStore.setMovie(randomMovie);
+                  modalStore.toggleModal();
+                  modalStore.setShouldPlay(false);
+                }}
               >
                 <InformationCircleIcon className="w-4 aspect-square" />
                 <p>More Info</p>

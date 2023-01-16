@@ -6,12 +6,12 @@ import { useModalStore } from "@/stores/modal";
 import { Movie } from "@/types/globals";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
-type RowProps = {
+type MyRowProps = {
   title: string;
   movies: Movie[];
 };
 
-const Row = ({ title, movies }: RowProps) => {
+const MyRow = ({ title, movies }: MyRowProps) => {
   const moviesRef = useRef<HTMLDivElement>(null);
   const [isScrollable, setIsScrollable] = useState(false);
 
@@ -51,7 +51,7 @@ const Row = ({ title, movies }: RowProps) => {
               {movies.map((movie) => (
                 <div
                   key={movie.id}
-                  className="relative w-full min-w-[15rem] h-28 aspect-square rounded-sm overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                  className="relative w-[15rem] h-28 aspect-square rounded-sm overflow-hidden cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => {
                     modalStore.setMovie(movie);
                     modalStore.toggleModal();
@@ -84,4 +84,4 @@ const Row = ({ title, movies }: RowProps) => {
   );
 };
 
-export default Row;
+export default MyRow;

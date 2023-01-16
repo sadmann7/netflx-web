@@ -7,11 +7,13 @@ import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
 import Row from "@/components/Row";
 import { useModalStore } from "@/stores/modal";
+import { useMovieStore } from "@/stores/movie";
 import { Movie } from "@/types/globals";
 import { queryFns } from "@/utils/queries";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
-import { NextPageWithLayout } from "./_app";
 import { GetStaticProps } from "next";
+import { NextPageWithLayout } from "./_app";
+import MyRow from "@/components/MyRow";
 
 const Home: NextPageWithLayout = () => {
   const trendingQuery = useQuery<{ results: Movie[] }>(
@@ -49,6 +51,7 @@ const Home: NextPageWithLayout = () => {
   );
 
   const modalStore = useModalStore((state) => state);
+  const movieStore = useMovieStore((state) => state);
 
   if (
     trendingQuery.isLoading ||
@@ -88,9 +91,9 @@ const Home: NextPageWithLayout = () => {
         <title>Netflx</title>
       </Head>
       <main className="mb-16">
-        {modalStore.isOpen && (
+        {modalStore.isModalOpen && (
           <Modal
-            isOpen={modalStore.isOpen}
+            isOpen={modalStore.isModalOpen}
             toggleModal={modalStore.toggleModal}
           />
         )}
@@ -103,6 +106,7 @@ const Home: NextPageWithLayout = () => {
             movies={actionMoviesQuery.data.results}
           />
           <Row title="Comedies" movies={comedyMoviesQuery.data.results} />
+          <MyRow title="My List" movies={movieStore.movies} />
           <Row title="Scary Movies" movies={horrorMoviesQuery.data.results} />
           <Row
             title="Romance Movies"
