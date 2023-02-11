@@ -1,6 +1,6 @@
 # [Netflx-web](https://netflx-web.vercel.app/)
 
-This project is a Netflix clone bootstrapped with the [create-next-app](https://nextjs.org/docs/api-reference/create-next-app).
+This project is a Netflix clone bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 [![Netflx-web](./public/screenshot.png)](https://netflx-web.vercel.app/)
 
@@ -48,4 +48,4 @@ The application will be available at `http://localhost:3000`.
 
 The easiest way to deploy is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
