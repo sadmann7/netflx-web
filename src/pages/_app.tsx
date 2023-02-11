@@ -10,10 +10,10 @@ import Head from "next/head";
 import { ReactElement, ReactNode, useState } from "react";
 import "../styles/globals.css";
 
-// imports: components, contexts
-import DefaultLayout from "@/components/layout/DefaultLayout";
+// external imports
 import ToastWrapper from "@/components/ToastWrapper";
 import { AuthProvider } from "@/contexts/AuthProvider";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<
   P,

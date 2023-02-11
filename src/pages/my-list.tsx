@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { NextPageWithLayout } from "./_app";
 
-// imports: components
-import DefaultLayout from "@/components/layout/DefaultLayout";
-import { useMovieStore } from "@/stores/movie";
+// external imports
 import MyRow from "@/components/MyRow";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import { useMovieStore } from "@/stores/movie";
 
 const MyList: NextPageWithLayout = () => {
   const movieStore = useMovieStore((state) => state);

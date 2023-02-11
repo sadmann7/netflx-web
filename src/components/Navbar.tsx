@@ -2,11 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-// images import
-import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-
-// hooks import
+// external imports
 import { useAuth } from "@/contexts/AuthProvider";
+import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const links = [
   { name: "Home", path: "/" },

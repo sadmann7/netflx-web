@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-// imports: icons, types, and stores
+// external imports
 import { useModalStore } from "@/stores/modal";
 import { Movie } from "@/types/globals";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";

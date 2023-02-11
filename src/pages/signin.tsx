@@ -4,10 +4,10 @@ import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { NextPageWithLayout } from "./_app";
 
-// imports: components, hooks
+// external imports
 import Button from "@/components/Button";
-import StaticLayout from "@/components/layout/StaticLayout";
 import { useAuth } from "@/contexts/AuthProvider";
+import StaticLayout from "@/layouts/StaticLayout";
 
 const Signin: NextPageWithLayout = () => {
   return (

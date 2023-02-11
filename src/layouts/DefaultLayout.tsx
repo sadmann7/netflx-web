@@ -1,16 +1,16 @@
 import { useAuth } from "@/contexts/AuthProvider";
 import { ReactNode } from "react";
 
-// imports: components
-import Loader from "../Loader";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+// external imports
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import LoadingScreen from "@/screens/LoadingScreen";
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
   const { isLoading, user } = useAuth();
 
   if (isLoading || user === null) {
-    return <Loader />;
+    return <LoadingScreen />;
   }
 
   return (

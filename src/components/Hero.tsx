@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-// imports: icons, types, stores
+// external imports
 import { useModalStore } from "@/stores/modal";
 import { Movie } from "@/types/globals";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";

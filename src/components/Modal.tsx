@@ -1,8 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import ReactPlayer from "react-player/lazy";
+import { toast } from "react-toastify";
 
-// imports: icons, types, stores
+// external imports
 import { useModalStore } from "@/stores/modal";
 import { useMovieStore } from "@/stores/movie";
 import { Genre, MovieWithVideo } from "@/types/globals";
@@ -15,7 +16,6 @@ import {
   SpeakerXMarkIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { toast } from "react-toastify";
 
 type ModalProps = {
   isOpen: boolean;

@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { NextPageWithLayout } from "./_app";
 
-// imports: components
-import DefaultLayout from "@/components/layout/DefaultLayout";
+// external imports
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const Movies: NextPageWithLayout = () => {
   return (

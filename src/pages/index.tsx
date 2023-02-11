@@ -1,11 +1,12 @@
 import Head from "next/head";
 
-// imports: components, requests, hooks, stores, and types
+// external imports
 import Hero from "@/components/Hero";
-import DefaultLayout from "@/components/layout/DefaultLayout";
-import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
+import MyRow from "@/components/MyRow";
 import Row from "@/components/Row";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import LoadingScreen from "@/screens/LoadingScreen";
 import { useModalStore } from "@/stores/modal";
 import { useMovieStore } from "@/stores/movie";
 import { Movie } from "@/types/globals";
@@ -13,7 +14,6 @@ import { queryFns } from "@/utils/queries";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import { NextPageWithLayout } from "./_app";
-import MyRow from "@/components/MyRow";
 
 const Home: NextPageWithLayout = () => {
   const trendingQuery = useQuery<{ results: Movie[] }>(
@@ -63,7 +63,7 @@ const Home: NextPageWithLayout = () => {
     romanceMoviesQuery.isLoading ||
     documentariesQuery.isLoading
   ) {
-    return <Loader />;
+    return <LoadingScreen />;
   }
 
   if (
