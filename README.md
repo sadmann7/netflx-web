@@ -1,6 +1,6 @@
 # [Netflx-web](https://netflx-web.vercel.app/)
 
-This project is a Netflix clone bootstrapped with the [create-next-app](https://nextjs.org/docs/api-reference/create-next-app). It is built with Next.js, Tailwind CSS, Firebase, and TMDB API.
+This project is a Netflix clone bootstrapped with the [create-next-app](https://nextjs.org/docs/api-reference/create-next-app).
 
 [![Netflx-web](./public/screenshot.png)](https://netflx-web.vercel.app/)
 
