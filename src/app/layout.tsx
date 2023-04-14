@@ -28,9 +28,13 @@ export const metadata = {
     "React",
     "Tailwind CSS",
     "Server Components",
-    "Radix UI",
+    "TRPC",
+    "T3-App",
     "Netflix",
+    "Netflix OTT",
+    "OTT",
     "Netflix Clone",
+    "Kickflip",
   ],
   authors: [
     {

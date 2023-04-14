@@ -31,8 +31,8 @@ const SiteHeader = () => {
     <header
       aria-label="header"
       className={cn(
-        isScrolled ? "bg-background" : "",
-        " fixed top-0 z-50 w-full py-4 text-white transition-all md:py-6"
+        "fixed top-0 z-50 w-full py-4 text-white transition-all md:py-6",
+        isScrolled ? "bg-zinc-900" : "bg-transparent"
       )}
     >
       <nav className="container mx-auto flex w-full max-w-screen-2xl items-center justify-between">

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "My Page Title",
+  title: "Netflix OTT",
 }
 
 export default function Home() {
