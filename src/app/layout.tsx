@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
 import ToastWrapper from "@/components/ui/toast-wrapper"
 import "@/styles/globals.css"
+import SiteFooter from "@/components/site-footer"
+import SiteHeader from "@/components/site-header"
 import TailwindIndicator from "@/components/tailwind-indicator"
 
 const fontSans = FontSans({
@@ -66,8 +68,8 @@ export const metadata = {
   },
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 }
 
@@ -82,7 +84,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
     >
       <head />
       <body className="min-h-screen">
-        {children}
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </div>
         <ToastWrapper />
         <TailwindIndicator />
       </body>
