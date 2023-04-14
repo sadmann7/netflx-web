@@ -28,7 +28,7 @@ const MoviesRow = ({ title, movies }: MoviesRowProps) => {
     moviesRef.current.scrollTo({ left: offset, behavior: "smooth" })
   }
 
-  const modalStore = useModalStore((state) => state)
+  const modalStore = useModalStore()
 
   return (
     <section aria-label="horizontally-scrollable row">

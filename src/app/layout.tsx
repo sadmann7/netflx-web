@@ -82,12 +82,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       className={cn(
-        "bg-blending-gradient font-sans text-slate-900 antialiased",
+        "bg-black font-sans text-slate-900 antialiased",
         fontSans.variable
       )}
     >
       <head />
-      <body className="min-h-screen">
+      <body>
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>

@@ -10,9 +10,11 @@ import {
   FileText,
   HelpCircle,
   Image,
+  Info,
   Loader2,
   MoreVertical,
   Pizza,
+  Play,
   Plus,
   Search,
   Settings,
@@ -46,6 +48,8 @@ export const Icons = {
   pizza: Pizza,
   bell: Bell,
   search: Search,
+  info: Info,
+  play: Play,
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path

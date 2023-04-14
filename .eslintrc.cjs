@@ -34,7 +34,6 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "tailwindcss/classnames-order": "error",
   },
 }
 
