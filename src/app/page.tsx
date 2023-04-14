@@ -1,7 +1,12 @@
-export const metadata = {
-  title: "Netflix OTT",
-}
+import { getShows } from "@/lib/fetcher"
+import Hero from "@/components/hero"
 
-export default function Home() {
-  return <h1>My Page</h1>
+export default async function Home() {
+  const shows = await getShows("movie")
+
+  return (
+    <section className="mb-16">
+      <Hero shows={shows.netflix ?? []} />
+    </section>
+  )
 }

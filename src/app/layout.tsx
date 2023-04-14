@@ -2,11 +2,11 @@ import { Inter as FontSans } from "next/font/google"
 
 import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
-import ToastWrapper from "@/components/ui/toast-wrapper"
-import "@/styles/globals.css"
 import SiteFooter from "@/components/site-footer"
 import SiteHeader from "@/components/site-header"
 import TailwindIndicator from "@/components/tailwind-indicator"
+import ToastWrapper from "@/components/ui/toast-wrapper"
+import "@/styles/globals.css"
 
 const fontSans = FontSans({
   subsets: ["latin"],
