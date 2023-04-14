@@ -1,17 +1,16 @@
 "use client"
 
-import { Toaster as HotToaster } from "react-hot-toast"
+import { Toaster } from "react-hot-toast"
 
-export function Toaster() {
+const ToastWrapper = () => {
   return (
-    <HotToaster
+    <Toaster
       position="bottom-center"
       reverseOrder={false}
       gutter={8}
       containerClassName=""
       containerStyle={{}}
       toastOptions={{
-        // Define default options
         className: "",
         duration: 3000,
         style: {
@@ -22,3 +21,5 @@ export function Toaster() {
     />
   )
 }
+
+export default ToastWrapper

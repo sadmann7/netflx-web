@@ -2,7 +2,9 @@ import { Inter as FontSans } from "next/font/google"
 
 import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
+import ToastWrapper from "@/components/ui/toast-wrapper"
 import "@/styles/globals.css"
+import TailwindIndicator from "@/components/tailwind-indicator"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -74,12 +76,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       className={cn(
-        "bg-white font-sans text-slate-900 antialiased",
+        "bg-blending-gradient font-sans text-slate-900 antialiased",
         fontSans.variable
       )}
     >
       <head />
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen">
+        {children}
+        <ToastWrapper />
+        <TailwindIndicator />
+      </body>
     </html>
   )
 }
