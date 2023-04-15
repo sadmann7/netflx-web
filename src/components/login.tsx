@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Router from "next/router"
 import { signIn } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
@@ -15,7 +14,6 @@ const Login = () => {
     setIsLoading(true)
     try {
       await signIn("google")
-      await Router.push("/")
       toast.success("Successfully logged in")
     } catch (error) {
       toast.error(
