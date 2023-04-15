@@ -2,9 +2,9 @@ import { Inter as FontSans } from "next/font/google"
 
 import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
+import SiteFooter from "@/components/layouts/site-footer"
+import SiteHeader from "@/components/layouts/site-header"
 import TailwindIndicator from "@/components/tailwind-indicator"
-import SiteFooter from "@/components/ui/site-footer"
-import SiteHeader from "@/components/ui/site-header"
 import ToastWrapper from "@/components/ui/toast-wrapper"
 import "@/styles/globals.css"
 

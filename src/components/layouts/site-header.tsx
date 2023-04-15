@@ -6,7 +6,7 @@ import Image from "next/image"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
-import { MainNav } from "@/components/ui/main-nav"
+import { MainNav } from "@/components/layouts/main-nav"
 
 const SiteHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -27,7 +27,7 @@ const SiteHeader = () => {
         isScrolled ? "bg-white dark:bg-neutral-950" : "bg-transparent"
       )}
     >
-      <nav className="container flex h-16 items-center justify-between space-x-4 sm:space-x-0">
+      <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center space-x-5">
           <Icons.search className="aspect-square w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />

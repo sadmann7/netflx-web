@@ -1,4 +1,3 @@
-import Image from "next/image"
 import {
   AlertTriangle,
   ArrowRight,
@@ -12,7 +11,6 @@ import {
   HelpCircle,
   Info,
   Loader2,
-  Image as MediaImage,
   Minus,
   MoreVertical,
   Pause,
@@ -43,7 +41,7 @@ export const Icons = {
   trash: Trash,
   post: FileText,
   page: File,
-  media: MediaImage,
+  media: Image,
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
@@ -65,9 +63,11 @@ export const Icons = {
   volumneMute: VolumeX,
   logo: ({ ...props }: LucideProps) => (
     <svg
+      aria-hidden="true"
+      focusable="false"
       role="img"
-      viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
       {...props}
     >
       <path
@@ -75,16 +75,6 @@ export const Icons = {
         d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.002-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z"
       ></path>
     </svg>
-  ),
-  logoImage: ({ ...props }: LucideProps) => (
-    <Image
-      src="/images/netflix-logo.svg"
-      alt="netflix"
-      width={1024}
-      height={276.74}
-      className="h-auto w-28 object-cover transition-opacity hover:opacity-75 active:opacity-100"
-      priority
-    />
   ),
   gitHub: ({ ...props }: LucideProps) => (
     <svg
