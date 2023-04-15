@@ -14,7 +14,7 @@ export default async function TVShowsPage() {
   const shows = await getShows("tv")
 
   return (
-    <section className="pb-16 pt-24">
+    <section className="pb-16 pt-8">
       <Suspense fallback={<LoadingScreen />}>
         <div className="w-full space-y-10">
           <Shows title="Trending Now" shows={shows.trending ?? []} />

@@ -10,4 +10,26 @@ export const siteConfig: SiteConfig = {
     twitter: "https://twitter.com/sadmann17",
     github: "https://github.com/sadmann7",
   },
+  mainNav: [
+    {
+      title: "Home",
+      href: "/",
+    },
+    {
+      title: "TV Shows",
+      href: "/tv-shows",
+    },
+    {
+      title: "Movies",
+      href: "/movies",
+    },
+    {
+      title: "New & Popular",
+      href: "/new-and-popular",
+    },
+    {
+      title: "My List",
+      href: "/my-list",
+    },
+  ],
 }

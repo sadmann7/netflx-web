@@ -16,6 +16,7 @@ export type SiteConfig = {
     twitter: string
     github: string
   }
+  mainNav: NavItem[]
 }
 export type Genre = {
   id: number
