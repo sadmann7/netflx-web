@@ -7,6 +7,7 @@ import type { Show } from "@/types"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import Modal from "@/components/modal"
 import { Button } from "@/components/ui/button"
 
 interface HeroProps {
@@ -26,6 +27,10 @@ const Hero = ({ shows }: HeroProps) => {
 
   return (
     <section aria-label="hero section" className="w-full pb-24 pt-10 ">
+      <Modal
+        isOpen={modalStore.isModalOpen}
+        toggleModal={modalStore.toggleModal}
+      />
       {randomShow && (
         <div className="container w-full max-w-screen-2xl">
           <div className="absolute inset-0 -z-10 h-screen w-full">
@@ -65,7 +70,7 @@ const Hero = ({ shows }: HeroProps) => {
                 onClick={() => {
                   modalStore.setShow(randomShow)
                   modalStore.toggleModal()
-                  modalStore.setShouldPlay(true)
+                  modalStore.setPlay(true)
                 }}
               >
                 <Icons.play className="h-4 w-4" aria-hidden="true" />
@@ -73,11 +78,12 @@ const Hero = ({ shows }: HeroProps) => {
               </Button>
               <Button
                 aria-label="open show's details modal"
+                variant="outline"
                 className="h-auto gap-1 rounded-none"
                 onClick={() => {
                   modalStore.setShow(randomShow)
                   modalStore.toggleModal()
-                  modalStore.setShouldPlay(false)
+                  modalStore.setPlay(false)
                 }}
               >
                 <Icons.info className="h-4 w-4" aria-hidden="true" />

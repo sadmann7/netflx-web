@@ -6,8 +6,8 @@ interface ModalState {
   toggleModal: () => void
   show: Show | null
   setShow: (show: Show | null) => void
-  shouldPlay: boolean
-  setShouldPlay: (shouldPlay: boolean) => void
+  play: boolean
+  setPlay: (play: boolean) => void
 }
 
 export const useModalStore = create<ModalState>()((set) => ({
@@ -15,6 +15,6 @@ export const useModalStore = create<ModalState>()((set) => ({
   toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
   show: null,
   setShow: (show: Show | null) => set(() => ({ show })),
-  shouldPlay: false,
-  setShouldPlay: (shouldPlay: boolean) => set(() => ({ shouldPlay })),
+  play: false,
+  setPlay: (play: boolean) => set(() => ({ play })),
 }))

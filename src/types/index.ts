@@ -35,6 +35,7 @@ export type VideoType =
 export type Show = {
   adult: boolean
   backdrop_path: string
+  media_type?: MediaType
   belongs_to_collection: null
   budget: number
   genres: Genre[]
