@@ -23,7 +23,7 @@ const SiteFooter = () => {
   return (
     <footer
       aria-label="footer"
-      className="border-t-8 border-t-[#222222] text-slate-400"
+      className="border-t-8 border-t-zinc-800 text-slate-400"
     >
       <div className="container mx-auto w-full max-w-screen-lg py-10">
         <p className="cursor-pointer text-sm font-medium hover:underline md:text-base">
