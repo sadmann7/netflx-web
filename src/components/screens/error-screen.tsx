@@ -1,11 +1,15 @@
 import type { AppRouter } from "@/server/api/root"
 import type { TRPCClientErrorLike } from "@trpc/client"
-import { AlertTriangle } from "lucide-react"
+
+import { Icons } from "@/components/icons"
 
 const ErrorScreen = ({ error }: { error?: TRPCClientErrorLike<AppRouter> }) => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-4">
-      <AlertTriangle className="aspect-square w-24 text-red-400 md:w-28" />
+      <Icons.warning
+        className="aspect-square w-24 text-red-400 md:w-28"
+        aria-hidden="true"
+      />
       <h1 className="text-center text-2xl font-bold text-red-400 md:text-3xl">
         {error?.message ?? "Something went wrong"}
       </h1>

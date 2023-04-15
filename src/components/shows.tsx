@@ -65,8 +65,8 @@ const Shows = ({ title, shows }: ShowsProps) => {
                     className="relative aspect-square h-28 w-full min-w-[15rem] cursor-pointer overflow-hidden rounded-sm transition-transform hover:scale-105"
                     onClick={() => {
                       modalStore.setShow(show)
-                      modalStore.toggleModal()
-                      modalStore.setShouldPlay(false)
+                      modalStore.setOpen(true)
+                      modalStore.setPlay(false)
                     }}
                   >
                     <Image

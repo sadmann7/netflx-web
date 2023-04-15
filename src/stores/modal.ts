@@ -2,8 +2,8 @@ import type { Show } from "@/types"
 import { create } from "zustand"
 
 interface ModalState {
-  isModalOpen: boolean
-  toggleModal: () => void
+  open: boolean
+  setOpen: (open: boolean) => void
   show: Show | null
   setShow: (show: Show | null) => void
   play: boolean
@@ -11,8 +11,8 @@ interface ModalState {
 }
 
 export const useModalStore = create<ModalState>()((set) => ({
-  isModalOpen: false,
-  toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
+  open: false,
+  setOpen: (open: boolean) => set(() => ({ open })),
   show: null,
   setShow: (show: Show | null) => set(() => ({ show })),
   play: false,

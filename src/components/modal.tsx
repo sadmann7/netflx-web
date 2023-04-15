@@ -9,14 +9,20 @@ import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
 import { Icons } from "@/components/icons"
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 interface ModalProps {
-  isOpen: boolean
-  toggleModal: () => void
+  open: boolean
+  setOpen: (open: boolean) => void
 }
 
-const Modal = ({ isOpen, toggleModal }: ModalProps) => {
+const Modal = ({ open, setOpen }: ModalProps) => {
   // stores
   const modalStore = useModalStore()
   const showStore = useShowStore()
@@ -26,7 +32,7 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
   const [isMuted, setIsMuted] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
 
-  // fetch show by id
+  // get trailer and genres of show
   useEffect(() => {
     const getShow = async () => {
       if (!modalStore.show) return
@@ -39,12 +45,6 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
             env.NEXT_PUBLIC_TMDB_API_KEY
           }&language=en-US&append_to_response=videos`
         )
-
-        if (!response.ok) {
-          toast.error("Show not found")
-          return
-        }
-
         const data = (await response.json()) as Show
         if (data?.videos) {
           const trailerIndex = data.videos.results.findIndex(
@@ -75,12 +75,12 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
   return (
     <Dialog
       onOpenChange={() => {
-        toggleModal()
+        setOpen(!open)
         modalStore.setShow(null)
       }}
-      open={isOpen}
+      open={open}
     >
-      <DialogContent className="w-full max-w-2xl overflow-hidden rounded-md text-left align-middle shadow-xl dark:bg-zinc-900">
+      <DialogContent className="w-full overflow-hidden rounded-md p-0 text-left align-middle shadow-xl dark:bg-zinc-900 sm:max-w-2xl">
         <div className="relative aspect-video">
           <ReactPlayer
             style={{ position: "absolute", top: 0, left: 0 }}
@@ -92,27 +92,28 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
           />
           <div className="absolute bottom-6 flex w-full items-center justify-between gap-2 px-6">
             <div className="flex items-center gap-2.5">
-              <button
+              <Button
                 aria-label="control video playback"
-                className="flex items-center gap-1 rounded-sm bg-white px-2.5 py-1 text-sm text-black transition-opacity hover:opacity-90 active:opacity-100 md:text-base"
+                className="group h-auto gap-1 rounded-none px-3 py-1.5"
                 onClick={() => setIsPlaying(!isPlaying)}
               >
                 {isPlaying ? (
                   <>
-                    <Icons.pause className="h-5 w-5" aria-hidden="true" />
-                    <p>Pause</p>
+                    <Icons.pause className="h-4 w-4" aria-hidden="true" />
+                    Pause
                   </>
                 ) : (
                   <>
-                    <Icons.play className="h-5 w-5" aria-hidden="true" />
-                    <p>Play</p>
+                    <Icons.play className="h-4 w-4" aria-hidden="true" />
+                    Play
                   </>
                 )}
-              </button>
-              {showStore.shows.some((m) => m.id === modalStore.show?.id) ? (
-                <button
-                  aria-label="remove from my list"
-                  className="grid aspect-square w-7 place-items-center rounded-full bg-gray-700 ring-1 ring-white transition-opacity hover:opacity-90 active:opacity-100"
+              </Button>
+              {showStore.shows.some((s) => s.id === modalStore.show?.id) ? (
+                <Button
+                  aria-label="remove show from my list"
+                  variant="ghost"
+                  className="h-auto rounded-full p-1 ring-1 ring-slate-100"
                   onClick={() => {
                     modalStore.show
                       ? showStore.removeShow(modalStore.show)
@@ -120,57 +121,44 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
                     toast.success("Removed from My List")
                   }}
                 >
-                  <Icons.close
-                    className="h-5 w-5 text-white"
-                    aria-hidden="true"
-                  />
-                </button>
+                  <Icons.remove className="h-4 w-4" aria-hidden="true" />
+                </Button>
               ) : (
-                <button
-                  aria-label="add to my list"
-                  className="grid aspect-square w-7 place-items-center rounded-full bg-gray-700 ring-1 ring-white transition-opacity hover:opacity-90 active:opacity-100"
+                <Button
+                  aria-label="add show to my list"
+                  variant="ghost"
+                  className="h-auto rounded-full p-1 ring-1 ring-slate-100"
                   onClick={() => {
                     modalStore.show ? showStore.addShow(modalStore.show) : null
                     toast.success("Added to My List")
                   }}
                 >
-                  <Icons.add
-                    className="h-5 w-5 text-white"
-                    aria-hidden="true"
-                  />
-                </button>
+                  <Icons.add className="h-4 w-4" aria-hidden="true" />
+                </Button>
               )}
-              <button
-                aria-label="thumb up"
-                className="grid aspect-square w-7 place-items-center rounded-full bg-gray-700 ring-1 ring-white transition-opacity hover:opacity-90 active:opacity-100"
-              >
-                <Icons.thumbsUp
-                  className="h-4 w-4 text-white"
-                  aria-hidden="true"
-                />
-              </button>
             </div>
-            <button
-              aria-label="toggle audio"
-              className="grid aspect-square w-7 place-items-center rounded-full bg-gray-700 ring-1 ring-white transition-opacity hover:opacity-90 active:opacity-100"
+            <Button
+              aria-label="toggle sound"
+              variant="ghost"
+              className="h-auto rounded-full p-1.5 ring-1 ring-slate-50"
               onClick={() => setIsMuted(!isMuted)}
             >
               {isMuted ? (
                 <Icons.volumneMute
-                  className="h-4 w-4 text-white"
+                  className="h-4 w-4 text-slate-50"
                   aria-hidden="true"
                 />
               ) : (
                 <Icons.volumne
-                  className="h-4 w-4 text-white"
+                  className="h-4 w-4 text-slate-50"
                   aria-hidden="true"
                 />
               )}
-            </button>
+            </Button>
           </div>
         </div>
-        <div className="grid gap-2">
-          <DialogTitle className="text-lg font-medium leading-6 text-white md:text-xl">
+        <div className="grid gap-2 p-5">
+          <DialogTitle className="text-lg font-medium leading-6 text-slate-50 md:text-xl">
             {modalStore.show?.title ?? modalStore.show?.name}
           </DialogTitle>
           <div className="flex items-center space-x-2 text-xs md:text-sm">
@@ -182,9 +170,9 @@ const Modal = ({ isOpen, toggleModal }: ModalProps) => {
             <p>{modalStore.show?.release_date ?? "-"}</p>
             <p>{modalStore.show?.original_language.toUpperCase() ?? "-"}</p>
           </div>
-          <p className="line-clamp-3 text-xs md:text-sm">
+          <DialogDescription className="line-clamp-3 text-xs md:text-sm">
             {modalStore.show?.overview ?? "-"}
-          </p>
+          </DialogDescription>
           <div className="flex items-center gap-2 text-xs md:text-sm">
             <span className="text-gray-400">Genres:</span>
             {genres.map((genre) => genre.name).join(", ")}

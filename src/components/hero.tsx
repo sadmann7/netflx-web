@@ -27,10 +27,9 @@ const Hero = ({ shows }: HeroProps) => {
 
   return (
     <section aria-label="hero section" className="w-full pb-24 pt-10 ">
-      <Modal
-        isOpen={modalStore.isModalOpen}
-        toggleModal={modalStore.toggleModal}
-      />
+      {modalStore.open ? (
+        <Modal open={modalStore.open} setOpen={modalStore.setOpen} />
+      ) : null}
       {randomShow && (
         <div className="container w-full max-w-screen-2xl">
           <div className="absolute inset-0 -z-10 h-screen w-full">
@@ -69,7 +68,7 @@ const Hero = ({ shows }: HeroProps) => {
                 className="h-auto gap-1 rounded-none"
                 onClick={() => {
                   modalStore.setShow(randomShow)
-                  modalStore.toggleModal()
+                  modalStore.setOpen(true)
                   modalStore.setPlay(true)
                 }}
               >
@@ -82,7 +81,7 @@ const Hero = ({ shows }: HeroProps) => {
                 className="h-auto gap-1 rounded-none"
                 onClick={() => {
                   modalStore.setShow(randomShow)
-                  modalStore.toggleModal()
+                  modalStore.setOpen(true)
                   modalStore.setPlay(false)
                 }}
               >
