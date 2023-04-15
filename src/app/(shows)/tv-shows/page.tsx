@@ -1,19 +1,31 @@
+import { Suspense } from "react"
 import type { Metadata } from "next"
+
+import { getShows } from "@/lib/fetcher"
+import LoadingScreen from "@/components/screens/loading-screen"
+import Shows from "@/components/shows"
 
 export const metadata: Metadata = {
   title: "TV Shows",
   description: "All TV shows grouped by genre",
 }
 
-export default function TVShowsPage() {
+export default async function TVShowsPage() {
+  const shows = await getShows("tv")
+
   return (
-    <section className="container grid h-screen items-center justify-center gap-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pb-24 lg:pt-16">
-      <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
-        <h1 className="text-center text-3xl font-bold text-slate-50 md:text-4xl lg:text-5xl">
-          TV Shows
-        </h1>
-        <p className="text-center text-slate-500">Coming soon...</p>
-      </div>
+    <section className="pb-16 pt-24">
+      <Suspense fallback={<LoadingScreen />}>
+        <div className="w-full space-y-10">
+          <Shows title="Trending Now" shows={shows.trending ?? []} />
+          <Shows title="Top Rated" shows={shows.topRated ?? []} />
+          <Shows title="Action Thrillers" shows={shows.action ?? []} />
+          <Shows title="Comedies" shows={shows.comedy ?? []} />
+          <Shows title="Scary Movies" shows={shows.horror ?? []} />
+          <Shows title="Romance Movies" shows={shows.romance ?? []} />
+          <Shows title="Documentaries" shows={shows.docs ?? []} />
+        </div>
+      </Suspense>
     </section>
   )
 }

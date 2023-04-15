@@ -26,7 +26,7 @@ const Hero = ({ shows }: HeroProps) => {
   const modalStore = useModalStore()
 
   return (
-    <section aria-label="hero section" className="w-full pb-24 pt-10">
+    <section aria-label="Hero section" className="w-full pb-24 pt-10">
       {modalStore.open ? (
         <Modal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
@@ -35,7 +35,7 @@ const Hero = ({ shows }: HeroProps) => {
           <div className="absolute inset-0 -z-10 h-screen w-full">
             <div
               className={cn(
-                "bg-black/75 bg-gradient-to-b from-gray-900/10 to-zinc-950",
+                "bg-black/75 bg-gradient-to-b from-neutral-900/10 to-neutral-900",
                 "absolute inset-0 z-10 h-full w-full"
               )}
             />
@@ -64,28 +64,28 @@ const Hero = ({ shows }: HeroProps) => {
             </p>
             <div className="flex items-center space-x-2 pt-1.5">
               <Button
-                aria-label="play video"
-                className="h-auto gap-1 rounded"
+                aria-label="Play video"
+                className="h-auto gap-1.5 rounded"
                 onClick={() => {
                   modalStore.setShow(randomShow)
                   modalStore.setOpen(true)
                   modalStore.setPlay(true)
                 }}
               >
-                <Icons.play className="h-4 w-4" aria-hidden="true" />
+                <Icons.play className="h-5 w-5" aria-hidden="true" />
                 Play
               </Button>
               <Button
-                aria-label="open show's details modal"
+                aria-label="Open show's details modal"
                 variant="outline"
-                className="h-auto gap-1 rounded"
+                className="h-auto gap-2 rounded"
                 onClick={() => {
                   modalStore.setShow(randomShow)
                   modalStore.setOpen(true)
                   modalStore.setPlay(false)
                 }}
               >
-                <Icons.info className="h-4 w-4" aria-hidden="true" />
+                <Icons.info className="h-5 w-5" aria-hidden="true" />
                 More Info
               </Button>
             </div>

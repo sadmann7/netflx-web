@@ -11,7 +11,10 @@ interface TrpcErrorScreenProps {
 
 const TrpcErrorScreen = ({ error, reset }: TrpcErrorScreenProps) => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-4">
+    <section
+      aria-label="Error screen"
+      className="flex min-h-screen flex-col items-center justify-center gap-4 px-4"
+    >
       <Icons.warning
         className="aspect-square w-24 text-red-500 md:w-28"
         aria-hidden="true"
@@ -46,7 +49,7 @@ const TrpcErrorScreen = ({ error, reset }: TrpcErrorScreenProps) => {
           Try again
         </Button>
       ) : null}
-    </div>
+    </section>
   )
 }
 

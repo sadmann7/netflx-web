@@ -31,11 +31,11 @@ const SiteHeader = () => {
     <header
       aria-label="header"
       className={cn(
-        "fixed top-0 z-50 w-full py-4 text-white transition-all md:py-6",
+        "sticky top-0 z-40 w-full py-4 text-white transition-all md:py-6",
         isScrolled ? "bg-zinc-900" : "bg-transparent"
       )}
     >
-      <nav className="container mx-auto flex w-full max-w-screen-2xl items-center justify-between">
+      <nav className="container flex w-full max-w-screen-2xl items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link href="/">
             <Image

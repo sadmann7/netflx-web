@@ -33,15 +33,15 @@ const Shows = ({ title, shows }: ShowsProps) => {
   const modalStore = useModalStore()
 
   return (
-    <section aria-label="carousel of shows">
+    <section aria-label="Show's carousel section">
       {shows.length !== 0 && (
-        <div className="container mx-auto w-full max-w-screen-2xl space-y-2.5">
+        <div className="container w-full max-w-screen-2xl space-y-2.5">
           <h2 className="text-base font-semibold text-white/90 transition-colors hover:text-white md:text-xl ">
             {title ?? "-"}
           </h2>
           <div className="group relative">
             <Button
-              aria-label="scroll to right"
+              aria-label="Scroll to right"
               variant="ghost"
               className={cn(
                 "absolute left-2 top-1/3 z-10 h-auto rounded-full p-0 opacity-0 hover:bg-transparent group-hover:opacity-100 dark:hover:bg-transparent",
@@ -85,7 +85,7 @@ const Shows = ({ title, shows }: ShowsProps) => {
               </div>
             </div>
             <Button
-              aria-label="scroll to left"
+              aria-label="Scroll to left"
               variant="ghost"
               className="absolute right-2 top-1/3 z-10 h-auto rounded-full p-0 opacity-0 hover:bg-transparent group-hover:opacity-100 dark:hover:bg-transparent"
               onClick={() => scrollToDirection("right")}
