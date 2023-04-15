@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Router from "next/router"
 import { signIn } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
@@ -10,10 +11,11 @@ import { Button } from "@/components/ui/button"
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const googleLogin = async () => {
+  const loginWithGoogle = async () => {
     setIsLoading(true)
     try {
       await signIn("google")
+      await Router.push("/")
       toast.success("Successfully logged in")
     } catch (error) {
       toast.error(
@@ -26,9 +28,10 @@ const Login = () => {
 
   return (
     <Button
-      aria-label="Login with Discord"
+      aria-label="Login with Google"
+      variant="brand"
       className="w-full"
-      onClick={isLoading ? undefined : googleLogin}
+      onClick={isLoading ? undefined : loginWithGoogle}
       disabled={isLoading}
     >
       {isLoading ? (

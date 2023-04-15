@@ -6,7 +6,7 @@ export default async function Home() {
   const shows = await getShows("movie")
 
   return (
-    <section className="mb-16">
+    <section className="pb-16">
       <Hero shows={shows.netflix ?? []} />
       <div className="w-full space-y-10">
         <Shows title="Trending Now" shows={shows.trending ?? []} />

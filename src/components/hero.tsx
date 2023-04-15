@@ -26,7 +26,7 @@ const Hero = ({ shows }: HeroProps) => {
   const modalStore = useModalStore()
 
   return (
-    <section aria-label="hero section" className="w-full pb-24 pt-10 ">
+    <section aria-label="hero section" className="w-full pb-24 pt-10">
       {modalStore.open ? (
         <Modal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
@@ -65,7 +65,7 @@ const Hero = ({ shows }: HeroProps) => {
             <div className="flex items-center space-x-2 pt-1.5">
               <Button
                 aria-label="play video"
-                className="h-auto gap-1 rounded-none"
+                className="h-auto gap-1 rounded"
                 onClick={() => {
                   modalStore.setShow(randomShow)
                   modalStore.setOpen(true)
@@ -78,7 +78,7 @@ const Hero = ({ shows }: HeroProps) => {
               <Button
                 aria-label="open show's details modal"
                 variant="outline"
-                className="h-auto gap-1 rounded-none"
+                className="h-auto gap-1 rounded"
                 onClick={() => {
                   modalStore.setShow(randomShow)
                   modalStore.setOpen(true)

@@ -89,6 +89,11 @@ const Modal = ({ open, setOpen }: ModalProps) => {
             height="100%"
             muted={isMuted}
             playing={isPlaying}
+            controls={false}
+            onStart={() => setIsPlaying(true)}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onEnded={() => setIsPlaying(false)}
           />
           <div className="absolute bottom-6 flex w-full items-center justify-between gap-2 px-6">
             <div className="flex items-center gap-2.5">
@@ -157,7 +162,7 @@ const Modal = ({ open, setOpen }: ModalProps) => {
             </Button>
           </div>
         </div>
-        <div className="grid gap-2 p-5">
+        <div className="grid gap-2 px-5 pb-5">
           <DialogTitle className="text-lg font-medium leading-6 text-slate-50 md:text-xl">
             {modalStore.show?.title ?? modalStore.show?.name}
           </DialogTitle>
