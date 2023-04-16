@@ -21,6 +21,21 @@ export type SiteConfig = {
   }
   mainNav: NavItem[]
 }
+
+export type PlansConfig = {
+  perks: string[]
+  plans: {
+    title: "Mobile" | "Basic" | "Standard" | "Premium"
+    price: number
+    videoQuality: "Good" | "Better" | "Best"
+    resolution: "480p" | "720p" | "1080p" | "4K+HDR"
+    devices: {
+      title: "Phone" | "Tablet" | "Computer" | "TV"
+      icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+    }[]
+  }[]
+}
+
 export type Genre = {
   id: number
   name: string | null

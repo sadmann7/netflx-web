@@ -5,13 +5,13 @@ import Image from "next/image"
 import Link from "next/link"
 import type { NavItem } from "@/types"
 import type { Session } from "next-auth"
-import { signIn } from "next-auth/react"
+import { signOut } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/layouts/main-nav"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,7 +48,6 @@ interface SiteHeaderProps {
 
 const SiteHeader = ({ session }: SiteHeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const changeBgColor = () => {
     window.scrollY > 0 ? setIsScrolled(true) : setIsScrolled(false)
@@ -125,31 +124,31 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         asChild
                         className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
                       >
-                        <Link href={item.href}>
-                          <span className="mx-auto line-clamp-1">
-                            {item.title}
-                          </span>
-                        </Link>
+                        <span
+                          className="line-clamp-1 grid place-items-center"
+                          onClick={() => void signOut()}
+                        >
+                          {item.title}
+                        </span>
                       </DropdownMenuItem>
                     )
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button
+            <Link
+              href="/login"
               aria-label="Sign in"
-              variant="brand"
-              className="h-auto px-4 py-2"
-              onClick={() => {
-                void signIn("google")
-                setTimeout(() => {
-                  setIsLoading(true)
-                }, 2500)
-              }}
-              disabled={isLoading}
+              className={cn(
+                buttonVariants({
+                  variant: "brand",
+                  size: "sm",
+                  className: "h-auto px-4 py-2",
+                })
+              )}
             >
               Sign In
-            </Button>
+            </Link>
           )}
         </div>
       </nav>
