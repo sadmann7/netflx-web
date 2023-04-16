@@ -8,9 +8,9 @@ import {
 } from "@/config/subscriptions"
 import { db } from "@/lib/db"
 
-export const getUserSubscriptionPlan = async (
+export async function getUserSubscriptionPlan(
   userId: string
-): Promise<UserSubscriptionPlan | null> => {
+): Promise<UserSubscriptionPlan | null> {
   const user = await db.user.findFirst({
     where: {
       id: userId,

@@ -1,7 +1,7 @@
 import { Inter as FontSans } from "next/font/google"
-import { getServerAuthSessionWithoutContext } from "@/server/auth"
 
 import { siteConfig } from "@/config/site"
+import { getSession } from "@/lib/session"
 import { absoluteUrl, cn } from "@/lib/utils"
 import SiteFooter from "@/components/layouts/site-footer"
 import SiteHeader from "@/components/layouts/site-header"
@@ -79,7 +79,7 @@ export const metadata = {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerAuthSessionWithoutContext()
+  const session = await getSession()
 
   return (
     <html

@@ -74,7 +74,3 @@ export const getServerAuthSession = (ctx: {
 }) => {
   return getServerSession(ctx.req, ctx.res, authOptions)
 }
-
-export const getServerAuthSessionWithoutContext = () => {
-  return getServerSession(authOptions)
-}

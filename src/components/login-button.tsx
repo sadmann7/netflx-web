@@ -7,14 +7,13 @@ import { toast } from "react-hot-toast"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 
-const Login = () => {
+const LoginButton = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const loginWithGoogle = async () => {
     setIsLoading(true)
     try {
       await signIn("google")
-      toast.success("Successfully logged in")
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Something went wrong"
@@ -45,4 +44,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginButton

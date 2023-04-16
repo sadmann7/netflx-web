@@ -72,7 +72,10 @@ const Hero = ({ shows }: HeroProps) => {
                   modalStore.setPlay(true)
                 }}
               >
-                <Icons.play className="h-5 w-5" aria-hidden="true" />
+                <Icons.play
+                  className="h-5 w-5 fill-current"
+                  aria-hidden="true"
+                />
                 Play
               </Button>
               <Button

@@ -13,14 +13,15 @@ const TrpcErrorScreen = ({ error, reset }: TrpcErrorScreenProps) => {
   return (
     <section
       aria-label="Error screen"
+      role="alert"
       className="container grid min-h-screen max-w-screen-2xl items-center justify-center gap-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pb-24 lg:pt-16"
     >
       <Icons.warning
-        className="aspect-square w-24 text-red-500 dark:text-red-500 sm:w-28"
+        className="h-28 w-28 animate-pulse text-red-500 dark:text-red-500"
         aria-hidden="true"
       />
-      <h1 className="text-center text-2xl font-bold text-red-500 dark:text-red-500 sm:text-3xl">
-        {error?.message ?? "Something went wrong"}
+      <h1 className="text-center text-2xl font-bold text-red-500 dark:text-red-500 sm:text-2xl lg:text-3xl">
+        {error?.message ?? "Something went wrong!"}
       </h1>
       <table>
         <thead className="text-base font-medium text-slate-900 dark:text-slate-50 sm:text-lg">
