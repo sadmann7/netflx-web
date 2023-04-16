@@ -1,13 +1,10 @@
 import { Inter as FontSans } from "next/font/google"
-import { getServerAuthSessionWithoutContext } from "@/server/auth"
 
+import "@/styles/globals.css"
 import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
-import SiteFooter from "@/components/layouts/site-footer"
-import SiteHeader from "@/components/layouts/site-header"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ToastWrapper from "@/components/ui/toast-wrapper"
-import "@/styles/globals.css"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,12 +27,6 @@ export const metadata = {
     "Tailwind CSS",
     "Server Components",
     "Radix UI",
-    "TRPC",
-    "T3-App",
-    "Netflix",
-    "Netflix OTT",
-    "Netflix Clone",
-    "Kickflip",
   ],
   authors: [
     {
@@ -57,7 +48,7 @@ export const metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: absoluteUrl("/src/pages/api/og.tsx"),
+        url: absoluteUrl("/og.jpg"),
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -78,23 +69,19 @@ export const metadata = {
   },
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerAuthSessionWithoutContext()
-
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
       className={cn(
-        "scroll-smooth bg-neutral-900 font-sans text-slate-50 antialiased",
+        "bg-white font-sans text-slate-900 antialiased",
         fontSans.variable
       )}
     >
       <head />
-      <body>
+      <body className="min-h-screen">
         <div className="flex min-h-screen flex-col">
-          <SiteHeader session={session} />
           <main className="flex-1">{children}</main>
-          <SiteFooter />
         </div>
         <ToastWrapper />
         <TailwindIndicator />

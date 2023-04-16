@@ -1,3 +1,5 @@
+import type { User } from "@prisma/client"
+
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
 
 export type NavItem = {
@@ -108,3 +110,18 @@ export type PaginatedShows = {
   page: number
   results: Show[]
 }
+
+export type SubscriptionPlan = {
+  name: string
+  description: string
+  stripePriceId: string
+  monthlyPrice?: number
+  videoQuality?: string
+  resolution?: string
+  devices?: string
+}
+
+export type UserSubscriptionPlan = SubscriptionPlan &
+  Pick<User, "stripeCustomerId" | "stripeSubscriptionId"> & {
+    stripeCurrentPeriodEnd: number
+  }

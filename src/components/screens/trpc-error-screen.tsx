@@ -16,10 +16,10 @@ const TrpcErrorScreen = ({ error, reset }: TrpcErrorScreenProps) => {
       className="container grid min-h-screen max-w-screen-2xl items-center justify-center gap-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pb-24 lg:pt-16"
     >
       <Icons.warning
-        className="aspect-square w-24 text-red-500 sm:w-28"
+        className="aspect-square w-24 text-red-500 dark:text-red-500 sm:w-28"
         aria-hidden="true"
       />
-      <h1 className="text-center text-2xl font-bold text-red-500 sm:text-3xl">
+      <h1 className="text-center text-2xl font-bold text-red-500 dark:text-red-500 sm:text-3xl">
         {error?.message ?? "Something went wrong"}
       </h1>
       <table>
