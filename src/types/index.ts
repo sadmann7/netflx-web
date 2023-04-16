@@ -19,7 +19,6 @@ export type SiteConfig = {
   }
   mainNav: NavItem[]
 }
-
 export type Genre = {
   id: number
   name: string | null

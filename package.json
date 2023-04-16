@@ -8,7 +8,8 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "start": "next start"
+    "start": "next start",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe --latest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.0.1",
@@ -30,11 +31,13 @@
     "lucide-react": "^0.144.0",
     "next": "^13.2.4",
     "next-auth": "^4.21.0",
+    "raw-body": "^2.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-hot-toast": "^2.4.0",
     "react-player": "^2.12.0",
+    "stripe": "^12.1.1",
     "superjson": "1.12.2",
     "tailwind-merge": "^1.12.0",
     "zod": "^3.21.4",

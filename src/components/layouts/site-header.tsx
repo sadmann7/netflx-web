@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { NavItem } from "@/types"
 import type { Session } from "next-auth"
-import { signIn, signOut } from "next-auth/react"
+import { signIn } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -48,7 +48,7 @@ interface SiteHeaderProps {
 
 const SiteHeader = ({ session }: SiteHeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false)
-  console.log(session)
+  const [isLoading, setIsLoading] = useState(false)
 
   const changeBgColor = () => {
     window.scrollY > 0 ? setIsScrolled(true) : setIsScrolled(false)
@@ -86,18 +86,18 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                     className="h-auto w-7 cursor-pointer rounded-sm transition-opacity hover:opacity-75 active:opacity-100"
                     loading="lazy"
                   />
-                  <Icons.chevronDown className="ml-1 h-4 w-4 transition-transform duration-200" />
+                  <Icons.chevronDown className="ml-2 h-4 w-4 transition-transform duration-200" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
                 sideOffset={16}
-                className="w-52 overflow-y-auto overflow-x-hidden rounded-none dark:bg-neutral-800/80 dark:text-slate-100"
+                className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/80 dark:text-slate-200"
               >
                 {dropdownItems?.map(
                   (item, index) =>
                     item.href &&
-                    item.title !== "Sign Out of Netflix" && (
+                    item !== dropdownItems[dropdownItems.length - 1] && (
                       <DropdownMenuItem
                         key={index}
                         asChild
@@ -118,16 +118,18 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                 <DropdownMenuSeparator />
                 {dropdownItems?.map(
                   (item, index) =>
-                    item.title === "Sign Out of Netflix" && (
+                    item.href &&
+                    item === dropdownItems[dropdownItems.length - 1] && (
                       <DropdownMenuItem
                         key={index}
                         asChild
                         className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
-                        onClick={() => void signOut()}
                       >
-                        <span className="mx-auto line-clamp-1">
-                          {item.title}
-                        </span>
+                        <Link href={item.href}>
+                          <span className="mx-auto line-clamp-1">
+                            {item.title}
+                          </span>
+                        </Link>
                       </DropdownMenuItem>
                     )
                 )}
@@ -135,10 +137,16 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
             </DropdownMenu>
           ) : (
             <Button
-              aria-label="Sign In"
+              aria-label="Sign in"
               variant="brand"
               className="h-auto px-4 py-2"
-              onClick={() => void signIn("google")}
+              onClick={() => {
+                void signIn("google")
+                setTimeout(() => {
+                  setIsLoading(true)
+                }, 2500)
+              }}
+              disabled={isLoading}
             >
               Sign In
             </Button>
