@@ -13,22 +13,22 @@ const TrpcErrorScreen = ({ error, reset }: TrpcErrorScreenProps) => {
   return (
     <section
       aria-label="Error screen"
-      className="flex min-h-screen flex-col items-center justify-center gap-4 px-4"
+      className="container grid min-h-screen max-w-screen-2xl items-center justify-center gap-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pb-24 lg:pt-16"
     >
       <Icons.warning
-        className="aspect-square w-24 text-red-500 md:w-28"
+        className="aspect-square w-24 text-red-500 sm:w-28"
         aria-hidden="true"
       />
-      <h1 className="text-center text-2xl font-bold text-red-500 md:text-3xl">
+      <h1 className="text-center text-2xl font-bold text-red-500 sm:text-3xl">
         {error?.message ?? "Something went wrong"}
       </h1>
       <table>
-        <thead className="text-base font-medium text-slate-50 md:text-lg">
+        <thead className="text-base font-medium text-slate-900 dark:text-slate-50 sm:text-lg">
           <tr>
             <th>Try doing these:</th>
           </tr>
         </thead>
-        <tbody className="text-base font-medium text-slate-300 md:text-lg">
+        <tbody className="text-base font-medium text-slate-500 dark:text-slate-400 sm:text-lg">
           <tr>
             <td>1. Spine transfer to nosegrab frontflip</td>
           </tr>

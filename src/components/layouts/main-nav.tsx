@@ -86,7 +86,9 @@ export function MainNav({ items }: MainNavProps) {
                   asChild
                   className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
                 >
-                  <Link href={item.href}>{item.title}</Link>
+                  <Link href={item.href}>
+                    <span className="line-clamp-1">{item.title}</span>
+                  </Link>
                 </DropdownMenuItem>
               )
           )}

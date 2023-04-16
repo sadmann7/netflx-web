@@ -5,6 +5,7 @@ export type NavItem = {
   href: string
   disabled?: boolean
   external?: boolean
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }
 
 export type SiteConfig = {
@@ -18,6 +19,7 @@ export type SiteConfig = {
   }
   mainNav: NavItem[]
 }
+
 export type Genre = {
   id: number
   name: string | null

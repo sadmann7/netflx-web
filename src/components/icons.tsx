@@ -9,11 +9,13 @@ import {
   File,
   FileText,
   HelpCircle,
+  Image,
   Info,
   Loader2,
   Minus,
   MoreVertical,
   Pause,
+  Pencil,
   Pizza,
   Play,
   Plus,
@@ -29,6 +31,7 @@ import {
   X,
   type Icon as LucideIcon,
   type LucideProps,
+  ChevronDown,
 } from "lucide-react"
 
 export type Icon = LucideIcon
@@ -38,6 +41,7 @@ export const Icons = {
   spinner: Loader2,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
+  chevronDown: ChevronDown,
   trash: Trash,
   post: FileText,
   page: File,
@@ -61,6 +65,7 @@ export const Icons = {
   thumbsDown: ThumbsDown,
   volumne: Volume2,
   volumneMute: VolumeX,
+  edit: Pencil,
   logo: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

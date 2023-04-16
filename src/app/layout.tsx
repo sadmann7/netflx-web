@@ -1,4 +1,5 @@
 import { Inter as FontSans } from "next/font/google"
+import { getServerAuthSessionWithoutContext } from "@/server/auth"
 
 import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
@@ -77,7 +78,9 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const session = await getServerAuthSessionWithoutContext()
+
   return (
     <html
       lang="en"
@@ -89,7 +92,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body>
         <div className="flex min-h-screen flex-col">
-          <SiteHeader />
+          <SiteHeader session={session} />
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </div>
