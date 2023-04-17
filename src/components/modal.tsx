@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { env } from "@/env.mjs"
 import { useModalStore } from "@/stores/modal"
-import { useShowStore } from "@/stores/show"
+import { useMyListStore } from "@/stores/my-list"
 import type { Genre, Show } from "@/types"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
@@ -25,7 +25,7 @@ interface ModalProps {
 const Modal = ({ open, setOpen }: ModalProps) => {
   // stores
   const modalStore = useModalStore()
-  const showStore = useShowStore()
+  const myListStore = useMyListStore()
 
   const [trailer, setTrailer] = useState("")
   const [genres, setGenres] = useState<Genre[]>([])
@@ -114,14 +114,14 @@ const Modal = ({ open, setOpen }: ModalProps) => {
                   </>
                 )}
               </Button>
-              {showStore.shows.some((s) => s.id === modalStore.show?.id) ? (
+              {myListStore.shows.some((s) => s.id === modalStore.show?.id) ? (
                 <Button
                   aria-label="remove show from my list"
                   variant="ghost"
                   className="h-auto rounded-full p-1 ring-1 ring-slate-100"
                   onClick={() => {
                     modalStore.show
-                      ? showStore.removeShow(modalStore.show)
+                      ? myListStore.removeShow(modalStore.show)
                       : null
                     toast.success("Removed from My List")
                   }}
@@ -134,7 +134,9 @@ const Modal = ({ open, setOpen }: ModalProps) => {
                   variant="ghost"
                   className="h-auto rounded-full p-1 ring-1 ring-slate-100"
                   onClick={() => {
-                    modalStore.show ? showStore.addShow(modalStore.show) : null
+                    modalStore.show
+                      ? myListStore.addShow(modalStore.show)
+                      : null
                     toast.success("Added to My List")
                   }}
                 >

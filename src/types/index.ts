@@ -20,6 +20,7 @@ export type SiteConfig = {
     github: string
   }
   mainNav: NavItem[]
+  profileDropdownItems: NavItem[]
 }
 
 export type PlansConfig = {

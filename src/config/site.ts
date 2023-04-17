@@ -1,5 +1,7 @@
 import type { SiteConfig } from "@/types"
 
+import { Icons } from "@/components/icons"
+
 export const siteConfig: SiteConfig = {
   name: "Netflix",
   description:
@@ -30,6 +32,27 @@ export const siteConfig: SiteConfig = {
     {
       title: "My List",
       href: "/my-list",
+    },
+  ],
+  profileDropdownItems: [
+    {
+      title: "Manage Profiles",
+      href: "/manage-profiles",
+      icon: Icons.edit,
+    },
+    {
+      title: "Account",
+      href: "/account",
+      icon: Icons.user,
+    },
+    {
+      title: "Help Center",
+      href: "/help-center",
+      icon: Icons.help,
+    },
+    {
+      title: "Sign Out of Netflix",
+      href: "/api/auth/signout",
     },
   ],
 }

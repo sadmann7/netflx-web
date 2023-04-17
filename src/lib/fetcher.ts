@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs"
 import type { MediaType, Show } from "@/types"
 
-export const getShows = async (mediaType: MediaType) => {
+export async function getShows(mediaType: MediaType) {
   const [
     trendingShows,
     topRatedShows,
@@ -48,7 +48,7 @@ export const getShows = async (mediaType: MediaType) => {
     !romanceShows.ok ||
     !documentaries.ok
   ) {
-    throw new Error("Failed to fetch data")
+    throw new Error("Failed to fetch shows")
   }
 
   const [trending, topRated, netflix, action, comedy, horror, romance, docs] =
@@ -72,5 +72,25 @@ export const getShows = async (mediaType: MediaType) => {
     horror: horror?.results,
     romance: romance?.results,
     docs: docs?.results,
+  }
+}
+
+export async function searchShows(query: string) {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/search/multi?api_key=${
+      env.NEXT_PUBLIC_TMDB_API_KEY
+    }&query=${encodeURIComponent(query)}`
+  )
+
+  if (!response.ok) {
+    throw new Error("Failed to find shows")
+  }
+
+  const shows = (await response.json()) as { results: Show[] }
+
+  const popularShows = shows.results.sort((a, b) => b.popularity - a.popularity)
+
+  return {
+    results: popularShows,
   }
 }

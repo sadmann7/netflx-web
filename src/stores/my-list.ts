@@ -2,13 +2,13 @@ import type { Show } from "@/types"
 import { create } from "zustand"
 import { createJSONStorage, devtools, persist } from "zustand/middleware"
 
-type ShowState = {
+type MyListState = {
   shows: Show[]
   addShow: (show: Show) => void
   removeShow: (show: Show) => void
 }
 
-export const useShowStore = create<ShowState>()(
+export const useMyListStore = create<MyListState>()(
   devtools(
     persist(
       (set) => ({

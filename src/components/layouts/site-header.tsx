@@ -1,13 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import type { NavItem } from "@/types"
+import { useSearchStore } from "@/stores/search"
 import type { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
+import { searchShows } from "@/lib/fetcher"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/layouts/main-nav"
@@ -20,42 +21,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const dropdownItems = [
-  {
-    title: "Manage Profiles",
-    href: "/manage-profiles",
-    icon: Icons.edit,
-  },
-  {
-    title: "Account",
-    href: "/account",
-    icon: Icons.user,
-  },
-  {
-    title: "Help Center",
-    href: "/help-center",
-    icon: Icons.help,
-  },
-  {
-    title: "Sign Out of Netflix",
-    href: "/api/auth/signout",
-  },
-] satisfies NavItem[]
-
 interface SiteHeaderProps {
   session: Session | null
 }
 
 const SiteHeader = ({ session }: SiteHeaderProps) => {
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isScrolled, setIsScrolled] = React.useState(false)
 
   const changeBgColor = () => {
     window.scrollY > 0 ? setIsScrolled(true) : setIsScrolled(false)
   }
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener("scroll", changeBgColor)
     return () => window.removeEventListener("scroll", changeBgColor)
   }, [isScrolled])
+
+  // search shows
+  const searchStore = useSearchStore()
+
+  async function searchShowsByQuery(e: React.ChangeEvent<HTMLInputElement>) {
+    void searchStore.setIsLoading(true)
+    searchStore.setQuery(e.target.value)
+    const shows = await searchShows(searchStore.query)
+    void searchStore.setShows(shows.results)
+    void searchStore.setIsLoading(false)
+  }
 
   return (
     <header
@@ -68,8 +58,15 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
       <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center space-x-5">
-          <Icons.search className="aspect-square w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
-          <Icons.bell className="aspect-square w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
+          <input
+            type="text"
+            placeholder="Search shows..."
+            className="bg-transparent"
+            value={searchStore.query}
+            onChange={(e) => void searchShowsByQuery(e)}
+          />
+          <Icons.search className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
+          <Icons.bell className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -93,10 +90,13 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                 sideOffset={16}
                 className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/80 dark:text-slate-200"
               >
-                {dropdownItems?.map(
+                {siteConfig.profileDropdownItems.map(
                   (item, index) =>
                     item.href &&
-                    item !== dropdownItems[dropdownItems.length - 1] && (
+                    item !==
+                      siteConfig.profileDropdownItems[
+                        siteConfig.profileDropdownItems.length - 1
+                      ] && (
                       <DropdownMenuItem
                         key={index}
                         asChild
@@ -115,10 +115,13 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                     )
                 )}
                 <DropdownMenuSeparator />
-                {dropdownItems?.map(
+                {siteConfig.profileDropdownItems.map(
                   (item, index) =>
                     item.href &&
-                    item === dropdownItems[dropdownItems.length - 1] && (
+                    item ===
+                      siteConfig.profileDropdownItems[
+                        siteConfig.profileDropdownItems.length - 1
+                      ] && (
                       <DropdownMenuItem
                         key={index}
                         asChild

@@ -3,10 +3,12 @@
 import { useRef, useState } from "react"
 import Image from "next/image"
 import { useModalStore } from "@/stores/modal"
+import { useSearchStore } from "@/stores/search"
 import type { Show } from "@/types"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import SearchedShows from "@/components/searched-shows"
 import { Button } from "@/components/ui/button"
 
 interface ShowsProps {
@@ -31,6 +33,17 @@ const Shows = ({ title, shows }: ShowsProps) => {
 
   // modal store for storing show and modal state
   const modalStore = useModalStore()
+
+  // search store
+  const searchStore = useSearchStore()
+
+  if (
+    !searchStore.isLoading &&
+    searchStore.query.length > 0 &&
+    searchStore.shows.length > 0
+  ) {
+    return <SearchedShows shows={searchStore.shows} />
+  }
 
   return (
     <section aria-label="Show's carousel section">
