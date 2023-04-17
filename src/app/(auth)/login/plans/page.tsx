@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/server/auth"
-import { UserSubscriptionPlan } from "@/types"
 
 import { plansConfig } from "@/config/plans"
 import { getCurrentUser } from "@/lib/session"
@@ -18,34 +17,20 @@ export const metadata: Metadata = {
 export default async function PlansPage() {
   const user = await getCurrentUser()
 
-  // if (!user) {
-  //   redirect(authOptions?.pages?.signIn ?? "/login")
-  // }
+  if (!user) {
+    redirect(authOptions?.pages?.signIn ?? "/login")
+  }
 
-  // // find subscription plan of user
-  // const subscriptionPlan = await getUserSubscriptionPlan(user.id)
+  // find subscription plan of user
+  const subscriptionPlan = await getUserSubscriptionPlan(user.id)
 
-  // // if user has a subscription plan, check if it's active
-  // let isCanceled = false
-  // if (subscriptionPlan && subscriptionPlan.stripeSubscriptionId) {
-  //   const stripePlan = await stripe.subscriptions.retrieve(
-  //     subscriptionPlan.stripeSubscriptionId
-  //   )
-  //   isCanceled = stripePlan.cancel_at_period_end
-  // }
-
-  const isCanceled = false
-  const subscriptionPlan: UserSubscriptionPlan = {
-    description: "",
-    devices: [],
-    monthlyPrice: 0,
-    name: "",
-    resolution: "",
-    stripeCurrentPeriodEnd: 0,
-    stripeCustomerId: "",
-    stripePriceId: "",
-    stripeSubscriptionId: "",
-    videoQuality: "",
+  // if user has a subscription plan, check if it's active
+  let isCanceled = false
+  if (subscriptionPlan && subscriptionPlan.stripeSubscriptionId) {
+    const stripePlan = await stripe.subscriptions.retrieve(
+      subscriptionPlan.stripeSubscriptionId
+    )
+    isCanceled = stripePlan.cancel_at_period_end
   }
 
   return (

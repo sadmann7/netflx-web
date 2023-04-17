@@ -25,7 +25,7 @@ export type SiteConfig = {
 export type PlansConfig = {
   perks: string[]
   plans: {
-    title: "Mobile" | "Basic" | "Standard" | "Premium"
+    name: "Mobile" | "Basic" | "Standard" | "Premium"
     price: number
     videoQuality: "Good" | "Better" | "Best"
     resolution: "480p" | "720p" | "1080p" | "4K+HDR"
@@ -130,13 +130,13 @@ export type SubscriptionPlan = {
   name: string
   description: string
   stripePriceId: string
-  monthlyPrice: number
-  videoQuality: string
-  resolution: string
-  devices: string[]
+  monthlyPrice?: number
+  videoQuality?: string
+  resolution?: string
+  devices?: string
 }
 
 export type UserSubscriptionPlan = SubscriptionPlan &
-  Pick<User, "stripeCustomerId" | "stripeSubscriptionId"> & {
+  Pick<User, "stripeCustomerId" | "stripeSubscriptionId" | "stripePriceId"> & {
     stripeCurrentPeriodEnd: number
   }

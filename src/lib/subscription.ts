@@ -1,11 +1,6 @@
 import type { UserSubscriptionPlan } from "@/types"
 
-import {
-  basicPlan,
-  mobilePlan,
-  premiumPlan,
-  standardPlan,
-} from "@/config/subscriptions"
+import { subscriptionPlans } from "@/config/subscriptions"
 import { db } from "@/lib/db"
 
 export async function getUserSubscriptionPlan(
@@ -42,12 +37,9 @@ export async function getUserSubscriptionPlan(
   if (!user.stripePriceId) return null
 
   // find the subscription plan that matches the user's subscription plan
-  const subscriptionPlan = [
-    mobilePlan,
-    basicPlan,
-    standardPlan,
-    premiumPlan,
-  ].find((plan) => plan.stripePriceId === user.stripePriceId)
+  const subscriptionPlan = subscriptionPlans.find(
+    (plan) => plan.stripePriceId === user.stripePriceId
+  )
 
   if (!subscriptionPlan) return null
 
@@ -55,6 +47,7 @@ export async function getUserSubscriptionPlan(
     ...subscriptionPlan,
     stripeCustomerId: user.stripeCustomerId,
     stripeSubscriptionId: user.stripeSubscriptionId,
+    stripePriceId: user.stripePriceId,
     stripeCurrentPeriodEnd: (user.stripeCurrentPeriodEnd as Date)?.getTime(),
   }
 }

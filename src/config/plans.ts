@@ -9,7 +9,7 @@ export const plansConfig: PlansConfig = {
   ],
   plans: [
     {
-      title: "Mobile",
+      name: "Mobile",
       price: 2.99,
       videoQuality: "Good",
       resolution: "480p",
@@ -25,7 +25,7 @@ export const plansConfig: PlansConfig = {
       ],
     },
     {
-      title: "Basic",
+      name: "Basic",
       price: 3.99,
       videoQuality: "Good",
       resolution: "720p",
@@ -45,7 +45,7 @@ export const plansConfig: PlansConfig = {
       ],
     },
     {
-      title: "Standard",
+      name: "Standard",
       price: 7.99,
       videoQuality: "Better",
       resolution: "1080p",
@@ -69,7 +69,7 @@ export const plansConfig: PlansConfig = {
       ],
     },
     {
-      title: "Premium",
+      name: "Premium",
       price: 9.99,
       videoQuality: "Best",
       resolution: "4K+HDR",

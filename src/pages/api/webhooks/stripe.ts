@@ -3,6 +3,7 @@ import { prisma } from "@/server/db"
 import rawBody from "raw-body"
 import type Stripe from "stripe"
 
+import { db } from "@/lib/db"
 import { stripe } from "@/lib/stripe"
 
 export const config = {
@@ -25,7 +26,7 @@ export default async function handler(
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET || ""
+      process.env.STRIPE_WEBHOOK_SECRET ?? ""
     )
   } catch (error) {
     return res
@@ -48,7 +49,7 @@ export default async function handler(
     // Update the user stripe into in our database.
     // Since this is the initial subscription, we need to update
     // the subscription id and customer id.
-    await prisma.user.update({
+    await db.user.update({
       where: {
         id: session?.metadata?.userId,
       },

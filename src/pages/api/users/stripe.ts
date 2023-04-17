@@ -2,17 +2,27 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { authOptions } from "@/server/auth"
 import { getServerSession } from "next-auth/next"
 
+import { subscriptionPlans } from "@/config/subscriptions"
 import { withAuthentication } from "@/lib/api-middlewares/with-authentication"
 import { withMethods } from "@/lib/api-middlewares/with-methods"
 import { stripe } from "@/lib/stripe"
 import { getUserSubscriptionPlan } from "@/lib/subscription"
 import { absoluteUrl } from "@/lib/utils"
 
-const billingUrl = absoluteUrl("/login/plans")
+const billingUrl = absoluteUrl("/")
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     try {
+      // get stripe price id from request body
+      const { planName } = req.body as { planName: string }
+      console.log(planName)
+
+      // find stripe price id from plan name
+      const stripePriceId = subscriptionPlans.find(
+        (plan) => plan.name === planName
+      )?.stripePriceId
+
       const session = await getServerSession(req, res, authOptions)
       const user = session?.user
 
@@ -22,9 +32,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       const subscriptionPlan = await getUserSubscriptionPlan(user.id)
 
-      // The user is on the pro plan.
+      // The user is already subscribed to the plan.
       // Create a portal session to manage subscription.
-      if (subscriptionPlan?.stripeSubscriptionId) {
+      if (
+        subscriptionPlan?.stripeSubscriptionId &&
+        subscriptionPlan?.stripePriceId === stripePriceId
+      ) {
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: subscriptionPlan.stripeCustomerId ?? "",
           return_url: billingUrl,
@@ -33,8 +46,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.json({ url: stripeSession.url })
       }
 
-      // The user is on the free plan.
+      // The user is not subscribed.
       // Create a checkout session to upgrade.
+      console.log("creating checkout session")
       const stripeSession = await stripe.checkout.sessions.create({
         success_url: billingUrl,
         cancel_url: billingUrl,
@@ -44,7 +58,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         customer_email: user.email,
         line_items: [
           {
-            price: subscriptionPlan?.stripePriceId,
+            price: stripePriceId,
             quantity: 1,
           },
         ],
@@ -60,4 +74,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withMethods(["GET"], withAuthentication(handler))
+export default withMethods(["POST"], withAuthentication(handler))

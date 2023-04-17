@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import * as React from "react"
 import type { UserSubscriptionPlan } from "@/types"
+import { toast } from "react-hot-toast"
 
 import { plansConfig } from "@/config/plans"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 interface BillingFormProps {
   subscriptionPlan: UserSubscriptionPlan | null
@@ -12,7 +14,39 @@ interface BillingFormProps {
 }
 
 const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
-  const [selectedPlan, setSelectedPlan] = useState(plansConfig.plans[0])
+  const [selectedPlan, setSelectedPlan] = React.useState(plansConfig.plans[0])
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  async function handleSubscription() {
+    console.log("handleSubscription")
+
+    setIsLoading(!isLoading)
+
+    // Get a Stripe session URL.
+    const response = await fetch("/api/users/stripe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        planName: selectedPlan?.name,
+      }),
+    })
+
+    if (!response?.ok) {
+      return toast.error(
+        "Something went wrong. Please refresh the page and try again."
+      )
+    }
+
+    // Redirect to the Stripe session.
+    // This could be a checkout page for initial upgrade.
+    // Or portal to manage existing subscription.
+    const session = (await response.json()) as { url: string }
+    if (session) {
+      window.location.href = session.url
+    }
+  }
 
   return (
     <div className="flex h-full w-full flex-col gap-5 overflow-x-auto">
@@ -26,10 +60,13 @@ const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
             )}
             onClick={() => setSelectedPlan(plan)}
           >
-            {plan.title}
+            {plan.name}
           </div>
         ))}
       </div>
+      <Button onClick={() => void handleSubscription()}>
+        {subscriptionPlan && !isCanceled ? "Update" : "Subscribe"}
+      </Button>
     </div>
   )
 }
