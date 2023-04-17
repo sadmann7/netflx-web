@@ -1,26 +1,50 @@
 import { Suspense } from "react"
+import type { CategorizedShows } from "@/types"
 
 import { getShows } from "@/lib/fetcher"
 import Hero from "@/components/hero"
 import LoadingScreen from "@/components/screens/loading-screen"
-import Shows from "@/components/shows"
+import ShowsContainer from "@/components/shows-container"
 
 export default async function Home() {
-  const shows = await getShows("movie")
+  const allShows = await getShows("movie")
+
+  const allShowsByCategory: CategorizedShows[] = [
+    {
+      title: "Trending Now",
+      shows: allShows.trending,
+    },
+    {
+      title: "Top Rated",
+      shows: allShows.topRated,
+    },
+    {
+      title: "Action Thrillers",
+      shows: allShows.action,
+    },
+    {
+      title: "Comedies",
+      shows: allShows.comedy,
+    },
+    {
+      title: "Scary Movies",
+      shows: allShows.horror,
+    },
+    {
+      title: "Romance Movies",
+      shows: allShows.romance,
+    },
+    {
+      title: "Documentaries",
+      shows: allShows.docs,
+    },
+  ]
 
   return (
     <section className="pb-16">
       <Suspense fallback={<LoadingScreen />}>
-        <Hero shows={shows.netflix ?? []} />
-        <div className="w-full space-y-10">
-          <Shows title="Trending Now" shows={shows.trending ?? []} />
-          <Shows title="Top Rated" shows={shows.topRated ?? []} />
-          <Shows title="Action Thrillers" shows={shows.action ?? []} />
-          <Shows title="Comedies" shows={shows.comedy ?? []} />
-          <Shows title="Scary Movies" shows={shows.horror ?? []} />
-          <Shows title="Romance Movies" shows={shows.romance ?? []} />
-          <Shows title="Documentaries" shows={shows.docs ?? []} />
-        </div>
+        <Hero shows={allShows.netflix ?? []} />
+        <ShowsContainer shows={allShowsByCategory} />
       </Suspense>
     </section>
   )

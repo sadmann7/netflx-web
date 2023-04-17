@@ -42,11 +42,7 @@ const TrpcErrorScreen = ({ error, reset }: TrpcErrorScreenProps) => {
         </tbody>
       </table>
       {reset ? (
-        <Button
-          aria-label="Try again"
-          variant="destructive"
-          onClick={() => reset()}
-        >
+        <Button aria-label="Try again" onClick={() => reset()}>
           Try again
         </Button>
       ) : null}

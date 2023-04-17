@@ -122,9 +122,9 @@ export type Show = {
   vote_count: number
 }
 
-export type PaginatedShows = {
-  page: number
-  results: Show[]
+export type CategorizedShows = {
+  title: string
+  shows?: Show[]
 }
 
 export type SubscriptionPlan = {

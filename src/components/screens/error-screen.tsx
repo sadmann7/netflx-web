@@ -21,11 +21,7 @@ const ErrorScreen = ({ error, reset }: ErrorScreenProps) => {
         <h1 className="text-center text-2xl font-bold text-red-500 dark:text-red-500 sm:text-2xl lg:text-3xl">
           {error.message ?? "Something went wrong!"}
         </h1>
-        <Button
-          aria-label="Try again"
-          variant="destructive"
-          onClick={() => reset()}
-        >
+        <Button aria-label="Try again" onClick={() => reset()}>
           Try again
         </Button>
       </div>

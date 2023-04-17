@@ -1,19 +1,39 @@
 import type { Metadata } from "next"
+import type { CategorizedShows } from "@/types"
+
+import { getNewAndPopularShows } from "@/lib/fetcher"
+import ShowsContainer from "@/components/shows-container"
 
 export const metadata: Metadata = {
   title: "New & Popular",
   description: "All new and popular shows grouped by genre",
 }
 
-export default function NewAndPopularPage() {
+export default async function NewAndPopularPage() {
+  const allShows = await getNewAndPopularShows()
+
+  const allShowsByCategory: CategorizedShows[] = [
+    {
+      title: "New TV Shows",
+      shows: allShows.trendingTvs,
+    },
+    {
+      title: "New Movies",
+      shows: allShows.trendingMovies,
+    },
+    {
+      title: "Popular TV Shows",
+      shows: allShows.popularTvs,
+    },
+    {
+      title: "Popular Movies",
+      shows: allShows.popularMovies,
+    },
+  ]
+
   return (
-    <section className="container grid h-screen items-center justify-center gap-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pb-24 lg:pt-16">
-      <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
-        <h1 className="text-center text-3xl font-bold text-slate-50 md:text-4xl lg:text-5xl">
-          New & Popular
-        </h1>
-        <p className="text-center text-slate-500">Coming soon...</p>
-      </div>
+    <section className="pb-16 pt-10">
+      <ShowsContainer shows={allShowsByCategory} />
     </section>
   )
 }

@@ -9,7 +9,11 @@ interface SearchedShowsProps {
 const SearchedShows = ({ shows }: SearchedShowsProps) => {
   console.log(shows)
 
-  return <div>SearchedShows</div>
+  return (
+    <section className="container w-full max-w-screen-2xl space-y-2.5">
+      SearchedShows
+    </section>
+  )
 }
 
 export default SearchedShows

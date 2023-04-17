@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { useModalStore } from "@/stores/modal"
+import { useSearchStore } from "@/stores/search"
 import type { Show } from "@/types"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
-import Modal from "@/components/modal"
 import { Button } from "@/components/ui/button"
 
 interface HeroProps {
@@ -25,11 +25,19 @@ const Hero = ({ shows }: HeroProps) => {
   // modal store
   const modalStore = useModalStore()
 
+  // search store
+  const searchStore = useSearchStore()
+
+  if (
+    !searchStore.isLoading &&
+    searchStore.query.length > 0 &&
+    searchStore.shows.length > 0
+  ) {
+    return null
+  }
+
   return (
     <section aria-label="Hero section" className="w-full pb-24 pt-10">
-      {modalStore.open ? (
-        <Modal open={modalStore.open} setOpen={modalStore.setOpen} />
-      ) : null}
       {randomShow && (
         <div className="container w-full max-w-screen-2xl">
           <div className="absolute inset-0 -z-10 h-screen w-full">
