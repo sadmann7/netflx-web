@@ -40,11 +40,9 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
   const searchStore = useSearchStore()
 
   async function searchShowsByQuery(e: React.ChangeEvent<HTMLInputElement>) {
-    void searchStore.setIsLoading(true)
     searchStore.setQuery(e.target.value)
     const shows = await searchShows(searchStore.query)
     void searchStore.setShows(shows.results)
-    void searchStore.setIsLoading(false)
   }
 
   return (

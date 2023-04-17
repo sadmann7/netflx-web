@@ -11,6 +11,10 @@ export default {
           "2xl": "1360px",
         },
       },
+      screens: {
+        xxs: "320px",
+        xs: "420px",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

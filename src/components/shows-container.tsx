@@ -19,11 +19,7 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
   // search store
   const searchStore = useSearchStore()
 
-  if (
-    !searchStore.isLoading &&
-    searchStore.query.length > 0 &&
-    searchStore.shows.length > 0
-  ) {
+  if (searchStore.query.length > 0) {
     return <SearchedShows shows={searchStore.shows} />
   }
 

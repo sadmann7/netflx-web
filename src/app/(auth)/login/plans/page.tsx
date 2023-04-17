@@ -38,10 +38,13 @@ export default async function PlansPage() {
       <h1 className="text-3xl font-bold sm:text-4xl">
         Choose the plan that’s right for you
       </h1>
-      <div className="flex w-full flex-col space-y-2">
+      <div className="flex w-full flex-col gap-2">
         {plansConfig.perks.map((perk, i) => (
-          <div key={i} className="flex items-center space-x-2">
-            <Icons.check className="h-7 w-7 text-red-600" aria-hidden="true" />
+          <div key={i} className="flex items-center">
+            <Icons.check
+              className="mr-2 h-7 w-7 text-red-600"
+              aria-hidden="true"
+            />
             <span className="text-gray-500 dark:text-gray-400">{perk}</span>
           </div>
         ))}

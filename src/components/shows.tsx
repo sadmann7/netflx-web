@@ -58,11 +58,11 @@ const Shows = ({ title, shows }: ShowsProps) => {
               ref={showsRef}
               className="no-scrollbar h-full w-full overflow-x-auto overflow-y-hidden"
             >
-              <div className="flex space-x-2">
+              <div className="flex items-center gap-1">
                 {shows.map((show) => (
                   <div
                     key={show.id}
-                    className="relative aspect-square h-28 w-full min-w-[15rem] cursor-pointer overflow-hidden rounded-sm transition-transform hover:scale-105"
+                    className="relative aspect-video min-w-[15rem] cursor-pointer overflow-hidden rounded-sm transition-transform hover:scale-105"
                     onClick={() => {
                       modalStore.setShow(show)
                       modalStore.setOpen(true)
@@ -76,7 +76,7 @@ const Shows = ({ title, shows }: ShowsProps) => {
                       alt={show.title ?? "poster"}
                       fill
                       sizes="(max-width: 768px) 100vw, 
-                      (max-width: 1200px) 50vw, 33vw"
+                        (max-width: 1200px) 50vw, 33vw"
                       loading="lazy"
                       className="object-cover"
                     />
