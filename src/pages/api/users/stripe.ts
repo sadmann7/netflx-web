@@ -9,7 +9,7 @@ import { stripe } from "@/lib/stripe"
 import { getUserSubscriptionPlan } from "@/lib/subscription"
 import { absoluteUrl } from "@/lib/utils"
 
-const billingUrl = absoluteUrl("/")
+const billingUrl = absoluteUrl("/login/plans")
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {

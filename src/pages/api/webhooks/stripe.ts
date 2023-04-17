@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import { env } from "@/env.mjs"
 import { prisma } from "@/server/db"
 import rawBody from "raw-body"
 import type Stripe from "stripe"
@@ -26,7 +27,7 @@ export default async function handler(
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET ?? ""
+      env.STRIPE_WEBHOOK_SECRET ?? ""
     )
   } catch (error) {
     return res
