@@ -68,12 +68,15 @@ export function MainNav({ items }: MainNavProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="start"
-          sideOffset={24}
-          className="w-64 overflow-y-auto overflow-x-hidden dark:bg-neutral-800"
+          sideOffset={20}
+          className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/90 dark:text-slate-200"
         >
           <DropdownMenuLabel>
             <Link href="/" className="flex items-center">
-              <Icons.logo className="mr-2 h-4 w-4 text-red-600" />
+              <Icons.logo
+                className="mr-2 h-4 w-4 text-red-600"
+                aria-hidden="true"
+              />
               {siteConfig.name}
             </Link>
           </DropdownMenuLabel>
@@ -84,9 +87,12 @@ export function MainNav({ items }: MainNavProps) {
                 <DropdownMenuItem
                   key={index}
                   asChild
-                  className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
+                  className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                 >
                   <Link href={item.href}>
+                    {item.icon && (
+                      <item.icon className="mr-2 h-4 w-4" aria-hidden="true" />
+                    )}
                     <span className="line-clamp-1">{item.title}</span>
                   </Link>
                 </DropdownMenuItem>

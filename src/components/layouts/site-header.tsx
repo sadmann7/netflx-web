@@ -87,8 +87,8 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                sideOffset={16}
-                className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/80 dark:text-slate-200"
+                sideOffset={20}
+                className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/90 dark:text-slate-200"
               >
                 {siteConfig.profileDropdownItems.map(
                   (item, index) =>
@@ -100,7 +100,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                       <DropdownMenuItem
                         key={index}
                         asChild
-                        className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
+                        className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                       >
                         <Link href={item.href}>
                           {item.icon && (

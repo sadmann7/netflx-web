@@ -1,5 +1,6 @@
 import type { PlansConfig } from "@/types"
-import { Laptop, Phone, Tablet, Tv2 } from "lucide-react"
+
+import { Icons } from "@/components/icons"
 
 export const plansConfig: PlansConfig = {
   perks: [
@@ -16,11 +17,11 @@ export const plansConfig: PlansConfig = {
       devices: [
         {
           title: "Phone",
-          icon: Phone,
+          icon: Icons.phone,
         },
         {
           title: "Tablet",
-          icon: Tablet,
+          icon: Icons.tablet,
         },
       ],
     },
@@ -32,15 +33,15 @@ export const plansConfig: PlansConfig = {
       devices: [
         {
           title: "Phone",
-          icon: Phone,
+          icon: Icons.phone,
         },
         {
           title: "Tablet",
-          icon: Tablet,
+          icon: Icons.tablet,
         },
         {
           title: "Computer",
-          icon: Laptop,
+          icon: Icons.computer,
         },
       ],
     },
@@ -52,19 +53,19 @@ export const plansConfig: PlansConfig = {
       devices: [
         {
           title: "Phone",
-          icon: Phone,
+          icon: Icons.phone,
         },
         {
           title: "Tablet",
-          icon: Tablet,
+          icon: Icons.tablet,
         },
         {
           title: "Computer",
-          icon: Laptop,
+          icon: Icons.computer,
         },
         {
           title: "TV",
-          icon: Tv2,
+          icon: Icons.tv,
         },
       ],
     },
@@ -76,19 +77,19 @@ export const plansConfig: PlansConfig = {
       devices: [
         {
           title: "Phone",
-          icon: Phone,
+          icon: Icons.phone,
         },
         {
           title: "Tablet",
-          icon: Tablet,
+          icon: Icons.tablet,
         },
         {
           title: "Computer",
-          icon: Laptop,
+          icon: Icons.computer,
         },
         {
           title: "TV",
-          icon: Tv2,
+          icon: Icons.tv,
         },
       ],
     },

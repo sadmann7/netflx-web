@@ -1,5 +1,6 @@
 import type { SiteConfig } from "@/types"
 
+import { absoluteUrl } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 
 export const siteConfig: SiteConfig = {
@@ -7,7 +8,7 @@ export const siteConfig: SiteConfig = {
   description:
     "An open source Netflix clone built using the new router, server components, trpc and everything new in Next.js 13.",
   url: "https://netflx-web.vercel.app",
-  ogImage: "https://tx.shadcn.com/og.jpg",
+  ogImage: absoluteUrl("/src/pages/api/og.tsx"),
   links: {
     twitter: "https://twitter.com/sadmann17",
     github: "https://github.com/sadmann7",
@@ -16,22 +17,27 @@ export const siteConfig: SiteConfig = {
     {
       title: "Home",
       href: "/",
+      icon: Icons.home,
     },
     {
       title: "TV Shows",
       href: "/tv-shows",
+      icon: Icons.tvShow,
     },
     {
       title: "Movies",
       href: "/movies",
+      icon: Icons.movie,
     },
     {
       title: "New & Popular",
       href: "/new-and-popular",
+      icon: Icons.trendingUp,
     },
     {
       title: "My List",
       href: "/my-list",
+      icon: Icons.list,
     },
   ],
   profileDropdownItems: [
