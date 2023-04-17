@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import { prisma } from "@/server/db"
 import rawBody from "raw-body"
 import type Stripe from "stripe"
 
-import { db } from "@/lib/db"
 import { stripe } from "@/lib/stripe"
 
 export const config = {
@@ -48,7 +48,7 @@ export default async function handler(
     // Update the user stripe into in our database.
     // Since this is the initial subscription, we need to update
     // the subscription id and customer id.
-    await db.user.update({
+    await prisma.user.update({
       where: {
         id: session?.metadata?.userId,
       },
@@ -70,7 +70,7 @@ export default async function handler(
     )
 
     // Update the price id and set the new period end.
-    await db.user.update({
+    await prisma.user.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },

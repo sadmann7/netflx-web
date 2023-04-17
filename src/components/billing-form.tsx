@@ -1,11 +1,17 @@
 "use client"
 
 import { useState } from "react"
+import type { UserSubscriptionPlan } from "@/types"
 
 import { plansConfig } from "@/config/plans"
 import { cn } from "@/lib/utils"
 
-const Plans = () => {
+interface BillingFormProps {
+  subscriptionPlan: UserSubscriptionPlan | null
+  isCanceled: boolean
+}
+
+const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
   const [selectedPlan, setSelectedPlan] = useState(plansConfig.plans[0])
 
   return (
@@ -28,4 +34,4 @@ const Plans = () => {
   )
 }
 
-export default Plans
+export default BillingForm

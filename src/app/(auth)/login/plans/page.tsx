@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
+import { redirect } from "next/navigation"
+import { authOptions } from "@/server/auth"
+import { UserSubscriptionPlan } from "@/types"
 
 import { plansConfig } from "@/config/plans"
-import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
+import { stripe } from "@/lib/stripe"
+import { getUserSubscriptionPlan } from "@/lib/subscription"
+import BillingForm from "@/components/billing-form"
 import { Icons } from "@/components/icons"
-import Plans from "@/components/plans"
 
 export const metadata: Metadata = {
   title: "Plans",
@@ -14,13 +18,34 @@ export const metadata: Metadata = {
 export default async function PlansPage() {
   const user = await getCurrentUser()
 
-  if (user) {
-    // find user in db by id
-    const dbUser = await db.user.findUnique({
-      where: {
-        id: user.id,
-      },
-    })
+  // if (!user) {
+  //   redirect(authOptions?.pages?.signIn ?? "/login")
+  // }
+
+  // // find subscription plan of user
+  // const subscriptionPlan = await getUserSubscriptionPlan(user.id)
+
+  // // if user has a subscription plan, check if it's active
+  // let isCanceled = false
+  // if (subscriptionPlan && subscriptionPlan.stripeSubscriptionId) {
+  //   const stripePlan = await stripe.subscriptions.retrieve(
+  //     subscriptionPlan.stripeSubscriptionId
+  //   )
+  //   isCanceled = stripePlan.cancel_at_period_end
+  // }
+
+  const isCanceled = false
+  const subscriptionPlan: UserSubscriptionPlan = {
+    description: "",
+    devices: [],
+    monthlyPrice: 0,
+    name: "",
+    resolution: "",
+    stripeCurrentPeriodEnd: 0,
+    stripeCustomerId: "",
+    stripePriceId: "",
+    stripeSubscriptionId: "",
+    videoQuality: "",
   }
 
   return (
@@ -36,7 +61,10 @@ export default async function PlansPage() {
           </div>
         ))}
       </div>
-      <Plans />
+      <BillingForm
+        subscriptionPlan={subscriptionPlan}
+        isCanceled={isCanceled}
+      />
     </section>
   )
 }

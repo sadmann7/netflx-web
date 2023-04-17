@@ -3,5 +3,5 @@ interface ShowsLayotutProps {
 }
 
 export default function ShowsLayout({ children }: ShowsLayotutProps) {
-  return <div className="min-h-screen">{children}</div>
+  return <div>{children}</div>
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { prisma } from "@/server/db"
 
-import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
 import LoginButton from "@/components/login-button"
 
@@ -15,7 +15,7 @@ export default async function LoginPage() {
 
   if (user) {
     // find user in db by id
-    const dbUser = await db.user.findUnique({
+    const dbUser = await prisma.user.findUnique({
       where: {
         id: user.id,
       },
