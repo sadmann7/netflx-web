@@ -55,7 +55,10 @@ const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col gap-8 overflow-x-auto">
+    <section
+      aria-label="Billing form for various subscription plans"
+      className="flex h-full w-full flex-col gap-8 overflow-x-auto"
+    >
       <div className="flex min-w-[480px] justify-end gap-5">
         {plansConfig.plans.map((plan, i) => (
           <div
@@ -108,7 +111,7 @@ const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
           ? "Update"
           : "Subscribe"}
       </Button>
-    </div>
+    </section>
   )
 }
 

@@ -15,7 +15,10 @@ const ShowsGrid = ({ shows }: SearchedShowsProps) => {
   const modalStore = useModalStore()
 
   return (
-    <div className="container w-full max-w-screen-2xl pb-16 pt-10">
+    <section
+      aria-label="Grid of shows"
+      className="container w-full max-w-screen-2xl pb-16 pt-10"
+    >
       {modalStore.open ? (
         <ShowModal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
@@ -45,7 +48,7 @@ const ShowsGrid = ({ shows }: SearchedShowsProps) => {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   )
 }
 

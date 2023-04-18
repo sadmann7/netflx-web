@@ -14,7 +14,7 @@ interface ShowsProps {
   shows: Show[]
 }
 
-const Shows = ({ title, shows }: ShowsProps) => {
+const ShowsCarousel = ({ title, shows }: ShowsProps) => {
   const showsRef = useRef<HTMLDivElement>(null)
   const [isScrollable, setIsScrollable] = useState(false)
 
@@ -33,7 +33,7 @@ const Shows = ({ title, shows }: ShowsProps) => {
   const modalStore = useModalStore()
 
   return (
-    <section aria-label="Show's carousel section">
+    <section aria-label="Carousel of shows">
       {shows.length !== 0 && (
         <div className="container w-full max-w-screen-2xl space-y-2.5">
           <h2 className="text-base font-semibold text-white/90 transition-colors hover:text-white md:text-xl ">
@@ -102,4 +102,4 @@ const Shows = ({ title, shows }: ShowsProps) => {
   )
 }
 
-export default Shows
+export default ShowsCarousel

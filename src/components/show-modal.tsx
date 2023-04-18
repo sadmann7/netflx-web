@@ -74,6 +74,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
 
   return (
     <Dialog
+      aria-label="Modal containing show's details"
       onOpenChange={() => {
         setOpen(!open)
         modalStore.setShow(null)

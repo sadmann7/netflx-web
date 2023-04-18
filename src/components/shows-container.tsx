@@ -5,7 +5,7 @@ import { useSearchStore } from "@/stores/search"
 import type { CategorizedShows } from "@/types"
 
 import ShowModal from "@/components/show-modal"
-import Shows from "@/components/shows"
+import ShowsCarousel from "@/components/shows-carousel"
 import ShowsGrid from "@/components/shows-grid"
 
 interface ShowsContainerProps {
@@ -29,7 +29,11 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
         <ShowModal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
       {shows.map((item) => (
-        <Shows key={item.title} title={item.title} shows={item.shows ?? []} />
+        <ShowsCarousel
+          key={item.title}
+          title={item.title}
+          shows={item.shows ?? []}
+        />
       ))}
     </div>
   )
