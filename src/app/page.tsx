@@ -41,7 +41,7 @@ export default async function Home() {
   ]
 
   return (
-    <section className="pb-16">
+    <section className="pb-16 pt-10">
       <Suspense fallback={<LoadingScreen />}>
         <Hero shows={allShows.netflix ?? []} />
         <ShowsContainer shows={allShowsByCategory} />
