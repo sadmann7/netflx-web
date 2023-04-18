@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 
-interface ShowsProps {
+interface ShowsCarouselProps {
   title: string
   shows: Show[]
 }
 
-const ShowsCarousel = ({ title, shows }: ShowsProps) => {
+const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
   const showsRef = useRef<HTMLDivElement>(null)
   const [isScrollable, setIsScrollable] = useState(false)
 
@@ -56,34 +56,33 @@ const ShowsCarousel = ({ title, shows }: ShowsProps) => {
             </Button>
             <div
               ref={showsRef}
-              className="no-scrollbar h-full w-full overflow-x-auto overflow-y-hidden"
+              className="no-scrollbar flex h-full w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden"
             >
-              <div className="flex items-center gap-1">
-                {shows.map((show) => (
-                  <div
-                    key={show.id}
-                    className="relative aspect-video min-w-[15rem] cursor-pointer overflow-hidden rounded-sm transition-transform hover:scale-105"
-                    onClick={() => {
-                      modalStore.setShow(show)
-                      modalStore.setOpen(true)
-                      modalStore.setPlay(false)
-                    }}
-                  >
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w500/${
-                        show.backdrop_path ?? show.poster_path
-                      }`}
-                      alt={show.title ?? "poster"}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 
+              {shows.map((show) => (
+                <div
+                  key={show.id}
+                  className="relative aspect-video min-w-[15rem] cursor-pointer overflow-hidden rounded-sm transition-transform hover:scale-105"
+                  onClick={() => {
+                    modalStore.setShow(show)
+                    modalStore.setOpen(true)
+                    modalStore.setPlay(false)
+                  }}
+                >
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w500/${
+                      show.backdrop_path ?? show.poster_path
+                    }`}
+                    alt={show.title ?? "poster"}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 
                         (max-width: 1200px) 50vw, 33vw"
-                      loading="lazy"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
+                    loading="lazy"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
             </div>
+
             <Button
               aria-label="Scroll to left"
               variant="ghost"

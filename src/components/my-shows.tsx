@@ -1,13 +1,16 @@
 "use client"
 
+import * as React from "react"
 import { useMounted } from "@/hooks/use-mounted"
 import { useMyListStore } from "@/stores/my-list"
+import { useSearchStore } from "@/stores/search"
 
 import LoadingScreen from "@/components/screens/loading-screen"
 import ShowsGrid from "@/components/shows-grid"
 
 const MyShows = () => {
-  // my list store
+  // stores
+  const searchStore = useSearchStore()
   const myListStore = useMyListStore()
 
   // check if component is mounted
@@ -17,7 +20,7 @@ const MyShows = () => {
     return <LoadingScreen />
   }
 
-  if (mounted && !myListStore.shows.length) {
+  if (!myListStore.shows.length) {
     return (
       <div className="container flex w-full max-w-screen-2xl flex-col gap-2.5">
         <h1 className="text-2xl font-bold sm:text-3xl">Your list is empty</h1>
@@ -28,7 +31,11 @@ const MyShows = () => {
     )
   }
 
-  return <>{mounted && <ShowsGrid shows={myListStore.shows} />}</>
+  if (searchStore.query.length > 0) {
+    return <ShowsGrid shows={searchStore.shows} />
+  }
+
+  return <ShowsGrid shows={myListStore.shows} />
 }
 
 export default MyShows

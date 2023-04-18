@@ -127,7 +127,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     toast.success("Removed from My List")
                   }}
                 >
-                  <Icons.remove className="h-4 w-4" aria-hidden="true" />
+                  <Icons.check className="h-4 w-4" aria-hidden="true" />
                 </Button>
               ) : (
                 <Button

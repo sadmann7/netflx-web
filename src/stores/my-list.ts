@@ -25,7 +25,7 @@ export const useMyListStore = create<MyListState>()(
           })),
       }),
       {
-        name: "show-store",
+        name: "my-list-store",
         storage: createJSONStorage(() => sessionStorage),
       }
     )
