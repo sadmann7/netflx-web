@@ -17,12 +17,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-interface ModalProps {
+interface ShowModalProps {
   open: boolean
   setOpen: (open: boolean) => void
 }
 
-const Modal = ({ open, setOpen }: ModalProps) => {
+const ShowModal = ({ open, setOpen }: ShowModalProps) => {
   // stores
   const modalStore = useModalStore()
   const myListStore = useMyListStore()
@@ -194,4 +194,4 @@ const Modal = ({ open, setOpen }: ModalProps) => {
   )
 }
 
-export default Modal
+export default ShowModal

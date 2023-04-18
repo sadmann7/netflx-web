@@ -8,17 +8,24 @@ import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Input, type InputProps } from "@/components/ui/input"
 
+interface ExpandableSearchbarProps extends InputProps {
+  setQuery: (query: string) => void
+}
+
 const ExpandableSearchbar = ({
   className,
   id = "query",
+
+  setQuery,
+
   ...props
-}: InputProps) => {
+}: ExpandableSearchbarProps) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   // close search input on clicking outside,
   // and optimize with useCallback hook to prevent unnecessary re-renders
-  const closeInput = React.useCallback(() => setIsOpen(false), [])
+  const closeInput = React.useCallback(() => setIsOpen(false), [setIsOpen])
   useOnClickOutside(inputRef, closeInput)
 
   // configure keyboard shortcuts
@@ -27,6 +34,7 @@ const ExpandableSearchbar = ({
       // close search input on pressing escape
       if (e.key === "Escape") {
         closeInput()
+        setQuery("")
       }
       // open search input on pressing ctrl + k or cmd + k
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -38,7 +46,7 @@ const ExpandableSearchbar = ({
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [closeInput, isOpen])
+  }, [closeInput, isOpen, setIsOpen, setQuery])
 
   return (
     <fieldset className="relative">
@@ -51,20 +59,20 @@ const ExpandableSearchbar = ({
         type="text"
         placeholder="Search..."
         className={cn(
-          "h-auto rounded-none py-1.5 text-sm transition-all dark:placeholder:text-slate-300 dark:focus:ring-offset-0",
+          "h-auto rounded-none py-1.5 pl-8 text-sm transition-all dark:placeholder:text-slate-300 dark:focus:ring-offset-0",
           isOpen
-            ? "w-44 border pl-9 dark:border-slate-500"
-            : "w-0 border-none pl-8",
+            ? "w-24 border dark:border-slate-500 xxs:w-28 xs:w-44"
+            : "w-0 border-none",
           className
         )}
         {...props}
       />
       <Button
-        aria-label="Search button"
+        aria-label="Search"
         variant="ghost"
         className={cn(
           "absolute top-1/2 h-auto -translate-y-1/2 rounded-full p-1 hover:bg-transparent dark:hover:bg-transparent",
-          isOpen ? "left-1.5" : "left-[9px]"
+          isOpen ? "left-1" : "left-[9px]"
         )}
         onClick={() => {
           if (!inputRef.current) return
@@ -74,7 +82,7 @@ const ExpandableSearchbar = ({
       >
         <Icons.search
           className={cn(
-            "text-slate-50 transition-all hover:opacity-75 active:scale-95",
+            "text-slate-50 transition-opacity hover:opacity-75 active:scale-95",
             isOpen ? "h-4 w-4" : "h-5 w-5"
           )}
           aria-hidden="true"

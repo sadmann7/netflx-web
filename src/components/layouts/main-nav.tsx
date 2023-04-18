@@ -81,22 +81,34 @@ export function MainNav({ items }: MainNavProps) {
             </Link>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {items?.map(
-            (item, index) =>
-              item.href && (
-                <DropdownMenuItem
-                  key={index}
-                  asChild
-                  className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                >
-                  <Link href={item.href}>
-                    {item.icon && (
-                      <item.icon className="mr-2 h-4 w-4" aria-hidden="true" />
-                    )}
-                    <span className="line-clamp-1">{item.title}</span>
-                  </Link>
-                </DropdownMenuItem>
-              )
+          {items?.map((item, index) =>
+            item.href ? (
+              <DropdownMenuItem
+                key={index}
+                asChild
+                className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+              >
+                <Link href={item.href}>
+                  {item.icon && (
+                    <item.icon className="mr-2 h-4 w-4" aria-hidden="true" />
+                  )}
+                  <span className="line-clamp-1">{item.title}</span>
+                </Link>
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                key={index}
+                asChild
+                className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+              >
+                <div onClick={item.onClick}>
+                  {item.icon && (
+                    <item.icon className="mr-2 h-4 w-4" aria-hidden="true" />
+                  )}
+                  <span className="line-clamp-1">{item.title}</span>
+                </div>
+              </DropdownMenuItem>
+            )
           )}
         </DropdownMenuContent>
       </DropdownMenu>

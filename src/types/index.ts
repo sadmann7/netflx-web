@@ -4,7 +4,8 @@ export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
 
 export type NavItem = {
   title: string
-  href: string
+  href?: string
+  onClick?: () => void
   disabled?: boolean
   external?: boolean
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>

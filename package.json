@@ -12,6 +12,7 @@
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe --latest"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.6",
     "@hookform/resolvers": "^3.0.1",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.11.0",

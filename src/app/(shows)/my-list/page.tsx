@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "My List",
-  description: "All shows and movies you've added to your list",
+  description: "All TV shows and movies you've added to your list",
 }
 
 export default function MyListPage() {

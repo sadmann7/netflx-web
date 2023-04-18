@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useSearchStore } from "@/stores/search"
 import type { Session } from "next-auth"
 import { signOut } from "next-auth/react"
+import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
 import { searchShows } from "@/lib/fetcher"
@@ -58,18 +59,33 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     >
       <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
-        <div className="flex items-center space-x-5">
+        <div className="flex items-center space-x-1.5">
           <ExpandableSearchbar
+            setQuery={searchStore.setQuery}
             value={searchStore.query}
             onChange={(e) => void searchShowsByQuery(e)}
           />
-          <Icons.bell className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
+          <Button
+            aria-label="Notifications"
+            variant="ghost"
+            className="hidden h-auto rounded-full p-1 hover:bg-transparent dark:hover:bg-transparent lg:flex"
+            onClick={() =>
+              toast.success("Do a kickflip", {
+                icon: "🛹",
+              })
+            }
+          >
+            <Icons.bell
+              className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:scale-95"
+              aria-hidden="true"
+            />
+          </Button>
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-auto px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
+                  className="h-auto shrink-0 px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
                 >
                   <Image
                     src="/images/who-is-watching.webp"
@@ -79,7 +95,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                     className="h-auto w-7 cursor-pointer rounded-sm transition-opacity hover:opacity-75 active:opacity-100"
                     loading="lazy"
                   />
-                  <Icons.chevronDown className="ml-2 h-4 w-4 transition-transform duration-200" />
+                  <Icons.chevronDown className="ml-2 hidden h-4 w-4 transition-transform duration-200 lg:inline-block" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent

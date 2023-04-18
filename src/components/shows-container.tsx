@@ -4,8 +4,8 @@ import { useModalStore } from "@/stores/modal"
 import { useSearchStore } from "@/stores/search"
 import type { CategorizedShows } from "@/types"
 
-import Modal from "@/components/modal"
 import SearchedShows from "@/components/searched-shows"
+import ShowModal from "@/components/show-modal"
 import Shows from "@/components/shows"
 
 interface ShowsContainerProps {
@@ -26,7 +26,7 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
   return (
     <div className="w-full space-y-10">
       {modalStore.open ? (
-        <Modal open={modalStore.open} setOpen={modalStore.setOpen} />
+        <ShowModal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
       {shows.map((item) => (
         <Shows key={item.title} title={item.title} shows={item.shows ?? []} />

@@ -39,6 +39,11 @@ export const siteConfig: SiteConfig = {
       href: "/my-list",
       icon: Icons.list,
     },
+    {
+      title: "Notifications",
+      onClick: () => alert("🛹 Do a kickflip"),
+      icon: Icons.bell,
+    },
   ],
   profileDropdownItems: [
     {

@@ -14,8 +14,8 @@ const ToastWrapper = () => {
         className: "",
         duration: 3000,
         style: {
-          background: "#3f3f46",
-          color: "#ffffff",
+          background: "#333",
+          color: "#fff",
         },
       }}
     />
