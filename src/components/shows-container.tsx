@@ -4,9 +4,9 @@ import { useModalStore } from "@/stores/modal"
 import { useSearchStore } from "@/stores/search"
 import type { CategorizedShows } from "@/types"
 
-import SearchedShows from "@/components/searched-shows"
 import ShowModal from "@/components/show-modal"
 import Shows from "@/components/shows"
+import ShowsGrid from "@/components/shows-grid"
 
 interface ShowsContainerProps {
   shows: CategorizedShows[]
@@ -20,7 +20,7 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
   const searchStore = useSearchStore()
 
   if (searchStore.query.length > 0) {
-    return <SearchedShows shows={searchStore.shows} />
+    return <ShowsGrid shows={searchStore.shows} />
   }
 
   return (

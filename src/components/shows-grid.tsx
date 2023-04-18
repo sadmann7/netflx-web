@@ -10,12 +10,12 @@ interface SearchedShowsProps {
   shows: Show[]
 }
 
-const SearchedShows = ({ shows }: SearchedShowsProps) => {
+const ShowsGrid = ({ shows }: SearchedShowsProps) => {
   // modal store
   const modalStore = useModalStore()
 
   return (
-    <section className="container w-full max-w-screen-2xl pb-16 pt-10">
+    <div className="container w-full max-w-screen-2xl pb-16 pt-10">
       {modalStore.open ? (
         <ShowModal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
@@ -45,8 +45,8 @@ const SearchedShows = ({ shows }: SearchedShowsProps) => {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   )
 }
 
-export default SearchedShows
+export default ShowsGrid

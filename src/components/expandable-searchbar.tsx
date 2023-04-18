@@ -25,7 +25,7 @@ const ExpandableSearchbar = ({
 
   // close search input on clicking outside,
   // and optimize with useCallback hook to prevent unnecessary re-renders
-  const closeInput = React.useCallback(() => setIsOpen(false), [setIsOpen])
+  const closeInput = React.useCallback(() => setIsOpen(false), [])
   useOnClickOutside(inputRef, closeInput)
 
   // configure keyboard shortcuts
@@ -46,7 +46,7 @@ const ExpandableSearchbar = ({
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [closeInput, isOpen, setIsOpen, setQuery])
+  }, [closeInput, setQuery])
 
   return (
     <fieldset className="relative">
