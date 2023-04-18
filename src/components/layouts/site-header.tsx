@@ -3,15 +3,14 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useSearchStore } from "@/stores/search"
 import type { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
-import { searchShows } from "@/lib/fetcher"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/layouts/main-nav"
+import Searchbar from "@/components/searchbar"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -36,15 +35,6 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     return () => window.removeEventListener("scroll", changeBgColor)
   }, [isScrolled])
 
-  // search shows
-  const searchStore = useSearchStore()
-
-  async function searchShowsByQuery(e: React.ChangeEvent<HTMLInputElement>) {
-    searchStore.setQuery(e.target.value)
-    const shows = await searchShows(searchStore.query)
-    void searchStore.setShows(shows.results)
-  }
-
   return (
     <header
       aria-label="Header"
@@ -56,14 +46,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
       <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center space-x-5">
-          <input
-            type="text"
-            placeholder="Search shows..."
-            className="bg-transparent"
-            value={searchStore.query}
-            onChange={(e) => void searchShowsByQuery(e)}
-          />
-          <Icons.search className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
+          <Searchbar />
           <Icons.bell className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:opacity-100" />
           {session ? (
             <DropdownMenu>
