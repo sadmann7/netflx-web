@@ -38,45 +38,72 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
     }
   }
 
+  // modal store
+  const modalStore = useModalStore()
+
   return (
     <section aria-label="Carousel of shows">
       {shows.length !== 0 && (
         <div className="container w-full max-w-screen-2xl space-y-2.5">
-          <h2 className="text-base font-semibold text-white/90 transition-colors hover:text-white md:text-xl ">
+          <h2 className="text-xl font-semibold text-white/90 transition-colors hover:text-white sm:text-2xl">
             {title ?? "-"}
           </h2>
           <div className="group relative">
-            <Button
-              aria-label="Scroll to right"
-              variant="ghost"
-              className={cn(
-                "absolute left-0 top-8 z-10 h-[8.5rem] rounded-none bg-slate-950/50 px-1 py-0 opacity-0 hover:bg-slate-950/50 active:scale-100 group-hover:opacity-100 dark:hover:bg-slate-950/50",
-                isScrollable ? "block" : "hidden"
-              )}
-              onClick={() => scrollToDirection("left")}
-            >
-              <Icons.chevronLeft
-                className="h-8 w-8 text-white"
-                aria-hidden="true"
-              />
-            </Button>
-            <Button
-              aria-label="Scroll to left"
-              variant="ghost"
-              className="absolute right-0 top-8 z-10 h-[8.5rem] rounded-none bg-slate-950/50 px-1 py-0 opacity-0 hover:bg-slate-950/50 active:scale-100 group-hover:opacity-100 dark:hover:bg-slate-950/50"
-              onClick={() => scrollToDirection("right")}
-            >
-              <Icons.chevronRight
-                className="h-8 w-8 text-white"
-                aria-hidden="true"
-              />
-            </Button>
+            {shows.length > 5 ? (
+              <>
+                <Button
+                  aria-label="Scroll to right"
+                  variant="ghost"
+                  className={cn(
+                    "absolute left-0 top-0 z-10 h-[8.5rem] rounded-none bg-slate-950/50 px-2 py-0 opacity-0 hover:bg-slate-950/50 active:scale-100 group-hover:opacity-100 dark:hover:bg-slate-950/50",
+                    isScrollable ? "block" : "hidden"
+                  )}
+                  onClick={() => scrollToDirection("left")}
+                >
+                  <Icons.chevronLeft
+                    className="h-8 w-8 text-white"
+                    aria-hidden="true"
+                  />
+                </Button>
+                <Button
+                  aria-label="Scroll to left"
+                  variant="ghost"
+                  className="absolute right-0 top-0 z-10 h-[8.5rem] rounded-none bg-slate-950/50 px-2 py-0 opacity-0 hover:bg-slate-950/50 active:scale-100 group-hover:opacity-100 dark:hover:bg-slate-950/50"
+                  onClick={() => scrollToDirection("right")}
+                >
+                  <Icons.chevronRight
+                    className="h-8 w-8 text-white"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </>
+            ) : null}
             <div
               ref={showsRef}
               className="no-scrollbar flex h-full w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden"
             >
               {shows.map((show) => (
-                <ShowCard key={show.id} show={show} />
+                <div
+                  key={show.id}
+                  className="relative aspect-video min-w-[15rem] cursor-pointer overflow-hidden rounded transition-all duration-300 ease-in-out hover:scale-125 hover:rounded-b-none"
+                  onClick={() => {
+                    modalStore.setShow(show)
+                    modalStore.setOpen(true)
+                    modalStore.setPlay(false)
+                  }}
+                >
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w500/${
+                      show.backdrop_path ?? show.poster_path
+                    }`}
+                    alt={show.title ?? "poster"}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 
+                      (max-width: 1200px) 50vw, 33vw"
+                    loading="lazy"
+                    className="object-cover"
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -87,35 +114,3 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
 }
 
 export default ShowsCarousel
-
-const ShowCard = ({ show }: { show: Show }) => {
-  const [isHovered, setIsHovered] = React.useState(false)
-
-  // modal store for storing show and modal state
-  const modalStore = useModalStore()
-
-  return (
-    <div
-      className="relative aspect-video min-w-[15rem] !cursor-pointer overflow-hidden rounded transition-all duration-300 ease-in-out hover:z-20 hover:m-4 hover:scale-125 hover:rounded-b-none"
-      onClick={() => {
-        modalStore.setShow(show)
-        modalStore.setOpen(true)
-        modalStore.setPlay(false)
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <Image
-        src={`https://image.tmdb.org/t/p/w500/${
-          show.backdrop_path ?? show.poster_path
-        }`}
-        alt={show.title ?? "poster"}
-        fill
-        sizes="(max-width: 768px) 100vw, 
-            (max-width: 1200px) 50vw, 33vw"
-        loading="lazy"
-        className="object-cover"
-      />
-    </div>
-  )
-}

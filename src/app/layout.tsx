@@ -1,4 +1,5 @@
 import { Inter as FontSans } from "next/font/google"
+import TRPCProvider from "@/context/trpc-provider"
 
 import { siteConfig } from "@/config/site"
 import { getSession } from "@/lib/session"
@@ -82,23 +83,25 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getSession()
 
   return (
-    <html
-      lang="en"
-      className={cn(
-        "scroll-smooth bg-neutral-900 font-sans text-slate-50 antialiased",
-        fontSans.variable
-      )}
-    >
-      <head />
-      <body>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader session={session} />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
-        <ToastWrapper />
-        <TailwindIndicator />
-      </body>
-    </html>
+    <TRPCProvider>
+      <html
+        lang="en"
+        className={cn(
+          "scroll-smooth bg-neutral-900 font-sans text-slate-50 antialiased",
+          fontSans.variable
+        )}
+      >
+        <head />
+        <body>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader session={session} />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+          </div>
+          <ToastWrapper />
+          <TailwindIndicator />
+        </body>
+      </html>
+    </TRPCProvider>
   )
 }
