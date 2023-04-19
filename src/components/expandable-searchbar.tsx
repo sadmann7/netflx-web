@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { usePathname } from "next/navigation"
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
 import { cn } from "@/lib/utils"
@@ -47,6 +48,12 @@ const ExpandableSearchbar = ({
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [closeInput, setQuery])
+
+  // reset query on route change
+  const path = usePathname()
+  React.useEffect(() => {
+    setQuery("")
+  }, [path, setQuery])
 
   return (
     <fieldset className="relative">

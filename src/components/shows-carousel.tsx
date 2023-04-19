@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import Image from "next/image"
-import { useMounted } from "@/hooks/use-mounted"
 import { useModalStore } from "@/stores/modal"
 import type { Show } from "@/types"
-import { useDraggable } from "react-use-draggable-scroll"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
@@ -40,21 +38,10 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
     }
   }
 
-  // check if component is mounted
-  const mounted = useMounted()
-
-  // draggable scrollbar
-  const { events: dragEvents } = useDraggable(showsRef, {
-    isMounted: mounted,
-  })
-
-  // modal store for storing show and modal state
-  const modalStore = useModalStore()
-
   return (
     <section aria-label="Carousel of shows">
       {shows.length !== 0 && (
-        <div className="container w-full max-w-screen-2xl ">
+        <div className="container w-full max-w-screen-2xl space-y-2.5">
           <h2 className="text-base font-semibold text-white/90 transition-colors hover:text-white md:text-xl ">
             {title ?? "-"}
           </h2>
@@ -87,33 +74,9 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
             <div
               ref={showsRef}
               className="no-scrollbar flex h-full w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden"
-              {...dragEvents}
             >
               {shows.map((show) => (
-                <div
-                  key={show.id}
-                  className={cn(
-                    "group relative my-8 aspect-video min-w-[15rem] !cursor-pointer overflow-hidden rounded-sm transition-all duration-300 ease-in-out hover:m-8 hover:scale-125",
-                    dragEvents.onMouseDown
-                  )}
-                  onClick={() => {
-                    modalStore.setShow(show)
-                    modalStore.setOpen(true)
-                    modalStore.setPlay(false)
-                  }}
-                >
-                  <Image
-                    src={`https://image.tmdb.org/t/p/w500/${
-                      show.backdrop_path ?? show.poster_path
-                    }`}
-                    alt={show.title ?? "poster"}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 
-                        (max-width: 1200px) 50vw, 33vw"
-                    loading="lazy"
-                    className="object-cover"
-                  />
-                </div>
+                <ShowCard key={show.id} show={show} />
               ))}
             </div>
           </div>
@@ -124,3 +87,35 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
 }
 
 export default ShowsCarousel
+
+const ShowCard = ({ show }: { show: Show }) => {
+  const [isHovered, setIsHovered] = React.useState(false)
+
+  // modal store for storing show and modal state
+  const modalStore = useModalStore()
+
+  return (
+    <div
+      className="relative aspect-video min-w-[15rem] !cursor-pointer overflow-hidden rounded transition-all duration-300 ease-in-out hover:z-20 hover:m-4 hover:scale-125 hover:rounded-b-none"
+      onClick={() => {
+        modalStore.setShow(show)
+        modalStore.setOpen(true)
+        modalStore.setPlay(false)
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Image
+        src={`https://image.tmdb.org/t/p/w500/${
+          show.backdrop_path ?? show.poster_path
+        }`}
+        alt={show.title ?? "poster"}
+        fill
+        sizes="(max-width: 768px) 100vw, 
+            (max-width: 1200px) 50vw, 33vw"
+        loading="lazy"
+        className="object-cover"
+      />
+    </div>
+  )
+}
