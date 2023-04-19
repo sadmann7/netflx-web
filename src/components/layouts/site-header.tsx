@@ -62,6 +62,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
         <div className="flex items-center space-x-1.5">
           <ExpandableSearchbar
             setQuery={searchStore.setQuery}
+            setData={searchStore.setShows}
             value={searchStore.query}
             onChange={(e) => void searchShowsByQuery(e)}
           />

@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { usePathname } from "next/navigation"
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
 import { cn } from "@/lib/utils"
@@ -9,18 +8,18 @@ import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Input, type InputProps } from "@/components/ui/input"
 
-interface ExpandableSearchbarProps extends InputProps {
+interface ExpandableSearchbarProps<TData extends object> extends InputProps {
   setQuery: (query: string) => void
+  setData: (data: TData[]) => void
 }
 
-const ExpandableSearchbar = ({
+const ExpandableSearchbar = <TData extends object>({
   className,
   id = "query",
-
   setQuery,
-
+  setData,
   ...props
-}: ExpandableSearchbarProps) => {
+}: ExpandableSearchbarProps<TData>) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -36,6 +35,7 @@ const ExpandableSearchbar = ({
       if (e.key === "Escape") {
         closeInput()
         setQuery("")
+        setData([])
       }
       // open search input on pressing ctrl + k or cmd + k
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -47,13 +47,7 @@ const ExpandableSearchbar = ({
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [closeInput, setQuery])
-
-  // reset query on route change
-  const path = usePathname()
-  React.useEffect(() => {
-    setQuery("")
-  }, [path, setQuery])
+  }, [closeInput, setData, setQuery])
 
   return (
     <fieldset className="relative">

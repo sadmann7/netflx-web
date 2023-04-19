@@ -104,7 +104,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
           />
-          <div className="absolute bottom-6 z-40 flex w-full items-center justify-between gap-2 px-6">
+          <div className="absolute bottom-6 z-20 flex w-full items-center justify-between gap-2 px-6">
             <div className="flex items-center gap-2.5">
               <Button
                 aria-label={`${isPlaying ? "Pause" : "Play"} video`}
@@ -130,43 +130,37 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                 )}
               </Button>
               {myListStore.shows.some((s) => s.id === modalStore.show?.id) ? (
-                <DynamicTooltip
-                  trigger={
-                    <Button
-                      aria-label="remove show from my list"
-                      variant="ghost"
-                      className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
-                      onClick={() => {
-                        modalStore.show
-                          ? myListStore.removeShow(modalStore.show)
-                          : null
-                        toast.success("Removed from My List")
-                      }}
-                    >
-                      <Icons.check className="h-5 w-5" aria-hidden="true" />
-                    </Button>
-                  }
-                  text="Remove from My List"
-                />
+                <DynamicTooltip text="Remove from My List">
+                  <Button
+                    aria-label="remove show from my list"
+                    variant="ghost"
+                    className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+                    onClick={() => {
+                      modalStore.show
+                        ? myListStore.removeShow(modalStore.show)
+                        : null
+                      toast.success("Removed from My List")
+                    }}
+                  >
+                    <Icons.check className="h-5 w-5" aria-hidden="true" />
+                  </Button>
+                </DynamicTooltip>
               ) : (
-                <DynamicTooltip
-                  trigger={
-                    <Button
-                      aria-label="add show to my list"
-                      variant="ghost"
-                      className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
-                      onClick={() => {
-                        modalStore.show
-                          ? myListStore.addShow(modalStore.show)
-                          : null
-                        toast.success("Added to My List")
-                      }}
-                    >
-                      <Icons.add className="h-5 w-5" aria-hidden="true" />
-                    </Button>
-                  }
-                  text="Add to My List"
-                />
+                <DynamicTooltip text="Add to My List">
+                  <Button
+                    aria-label="add show to my list"
+                    variant="ghost"
+                    className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+                    onClick={() => {
+                      modalStore.show
+                        ? myListStore.addShow(modalStore.show)
+                        : null
+                      toast.success("Added to My List")
+                    }}
+                  >
+                    <Icons.add className="h-5 w-5" aria-hidden="true" />
+                  </Button>
+                </DynamicTooltip>
               )}
             </div>
             <Button

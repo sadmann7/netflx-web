@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useSearchStore } from "@/stores/search"
 import type { NavItem } from "@/types"
 
 import { siteConfig } from "@/config/site"
@@ -23,9 +24,19 @@ interface MainNavProps {
 export function MainNav({ items }: MainNavProps) {
   const path = usePathname()
 
+  // search store
+  const searchStore = useSearchStore()
+
   return (
     <div className="flex gap-6 lg:gap-10">
-      <Link href="/" className="hidden lg:block">
+      <Link
+        href="/"
+        className="hidden lg:block"
+        onClick={() => {
+          searchStore.setQuery("")
+          searchStore.setShows([])
+        }}
+      >
         <Image
           src="/images/netflix-logo.svg"
           alt="netflix"
@@ -49,6 +60,7 @@ export function MainNav({ items }: MainNavProps) {
                       "font-bold text-slate-900 dark:text-white",
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
+                  onClick={() => searchStore.setQuery("")}
                 >
                   {item.title}
                 </Link>
@@ -72,7 +84,14 @@ export function MainNav({ items }: MainNavProps) {
           className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800 dark:text-slate-200"
         >
           <DropdownMenuLabel>
-            <Link href="/" className="flex items-center">
+            <Link
+              href="/"
+              className="flex items-center"
+              onClick={() => {
+                searchStore.setQuery("")
+                searchStore.setShows([])
+              }}
+            >
               <Icons.logo
                 className="mr-2 h-4 w-4 text-red-600"
                 aria-hidden="true"
@@ -88,7 +107,13 @@ export function MainNav({ items }: MainNavProps) {
                 asChild
                 className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
-                <Link href={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={() => {
+                    searchStore.setQuery("")
+                    searchStore.setShows([])
+                  }}
+                >
                   {item.icon && (
                     <item.icon className="mr-2 h-4 w-4" aria-hidden="true" />
                   )}
