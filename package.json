@@ -37,6 +37,7 @@
     "react-hook-form": "^7.43.9",
     "react-hot-toast": "^2.4.0",
     "react-player": "^2.12.0",
+    "react-use-draggable-scroll": "^0.4.7",
     "stripe": "^12.1.1",
     "superjson": "1.12.2",
     "tailwind-merge": "^1.12.0",

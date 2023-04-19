@@ -1,9 +1,11 @@
 "use client"
 
-import { useRef, useState } from "react"
+import * as React from "react"
 import Image from "next/image"
+import { useMounted } from "@/hooks/use-mounted"
 import { useModalStore } from "@/stores/modal"
 import type { Show } from "@/types"
+import { useDraggable } from "react-use-draggable-scroll"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
@@ -15,10 +17,12 @@ interface ShowsCarouselProps {
 }
 
 const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
-  const showsRef = useRef<HTMLDivElement>(null)
-  const [isScrollable, setIsScrollable] = useState(false)
+  const showsRef = React.useRef<HTMLDivElement>(
+    null
+  ) as React.MutableRefObject<HTMLDivElement>
+  const [isScrollable, setIsScrollable] = React.useState(false)
 
-  // handle scroll to left or right
+  // endless scroll to left or right
   const scrollToDirection = (direction: "left" | "right") => {
     if (!showsRef.current) return
 
@@ -27,7 +31,22 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
     const offset =
       direction === "left" ? scrollLeft - clientWidth : scrollLeft + clientWidth
     showsRef.current.scrollTo({ left: offset, behavior: "smooth" })
+
+    if (scrollLeft === 0) {
+      showsRef.current.scrollTo({
+        left: showsRef.current.scrollWidth,
+        behavior: "smooth",
+      })
+    }
   }
+
+  // check if component is mounted
+  const mounted = useMounted()
+
+  // draggable scrollbar
+  const { events: dragEvents } = useDraggable(showsRef, {
+    isMounted: mounted,
+  })
 
   // modal store for storing show and modal state
   const modalStore = useModalStore()
@@ -35,7 +54,7 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
   return (
     <section aria-label="Carousel of shows">
       {shows.length !== 0 && (
-        <div className="container w-full max-w-screen-2xl space-y-2.5">
+        <div className="container w-full max-w-screen-2xl ">
           <h2 className="text-base font-semibold text-white/90 transition-colors hover:text-white md:text-xl ">
             {title ?? "-"}
           </h2>
@@ -44,7 +63,7 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
               aria-label="Scroll to right"
               variant="ghost"
               className={cn(
-                "absolute left-2 top-1/3 z-10 h-auto rounded-full p-0 opacity-0 hover:bg-transparent group-hover:opacity-100 dark:hover:bg-transparent",
+                "absolute left-0 top-8 z-10 h-[8.5rem] rounded-none bg-slate-950/50 px-1 py-0 opacity-0 hover:bg-slate-950/50 active:scale-100 group-hover:opacity-100 dark:hover:bg-slate-950/50",
                 isScrollable ? "block" : "hidden"
               )}
               onClick={() => scrollToDirection("left")}
@@ -54,14 +73,29 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
                 aria-hidden="true"
               />
             </Button>
+            <Button
+              aria-label="Scroll to left"
+              variant="ghost"
+              className="absolute right-0 top-8 z-10 h-[8.5rem] rounded-none bg-slate-950/50 px-1 py-0 opacity-0 hover:bg-slate-950/50 active:scale-100 group-hover:opacity-100 dark:hover:bg-slate-950/50"
+              onClick={() => scrollToDirection("right")}
+            >
+              <Icons.chevronRight
+                className="h-8 w-8 text-white"
+                aria-hidden="true"
+              />
+            </Button>
             <div
               ref={showsRef}
               className="no-scrollbar flex h-full w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden"
+              {...dragEvents}
             >
               {shows.map((show) => (
                 <div
                   key={show.id}
-                  className="relative aspect-video min-w-[15rem] cursor-pointer overflow-hidden rounded-sm transition-transform hover:scale-105"
+                  className={cn(
+                    "group relative my-8 aspect-video min-w-[15rem] !cursor-pointer overflow-hidden rounded-sm transition-all duration-300 ease-in-out hover:m-8 hover:scale-125",
+                    dragEvents.onMouseDown
+                  )}
                   onClick={() => {
                     modalStore.setShow(show)
                     modalStore.setOpen(true)
@@ -82,18 +116,6 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
                 </div>
               ))}
             </div>
-
-            <Button
-              aria-label="Scroll to left"
-              variant="ghost"
-              className="absolute right-2 top-1/3 z-10 h-auto rounded-full p-0 opacity-0 hover:bg-transparent group-hover:opacity-100 dark:hover:bg-transparent"
-              onClick={() => scrollToDirection("right")}
-            >
-              <Icons.chevronRight
-                className="h-8 w-8 text-white"
-                aria-hidden="true"
-              />
-            </Button>
           </div>
         </div>
       )}
