@@ -8,6 +8,8 @@ import type { Genre, Show } from "@/types"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
+import { cn } from "@/lib/utils"
+import DynamicTooltip from "@/components/dynamic-tooltip"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import {
@@ -81,8 +83,14 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
       }}
       open={open}
     >
-      <DialogContent className="w-full overflow-hidden rounded-md p-0 text-left align-middle shadow-xl dark:bg-zinc-900 sm:max-w-2xl">
+      <DialogContent className="w-full overflow-hidden rounded-md p-0 text-left align-middle shadow-xl dark:bg-zinc-900 sm:max-w-3xl">
         <div className="relative aspect-video">
+          <div
+            className={cn(
+              "bg-black/10 bg-gradient-to-b from-neutral-900/10 to-neutral-900",
+              "absolute inset-0 z-10 h-full w-full"
+            )}
+          />
           <ReactPlayer
             style={{ position: "absolute", top: 0, left: 0 }}
             url={`https://www.youtube.com/watch?v=${trailer}`}
@@ -96,71 +104,81 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
           />
-          <div className="absolute bottom-6 flex w-full items-center justify-between gap-2 px-6">
+          <div className="absolute bottom-6 z-40 flex w-full items-center justify-between gap-2 px-6">
             <div className="flex items-center gap-2.5">
               <Button
-                aria-label="control video playback"
-                className="group h-auto gap-1 rounded-none px-3 py-1.5"
+                aria-label={`${isPlaying ? "Pause" : "Play"} video`}
+                className="group h-auto rounded py-1.5"
                 onClick={() => setIsPlaying(!isPlaying)}
               >
                 {isPlaying ? (
                   <>
-                    <Icons.pause className="h-4 w-4" aria-hidden="true" />
+                    <Icons.pause
+                      className="mr-1.5 h-6 w-6 fill-current"
+                      aria-hidden="true"
+                    />
                     Pause
                   </>
                 ) : (
                   <>
-                    <Icons.play className="h-4 w-4" aria-hidden="true" />
+                    <Icons.play
+                      className="mr-1.5 h-6 w-6 fill-current"
+                      aria-hidden="true"
+                    />
                     Play
                   </>
                 )}
               </Button>
               {myListStore.shows.some((s) => s.id === modalStore.show?.id) ? (
-                <Button
-                  aria-label="remove show from my list"
-                  variant="ghost"
-                  className="h-auto rounded-full p-1 ring-1 ring-slate-100"
-                  onClick={() => {
-                    modalStore.show
-                      ? myListStore.removeShow(modalStore.show)
-                      : null
-                    toast.success("Removed from My List")
-                  }}
-                >
-                  <Icons.check className="h-4 w-4" aria-hidden="true" />
-                </Button>
+                <DynamicTooltip
+                  trigger={
+                    <Button
+                      aria-label="remove show from my list"
+                      variant="ghost"
+                      className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+                      onClick={() => {
+                        modalStore.show
+                          ? myListStore.removeShow(modalStore.show)
+                          : null
+                        toast.success("Removed from My List")
+                      }}
+                    >
+                      <Icons.check className="h-5 w-5" aria-hidden="true" />
+                    </Button>
+                  }
+                  text="Remove from My List"
+                />
               ) : (
-                <Button
-                  aria-label="add show to my list"
-                  variant="ghost"
-                  className="h-auto rounded-full p-1 ring-1 ring-slate-100"
-                  onClick={() => {
-                    modalStore.show
-                      ? myListStore.addShow(modalStore.show)
-                      : null
-                    toast.success("Added to My List")
-                  }}
-                >
-                  <Icons.add className="h-4 w-4" aria-hidden="true" />
-                </Button>
+                <DynamicTooltip
+                  trigger={
+                    <Button
+                      aria-label="add show to my list"
+                      variant="ghost"
+                      className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+                      onClick={() => {
+                        modalStore.show
+                          ? myListStore.addShow(modalStore.show)
+                          : null
+                        toast.success("Added to My List")
+                      }}
+                    >
+                      <Icons.add className="h-5 w-5" aria-hidden="true" />
+                    </Button>
+                  }
+                  text="Add to My List"
+                />
               )}
             </div>
             <Button
-              aria-label="toggle sound"
+              aria-label={`${isMuted ? "Unmute" : "Mute"} video`}
               variant="ghost"
-              className="h-auto rounded-full p-1.5 ring-1 ring-slate-50"
+              className="h-auto rounded-full bg-neutral-400 p-1.5 opacity-50 ring-1 ring-slate-400 hover:bg-neutral-400 hover:opacity-100 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
               onClick={() => setIsMuted(!isMuted)}
             >
               {isMuted ? (
-                <Icons.volumneMute
-                  className="h-4 w-4 text-slate-50"
-                  aria-hidden="true"
-                />
+                <Icons.volumneMute className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Icons.volumne
-                  className="h-4 w-4 text-slate-50"
-                  aria-hidden="true"
-                />
+                <Icons.volumne className="h-6 w-6" aria-hidden="true" />
               )}
             </Button>
           </div>

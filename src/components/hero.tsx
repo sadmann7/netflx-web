@@ -39,7 +39,7 @@ const Hero = ({ shows }: HeroProps) => {
           <div className="absolute inset-0 -z-10 h-screen w-full">
             <div
               className={cn(
-                "bg-black/75 bg-gradient-to-b from-neutral-900/10 to-neutral-900",
+                "bg-black/60 bg-gradient-to-b from-neutral-900/10 to-neutral-900",
                 "absolute inset-0 z-10 h-full w-full"
               )}
             />

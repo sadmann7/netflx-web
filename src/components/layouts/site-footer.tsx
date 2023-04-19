@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site"
 const SiteFooter = () => {
   return (
     <footer aria-label="Footer" className="w-full text-neutral-500">
-      <div className="container mx-0 grid w-full max-w-6xl gap-7 py-10">
+      <div className="container grid w-full max-w-6xl gap-7 py-10">
         <p className="cursor-pointer text-sm font-medium hover:underline md:text-base">
           Questions? Contact us.
         </p>

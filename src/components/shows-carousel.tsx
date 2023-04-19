@@ -44,7 +44,7 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
   return (
     <section aria-label="Carousel of shows">
       {shows.length !== 0 && (
-        <div className="container w-full max-w-screen-2xl space-y-2.5">
+        <div className="container w-full max-w-screen-2xl space-y-3">
           <h2 className="text-xl font-semibold text-white/90 transition-colors hover:text-white sm:text-2xl">
             {title ?? "-"}
           </h2>

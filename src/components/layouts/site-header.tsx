@@ -54,7 +54,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
       aria-label="Header"
       className={cn(
         "sticky top-0 z-40 w-full",
-        isScrolled ? "bg-white dark:bg-neutral-950" : "bg-transparent"
+        isScrolled ? "bg-white shadow-md dark:bg-neutral-900" : "bg-transparent"
       )}
     >
       <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
