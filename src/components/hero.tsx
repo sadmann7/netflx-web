@@ -33,7 +33,7 @@ const Hero = ({ shows }: HeroProps) => {
   }
 
   return (
-    <section aria-label="Hero" className="w-full pb-24">
+    <section aria-label="Hero" className="w-full">
       {randomShow && (
         <div className="container w-full max-w-screen-2xl">
           <div className="absolute inset-0 -z-10 h-screen w-full">

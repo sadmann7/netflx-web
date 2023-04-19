@@ -107,7 +107,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
           <div className="absolute bottom-6 z-20 flex w-full items-center justify-between gap-2 px-6">
             <div className="flex items-center gap-2.5">
               <Button
-                aria-label={`${isPlaying ? "Pause" : "Play"} video`}
+                aria-label={`${isPlaying ? "Pause" : "Play"} show`}
                 className="group h-auto rounded py-1.5"
                 onClick={() => setIsPlaying(!isPlaying)}
               >
@@ -132,7 +132,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
               {myListStore.shows.some((s) => s.id === modalStore.show?.id) ? (
                 <DynamicTooltip text="Remove from My List">
                   <Button
-                    aria-label="remove show from my list"
+                    aria-label="Remove show from my list"
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {
@@ -148,7 +148,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
               ) : (
                 <DynamicTooltip text="Add to My List">
                   <Button
-                    aria-label="add show to my list"
+                    aria-label="Add show to my list"
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {

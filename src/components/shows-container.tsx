@@ -7,8 +7,9 @@ import { useMyListStore } from "@/stores/my-list"
 import { useSearchStore } from "@/stores/search"
 import type { CategorizedShows } from "@/types"
 
-import LoadingScreen from "@/components/screens/loading-screen"
+import { cn } from "@/lib/utils"
 import ShowModal from "@/components/show-modal"
+import ShowSkeleton from "@/components/show-skeleton"
 import ShowsCarousel from "@/components/shows-carousel"
 import ShowsGrid from "@/components/shows-grid"
 
@@ -26,14 +27,16 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
   const myListStore = useMyListStore()
 
   // check if component is mounted
-  if (!mounted) return <LoadingScreen />
+  if (!mounted) return <ShowSkeleton />
 
   if (searchStore.query.length > 0) {
     return <ShowsGrid shows={searchStore.shows} />
   }
 
   return (
-    <div className="w-full space-y-10">
+    <div
+      className={cn("w-full space-y-5 sm:space-y-10", path === "/" && "pt-24")}
+    >
       {modalStore.open ? (
         <ShowModal open={modalStore.open} setOpen={modalStore.setOpen} />
       ) : null}
