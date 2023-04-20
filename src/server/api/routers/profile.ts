@@ -1,8 +1,23 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 export const profileRouter = createTRPCRouter({
+  // get current user for quick access to any client-side data
+  getCurrentUser: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.session || !ctx.session.user) {
+      return null
+    }
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: ctx.session.user.id },
+    })
+    return user
+  }),
+
   getMany: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {

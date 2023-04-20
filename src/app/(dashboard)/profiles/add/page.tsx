@@ -18,7 +18,7 @@ export default async function AddProfilePage() {
   }
 
   return (
-    <section className="container flex min-h-screen w-full max-w-xl items-center justify-center">
+    <section className="w-full">
       <AddProfileForm />
     </section>
   )

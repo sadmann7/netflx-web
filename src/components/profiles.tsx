@@ -72,7 +72,8 @@ const Profiles = ({ profiles }: ProfilesProps) => {
       </div>
       <Button
         aria-label="Navigate to home page"
-        className="h-auto w-fit rounded-none py-1.5"
+        variant="flat"
+        size="auto"
         onClick={() => void router.push("/")}
       >
         Done

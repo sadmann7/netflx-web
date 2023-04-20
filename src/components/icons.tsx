@@ -1,5 +1,6 @@
 import {
   AlertTriangle,
+  ArrowLeft,
   ArrowRight,
   Bell,
   Check,
@@ -66,6 +67,7 @@ export const Icons = {
   remove: Minus,
   warning: AlertTriangle,
   user: User,
+  arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,
