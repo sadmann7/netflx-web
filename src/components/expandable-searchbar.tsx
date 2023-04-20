@@ -9,11 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Input, type InputProps } from "@/components/ui/input"
 
 interface ExpandableSearchbarProps<TData extends object> extends InputProps {
+  containerClassName?: string
   setQuery: (query: string) => void
   setData: (data: TData[]) => void
 }
 
 const ExpandableSearchbar = <TData extends object>({
+  containerClassName,
   className,
   id = "query",
   setQuery,
@@ -50,7 +52,7 @@ const ExpandableSearchbar = <TData extends object>({
   }, [closeInput, setData, setQuery])
 
   return (
-    <fieldset className="relative">
+    <fieldset className={cn("relative", containerClassName)}>
       <label htmlFor={id} className="sr-only">
         Search shows
       </label>

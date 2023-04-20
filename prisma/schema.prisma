@@ -54,6 +54,7 @@ model User {
 
     accounts Account[]
     sessions Session[]
+    profiles Profile[]
 
     stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
     stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -67,4 +68,72 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Profile {
+    id         String   @id @default(cuid())
+    userId     String
+    name       String
+    image      String?
+    language   LANGUAGE
+    gameHandle String
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum LANGUAGE {
+    BAHASA_INDONESIA
+    BAHASA_MELAYU
+    DANSK
+    DEUTSCH
+    ENGLISH
+    ESPANOL
+    FILIPINO
+    FRANCAIS
+    HRVATSKI
+    ITALIANO
+    HINDI
+    BANGLA
+    MAGYAR
+    NEDERLANDS
+    NORSK_BOKMAL
+    POLSKI
+    PORTUGUES
+    ROMANA
+    SUOMI
+    SVENSKA
+    TIENG_VIET
+    TURKCE
+    CESTINA
+}
+
+model Show {
+    id           String     @id @default(cuid())
+    tmdbId       Int        @unique
+    title        String
+    name         String
+    overview     String?
+    poster       String?
+    firstAirDate DateTime?
+    lastAirDate  DateTime?
+    voteAverage  Float
+    adult        Boolean
+    mediaType    MEDIA_TYPE
+    trailer      String?
+    genres       Genre[]
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+}
+
+model Genre {
+    tmdbId    Int      @unique
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Show      Show?    @relation(fields: [showId], references: [id])
+    showId    String?
+}
+
+enum MEDIA_TYPE {
+    MOVIE
+    TV
 }

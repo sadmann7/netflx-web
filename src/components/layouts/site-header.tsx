@@ -3,6 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useSearchStore } from "@/stores/search"
 import type { Session } from "next-auth"
 import { signOut } from "next-auth/react"
@@ -28,6 +29,7 @@ interface SiteHeaderProps {
 }
 
 const SiteHeader = ({ session }: SiteHeaderProps) => {
+  const path = usePathname()
   const [isScrolled, setIsScrolled] = React.useState(false)
 
   // change background color on scroll
@@ -61,6 +63,9 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center space-x-1.5">
           <ExpandableSearchbar
+            containerClassName={cn(
+              path === "/login" || path === "/login/plans" ? "hidden" : "flex"
+            )}
             setQuery={searchStore.setQuery}
             setData={searchStore.setShows}
             value={searchStore.query}

@@ -45,7 +45,9 @@ export default async function PlansPage() {
               className="mr-2 h-7 w-7 text-red-600"
               aria-hidden="true"
             />
-            <span className="text-gray-500 dark:text-gray-400">{perk}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">
+              {perk}
+            </span>
           </div>
         ))}
       </div>

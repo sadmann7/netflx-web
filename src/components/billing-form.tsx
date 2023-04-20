@@ -57,60 +57,65 @@ const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
   return (
     <section
       aria-label="Billing form for various subscription plans"
-      className="flex h-full w-full flex-col gap-8 overflow-x-auto"
+      className=" h-full w-full "
     >
-      <div className="flex min-w-[480px] justify-end gap-5">
-        {plansConfig.plans.map((plan, i) => (
-          <div
-            key={i}
-            className={cn(
-              "grid aspect-square w-28 cursor-default place-items-center rounded bg-red-600 font-medium",
-              selectedPlan === plan ? "opacity-100" : "opacity-70"
-            )}
-            onClick={() => setSelectedPlan(plan)}
-          >
-            {plan.name}
-          </div>
-        ))}
+      <div className="flex flex-col gap-8 overflow-x-auto">
+        <div className="flex min-w-[480px] justify-end gap-5">
+          {plansConfig.plans.map((plan, i) => (
+            <div
+              key={i}
+              className={cn(
+                "grid aspect-square w-28 cursor-default place-items-center rounded bg-red-600 font-medium",
+                selectedPlan === plan ? "opacity-100" : "opacity-70"
+              )}
+              onClick={() => setSelectedPlan(plan)}
+            >
+              {plan.name}
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <p>
+            HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability
+            subject to your internet service and device capabilities. Not all
+            content is available in all resolutions. See our{" "}
+            <Link
+              href="/terms-of-use"
+              target="_blank"
+              className="text-blue-400 hover:underline"
+            >
+              Terms of Use
+            </Link>{" "}
+            for more details.
+          </p>
+          <p>
+            Only people who live with you may use your account. Watch on 4
+            different devices at the same time with Premium, 2 with Standard,
+            and 1 with Basic and Mobile.
+          </p>
+        </div>
       </div>
-      <div className="flex flex-col gap-2 text-sm font-medium text-gray-500">
-        <p>
-          HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject
-          to your internet service and device capabilities. Not all content is
-          available in all resolutions. See our{" "}
-          <Link
-            href="/terms-of-use"
-            target="_blank"
-            className="text-blue-400 hover:underline"
-          >
-            Terms of Use
-          </Link>{" "}
-          for more details.
-        </p>
-        <p>
-          Only people who live with you may use your account. Watch on 4
-          different devices at the same time with Premium, 2 with Standard, and
-          1 with Basic and Mobile.
-        </p>
+      <div className="mt-10 grid w-full place-items-center">
+        <Button
+          aria-label="Subscribe to selected plan"
+          variant="brand"
+          className="w-full max-w-sm rounded"
+          onClick={() => void handleSubscription()}
+          disabled={isLoading}
+        >
+          {isLoading && (
+            <Icons.spinner
+              className="mr-2 h-4 w-4 animate-spin"
+              aria-hidden="true"
+            />
+          )}
+          {subscriptionPlan &&
+          !isCanceled &&
+          subscriptionPlan.name === selectedPlan?.name
+            ? "Update"
+            : "Subscribe"}
+        </Button>
       </div>
-      <Button
-        variant="brand"
-        className="mx-auto w-full max-w-xs rounded"
-        onClick={() => void handleSubscription()}
-        disabled={isLoading}
-      >
-        {isLoading && (
-          <Icons.spinner
-            className="mr-2 h-4 w-4 animate-spin"
-            aria-hidden="true"
-          />
-        )}
-        {subscriptionPlan &&
-        !isCanceled &&
-        subscriptionPlan.name === selectedPlan?.name
-          ? "Update"
-          : "Subscribe"}
-      </Button>
     </section>
   )
 }
