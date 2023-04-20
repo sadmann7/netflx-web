@@ -1,12 +1,12 @@
+import { prisma } from "@/server/db"
 import type { UserSubscriptionPlan } from "@/types"
 
 import { subscriptionPlans } from "@/config/subscriptions"
-import { db } from "@/lib/db"
 
 export async function getUserSubscriptionPlan(
   userId: string
 ): Promise<UserSubscriptionPlan | null> {
-  const user = await db.user.findFirst({
+  const user = await prisma.user.findFirst({
     where: {
       id: userId,
     },

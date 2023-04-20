@@ -17,6 +17,8 @@ export default async function AccountPage() {
   }
 
   return (
-    <section className="container w-full max-w-5xl pb-16 pt-8">Account</section>
+    <section className="container w-full max-w-5xl pb-16 pt-10">
+      Account
+    </section>
   )
 }

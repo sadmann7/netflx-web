@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/server/auth"
+import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
+import Profiles from "@/components/profiles"
 
 export const metadata: Metadata = {
   title: "Manage Profiles",
@@ -16,9 +18,15 @@ export default async function ManageProfilesPage() {
     redirect(authOptions?.pages?.signIn ?? "/login")
   }
 
+  const profiles = await prisma.profile.findMany({
+    where: {
+      id: user.id,
+    },
+  })
+
   return (
-    <section className="container w-full max-w-5xl pb-16 pt-8">
-      Manage Profiles
+    <section className="container flex min-h-screen w-full max-w-5xl items-center justify-center pb-16 pt-10">
+      <Profiles profiles={profiles} />
     </section>
   )
 }

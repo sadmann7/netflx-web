@@ -49,7 +49,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       // The user is not subscribed.
       // Create a checkout session to upgrade.
-      console.log("creating checkout session")
+      console.log("creating stripe checkout session")
       const stripeSession = await stripe.checkout.sessions.create({
         success_url: billingUrl,
         cancel_url: billingUrl,
@@ -70,11 +70,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       // If the checkout session is successful, then create a profile for the user.
       // Check if profile exists first.
+      console.log("creating profile if not exists")
       const existingProfile = await prisma.profile.findUnique({
         where: { id: user.id },
       })
 
-      if (!existingProfile) {
+      if (!existingProfile && stripeSession.payment_status === "paid") {
         await prisma.profile.create({
           data: {
             user: { connect: { id: user.id } },
