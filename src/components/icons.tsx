@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Clapperboard,
   CreditCard,
+  Facebook,
   File,
   FileText,
   Film,
@@ -15,6 +16,7 @@ import {
   Home,
   Image,
   Info,
+  Instagram,
   Laptop,
   List,
   Loader2,
@@ -39,6 +41,7 @@ import {
   Volume2,
   VolumeX,
   X,
+  Youtube,
   type Icon as LucideIcon,
   type LucideProps,
 } from "lucide-react"
@@ -58,6 +61,7 @@ export const Icons = {
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
+  check: Check,
   add: Plus,
   remove: Minus,
   warning: AlertTriangle,
@@ -84,6 +88,10 @@ export const Icons = {
   movie: Film,
   trendingUp: TrendingUp,
   list: List,
+  facebook: Facebook,
+  instagram: Instagram,
+  twitter: Twitter,
+  youtube: Youtube,
   logo: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
@@ -133,6 +141,4 @@ export const Icons = {
       ></path>
     </svg>
   ),
-  twitter: Twitter,
-  check: Check,
 }

@@ -23,6 +23,7 @@ export type SiteConfig = {
   mainNav: NavItem[]
   profileDropdownItems: NavItem[]
   footerItems: NavItem[]
+  socialLinks: NavItem[]
 }
 
 export type PlansConfig = {
