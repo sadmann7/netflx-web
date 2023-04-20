@@ -4,8 +4,8 @@ import { useMounted } from "@/hooks/use-mounted"
 import { useMyListStore } from "@/stores/my-list"
 import { useSearchStore } from "@/stores/search"
 
-import ShowSkeleton from "@/components/show-skeleton"
 import ShowsGrid from "@/components/shows-grid"
+import ShowSkeleton from "@/components/shows-skeleton"
 
 const MyShows = () => {
   // stores

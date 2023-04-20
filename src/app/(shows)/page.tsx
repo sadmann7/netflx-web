@@ -41,10 +41,12 @@ export default async function Home() {
   ]
 
   return (
-    <section className="pb-16 pt-10">
+    <section>
       <Suspense fallback={<LoadingScreen />}>
-        <Hero shows={allShows.netflix ?? []} />
-        <ShowsContainer shows={allShowsByCategory} />
+        <div className="pb-16 pt-10">
+          <Hero shows={allShows.netflix ?? []} />
+          <ShowsContainer shows={allShowsByCategory} />
+        </div>
       </Suspense>
     </section>
   )

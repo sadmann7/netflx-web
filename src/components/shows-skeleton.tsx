@@ -8,7 +8,7 @@ interface ShowSkeletonProps {
   variant?: "with-title" | "without-title"
 }
 
-const ShowSkeleton = ({
+const ShowsSkeleton = ({
   count = 8,
   variant = "with-title",
 }: ShowSkeletonProps) => {
@@ -48,4 +48,4 @@ const ShowSkeleton = ({
   )
 }
 
-export default ShowSkeleton
+export default ShowsSkeleton

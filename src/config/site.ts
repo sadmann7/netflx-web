@@ -48,7 +48,7 @@ export const siteConfig: SiteConfig = {
   profileDropdownItems: [
     {
       title: "Manage Profiles",
-      href: "/profiles/manage",
+      href: "/manage-profiles",
       icon: Icons.edit,
     },
     {

@@ -18,9 +18,7 @@ interface ShowsCarouselProps {
 }
 
 const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
-  const showsRef = React.useRef<HTMLDivElement>(
-    null
-  ) as React.MutableRefObject<HTMLDivElement>
+  const showsRef = React.useRef<HTMLDivElement>(null)
   const [isScrollable, setIsScrollable] = React.useState(false)
 
   // handle scroll to left and right

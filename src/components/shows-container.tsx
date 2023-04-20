@@ -9,9 +9,9 @@ import type { CategorizedShows } from "@/types"
 
 import { cn } from "@/lib/utils"
 import ShowModal from "@/components/show-modal"
-import ShowSkeleton from "@/components/show-skeleton"
 import ShowsCarousel from "@/components/shows-carousel"
 import ShowsGrid from "@/components/shows-grid"
+import ShowsSkeleton from "@/components/shows-skeleton"
 
 interface ShowsContainerProps {
   shows: CategorizedShows[]
@@ -27,7 +27,7 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
   const myListStore = useMyListStore()
 
   // check if component is mounted
-  if (!mounted) return <ShowSkeleton />
+  if (!mounted) return <ShowsSkeleton />
 
   if (searchStore.query.length > 0) {
     return <ShowsGrid shows={searchStore.shows} />

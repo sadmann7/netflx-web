@@ -25,7 +25,7 @@ export default async function ManageProfilesPage() {
   })
 
   return (
-    <section className="container flex min-h-screen w-full max-w-5xl items-center justify-center pb-16 pt-10">
+    <section className="w-full shadow-md">
       <Profiles profiles={profiles} />
     </section>
   )

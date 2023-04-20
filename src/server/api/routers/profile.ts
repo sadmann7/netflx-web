@@ -31,14 +31,13 @@ export const profileRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
         name: z.string(),
         image: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const existingProfile = await ctx.prisma.profile.findUnique({
-        where: { id: input.id },
+        where: { id: ctx.session.user.id },
       })
       if (existingProfile) {
         throw new TRPCError({
@@ -49,7 +48,6 @@ export const profileRouter = createTRPCRouter({
       const profile = await ctx.prisma.profile.create({
         data: {
           user: { connect: { id: ctx.session.user.id } },
-          id: input.id,
           name: input.name,
           image: input.image,
         },

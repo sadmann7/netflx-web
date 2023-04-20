@@ -22,49 +22,73 @@ const Profiles = ({ profiles }: ProfilesProps) => {
     onError: () => toast.error("Failed to update profile"),
   })
 
+  // create profile mutation
+  const createProfileMutation = api.profile.create.useMutation({
+    onMutate: () => toast.success("Profile created"),
+    onError: () => toast.error("Failed to create profile"),
+  })
+
   return (
-    <div className="flex flex-col items-center justify-center space-y-6">
+    <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">
       <h1 className="text-3xl font-medium sm:text-4xl">Manage Profiles:</h1>
-      <div className="flex flex-col items-center space-y-4">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {profiles.map(
-            (profile) =>
-              profile.image && (
-                <Button
-                  aria-label={`Edit ${profile.name}`}
-                  key={profile.id}
-                  variant="ghost"
-                  className="h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
-                >
-                  <div className="peer relative aspect-square w-32 overflow-hidden rounded hover:ring-2 hover:ring-slate-500">
-                    <Image
-                      src={profile.image}
-                      alt={profile.name}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 h-full w-full bg-neutral-950/60" />
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {profiles.map(
+          (profile) =>
+            profile.image && (
+              <Button
+                aria-label={`Edit ${profile.name}`}
+                key={profile.id}
+                variant="ghost"
+                className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
+              >
+                <div className="relative aspect-square w-32 overflow-hidden rounded group-hover:ring-2 group-hover:ring-slate-500">
+                  <Image
+                    src={profile.image}
+                    alt={profile.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 h-full w-full bg-neutral-800/25" />
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                     <Icons.edit
-                      // at the center of the image
-                      className="absolute left-1/2 top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 text-slate-100"
+                      className="h-8 w-8 text-slate-100"
                       aria-hidden="true"
                     />
                   </div>
-                  <h2 className="text-sm text-slate-400 peer-hover:text-slate-50 sm:text-base">
-                    {profile.name}
-                  </h2>
-                </Button>
-              )
-          )}
-        </div>
-        <Button
-          aria-label="Done editing profiles"
-          className="h-auto w-fit rounded-none py-1.5"
-          onClick={() => void router.push("/")}
-        >
-          Done
-        </Button>
+                </div>
+                <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
+                  {profile.name}
+                </h2>
+              </Button>
+            )
+        )}
+        {profiles.length < 5 && (
+          <Button
+            aria-label="Add new profile"
+            variant="ghost"
+            className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
+          >
+            <div className="relative aspect-square w-32 overflow-hidden rounded bg-neutral-800/50 group-hover:ring-2 group-hover:ring-slate-500">
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 ring-2 ring-slate-50">
+                <Icons.add
+                  className="h-8 w-8 text-slate-100"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+            <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
+              Add Profile
+            </h2>
+          </Button>
+        )}
       </div>
+      <Button
+        aria-label="Navigate to home page"
+        className="h-auto w-fit rounded-none py-1.5"
+        onClick={() => void router.push("/")}
+      >
+        Done
+      </Button>
     </div>
   )
 }
