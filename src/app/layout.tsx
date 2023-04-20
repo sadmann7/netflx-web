@@ -2,10 +2,7 @@ import { Inter as FontSans } from "next/font/google"
 import TRPCProvider from "@/context/trpc-provider"
 
 import { siteConfig } from "@/config/site"
-import { getSession } from "@/lib/session"
 import { absoluteUrl, cn } from "@/lib/utils"
-import SiteFooter from "@/components/layouts/site-footer"
-import SiteHeader from "@/components/layouts/site-header"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ToastWrapper from "@/components/ui/toast-wrapper"
 import "@/styles/globals.css"
@@ -79,9 +76,7 @@ export const metadata = {
   },
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getSession()
-
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <TRPCProvider>
       <html
@@ -92,12 +87,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <head />
-        <body>
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader session={session} />
-            <main className="flex-1">{children}</main>
-            <SiteFooter />
-          </div>
+        <body className="min-h-screen">
+          {children}
           <ToastWrapper />
           <TailwindIndicator />
         </body>

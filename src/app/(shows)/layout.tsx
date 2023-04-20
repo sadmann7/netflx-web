@@ -1,7 +1,19 @@
+import { getSession } from "@/lib/session"
+import SiteFooter from "@/components/layouts/site-footer"
+import SiteHeader from "@/components/layouts/site-header"
+
 interface ShowsLayotutProps {
   children: React.ReactNode
 }
 
-export default function ShowsLayout({ children }: ShowsLayotutProps) {
-  return <div>{children}</div>
+export default async function ShowsLayout({ children }: ShowsLayotutProps) {
+  const session = await getSession()
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader session={session} />
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
+    </div>
+  )
 }
