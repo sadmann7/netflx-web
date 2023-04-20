@@ -8,7 +8,7 @@ import type { Genre, Show } from "@/types"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
-import { cn } from "@/lib/utils"
+import { cn, getYear } from "@/lib/utils"
 import DynamicTooltip from "@/components/dynamic-tooltip"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
@@ -74,6 +74,14 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     }
   }, [modalStore.play])
 
+  useEffect(() => {
+    if (isPlaying) {
+      setIsMuted(false)
+    } else {
+      setIsMuted(true)
+    }
+  }, [isPlaying])
+
   return (
     <Dialog
       aria-label="Modal containing show's details"
@@ -104,7 +112,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
           />
-          <div className="absolute bottom-6 z-20 flex w-full items-center justify-between gap-2 px-6">
+          <div className="absolute bottom-6 z-20 flex w-full items-center justify-between gap-2 px-10">
             <div className="flex items-center gap-2.5">
               <Button
                 aria-label={`${isPlaying ? "Pause" : "Play"} show`}
@@ -177,29 +185,33 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
             </Button>
           </div>
         </div>
-        <div className="grid gap-2 px-5 pb-5">
-          <DialogTitle className="text-lg font-medium leading-6 text-slate-50 md:text-xl">
+        <div className="grid gap-2.5 px-10 pb-10">
+          <DialogTitle className="text-lg font-medium leading-6 text-slate-50 sm:text-xl">
             {modalStore.show?.title ?? modalStore.show?.name}
           </DialogTitle>
-          <div className="flex items-center space-x-2 text-xs md:text-sm">
-            <p className=" text-green-600">
+          <div className="flex items-center space-x-2 text-sm sm:text-base">
+            <p className="font-semibold text-green-400">
               {Math.round((Number(modalStore.show?.vote_average) / 10) * 100) ??
                 "-"}
               % Match
             </p>
-            <p>{modalStore.show?.release_date ?? "-"}</p>
-            <p>{modalStore.show?.original_language.toUpperCase() ?? "-"}</p>
+            {modalStore.show?.release_date ? (
+              <p>{getYear(modalStore.show?.release_date)}</p>
+            ) : modalStore.show?.first_air_date ? (
+              <p>{getYear(modalStore.show?.first_air_date)}</p>
+            ) : null}
+            {modalStore.show?.original_language && (
+              <span className="grid h-4 w-7 place-items-center text-xs font-bold text-neutral-400 ring-1 ring-neutral-400">
+                {modalStore.show.original_language.toUpperCase()}
+              </span>
+            )}
           </div>
-          <DialogDescription className="line-clamp-3 text-xs md:text-sm">
+          <DialogDescription className="line-clamp-3 text-xs text-slate-700 dark:text-slate-50 sm:text-sm">
             {modalStore.show?.overview ?? "-"}
           </DialogDescription>
-          <div className="flex items-center gap-2 text-xs md:text-sm">
-            <span className="text-gray-400">Genres:</span>
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <span className="text-slate-400">Genres:</span>
             {genres.map((genre) => genre.name).join(", ")}
-          </div>
-          <div className="flex items-center gap-2 text-xs md:text-sm">
-            <span className="text-gray-400">Total Votes:</span>
-            {modalStore.show?.vote_count ?? "-"}
           </div>
         </div>
       </DialogContent>

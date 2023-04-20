@@ -1,3 +1,6 @@
+import { motion } from "framer-motion"
+
+import { itemFade, itemsReveal } from "@/lib/constants"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface ShowSkeletonProps {
@@ -12,26 +15,34 @@ const ShowSkeleton = ({
   return (
     <>
       {variant === "with-title" ? (
-        <div className="no-scrollbar container w-full overflow-x-auto overflow-y-hidden">
+        <div className="no-scrollbar container mx-0 w-full overflow-x-auto overflow-y-hidden">
           <Skeleton className="h-5 w-28 rounded bg-neutral-700" />
-          <div className="mt-2.5 flex w-full items-center gap-1.5">
+          <motion.div
+            className="mt-2.5 flex w-full items-center gap-1.5"
+            initial="hidden"
+            animate="visible"
+            variants={itemsReveal}
+          >
             {Array.from({ length: count }, (_, i) => (
-              <Skeleton
-                key={i}
-                className="aspect-video min-w-[15rem] rounded bg-neutral-700"
-              />
+              <motion.div key={i} variants={itemFade}>
+                <Skeleton className="aspect-video min-w-[15rem] rounded bg-neutral-700" />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       ) : (
-        <div className="no-scrollbar container flex w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden">
+        <motion.div
+          className="no-scrollbar container mx-0 flex w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden"
+          initial="hidden"
+          animate="visible"
+          variants={itemsReveal}
+        >
           {Array.from({ length: count }, (_, i) => (
-            <Skeleton
-              key={i}
-              className="aspect-video min-w-[15rem] rounded bg-neutral-700"
-            />
+            <motion.div key={i} variants={itemFade}>
+              <Skeleton className="aspect-video min-w-[15rem] rounded bg-neutral-700" />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </>
   )
