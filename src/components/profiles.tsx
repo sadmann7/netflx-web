@@ -3,9 +3,7 @@
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import type { Profile } from "@prisma/client"
-import { toast } from "react-hot-toast"
 
-import { api } from "@/lib/api/api"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 
@@ -16,18 +14,6 @@ interface ProfilesProps {
 const Profiles = ({ profiles }: ProfilesProps) => {
   const router = useRouter()
 
-  // update profile mutation
-  const updateProfileMutation = api.profile.update.useMutation({
-    onMutate: () => toast.success("Profile updated"),
-    onError: () => toast.error("Failed to update profile"),
-  })
-
-  // create profile mutation
-  const createProfileMutation = api.profile.create.useMutation({
-    onMutate: () => toast.success("Profile created"),
-    onError: () => toast.error("Failed to create profile"),
-  })
-
   return (
     <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">
       <h1 className="text-3xl font-medium sm:text-4xl">Manage Profiles:</h1>
@@ -36,10 +22,11 @@ const Profiles = ({ profiles }: ProfilesProps) => {
           (profile) =>
             profile.image && (
               <Button
-                aria-label={`Edit ${profile.name}`}
+                aria-label="Navigate to edit profile page"
                 key={profile.id}
                 variant="ghost"
                 className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
+                onClick={() => router.push(`/profiles/${profile.id}`)}
               >
                 <div className="relative aspect-square w-32 overflow-hidden rounded group-hover:ring-2 group-hover:ring-slate-500">
                   <Image
@@ -64,9 +51,10 @@ const Profiles = ({ profiles }: ProfilesProps) => {
         )}
         {profiles.length < 5 && (
           <Button
-            aria-label="Add new profile"
+            aria-label="Navigate to add profile page"
             variant="ghost"
             className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
+            onClick={() => router.push("/profiles/add")}
           >
             <div className="relative aspect-square w-32 overflow-hidden rounded bg-neutral-800/50 group-hover:ring-2 group-hover:ring-slate-500">
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 ring-2 ring-slate-50">

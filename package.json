@@ -36,6 +36,7 @@
     "raw-body": "^2.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.43.9",
     "react-hot-toast": "^2.4.0",
     "react-player": "^2.12.0",

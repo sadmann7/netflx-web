@@ -6,7 +6,7 @@ import { plansConfig } from "@/config/plans"
 import { getCurrentUser } from "@/lib/session"
 import { stripe } from "@/lib/stripe"
 import { getUserSubscriptionPlan } from "@/lib/subscription"
-import BillingForm from "@/components/billing-form"
+import BillingForm from "@/components/form/billing-form"
 import { Icons } from "@/components/icons"
 
 export const metadata: Metadata = {
