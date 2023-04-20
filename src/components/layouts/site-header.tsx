@@ -10,6 +10,7 @@ import { signOut } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
+import { api } from "@/lib/api/api"
 import { searchShows } from "@/lib/fetcher"
 import { cn } from "@/lib/utils"
 import ExpandableSearchbar from "@/components/expandable-searchbar"
@@ -50,6 +51,9 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     const shows = await searchShows(searchStore.query)
     void searchStore.setShows(shows.results)
   }
+
+  // profile query
+  const profileQuery = api.profile.get.useQuery()
 
   return (
     <header
@@ -94,7 +98,9 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                   className="h-auto shrink-0 px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
                 >
                   <Image
-                    src="/images/who-is-watching.webp"
+                    src={
+                      profileQuery.data?.image ?? "/images/who-is-watching.webp"
+                    }
                     alt="who is watching"
                     width={755}
                     height={736}

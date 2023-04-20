@@ -1,13 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "cockroachdb"
-    url      = env("DATABASE_URL")
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 model Example {
@@ -23,16 +21,17 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
+    @@index([userId])
 }
 
 model Session {
@@ -41,6 +40,8 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
 
 model User {
@@ -75,9 +76,47 @@ model Profile {
     userId     String
     name       String
     image      String?
-    language   LANGUAGE
-    gameHandle String
+    language   LANGUAGE @default(ENGLISH)
+    gameHandle String?
     user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@index([userId])
+}
+
+model Show {
+    id           String     @id @default(cuid())
+    tmdbId       Int        @unique
+    title        String
+    name         String
+    overview     String?
+    poster       String?
+    firstAirDate DateTime?
+    lastAirDate  DateTime?
+    voteAverage  Float
+    adult        Boolean
+    mediaType    MEDIA_TYPE
+    trailer      String?
+    genres       Genre[]
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+}
+
+model Genre {
+    tmdbId    Int      @unique
+    name      String
+    Show      Show?    @relation(fields: [showId], references: [id])
+    showId    String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([showId])
+}
+
+enum MEDIA_TYPE {
+    MOVIE
+    TV
 }
 
 enum LANGUAGE {
@@ -104,36 +143,4 @@ enum LANGUAGE {
     TIENG_VIET
     TURKCE
     CESTINA
-}
-
-model Show {
-    id           String     @id @default(cuid())
-    tmdbId       Int        @unique
-    title        String
-    name         String
-    overview     String?
-    poster       String?
-    firstAirDate DateTime?
-    lastAirDate  DateTime?
-    voteAverage  Float
-    adult        Boolean
-    mediaType    MEDIA_TYPE
-    trailer      String?
-    genres       Genre[]
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
-}
-
-model Genre {
-    tmdbId    Int      @unique
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    Show      Show?    @relation(fields: [showId], references: [id])
-    showId    String?
-}
-
-enum MEDIA_TYPE {
-    MOVIE
-    TV
 }

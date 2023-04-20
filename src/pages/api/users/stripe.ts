@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { authOptions } from "@/server/auth"
+import { prisma } from "@/server/db"
 import { getServerSession } from "next-auth/next"
 
 import { subscriptionPlans } from "@/config/subscriptions"
@@ -26,7 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const session = await getServerSession(req, res, authOptions)
       const user = session?.user
 
-      if (!user || !user.email) {
+      if (!user || !user.email || !user.id || !user.name) {
         throw new Error("User not found.")
       }
 
@@ -66,6 +67,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           userId: user.id,
         },
       })
+
+      // If the checkout session is successful, then create a profile for the user.
+      // Check if profile exists first.
+      const existingProfile = await prisma.profile.findUnique({
+        where: { id: user.id },
+      })
+
+      if (!existingProfile) {
+        await prisma.profile.create({
+          data: {
+            user: { connect: { id: user.id } },
+            id: user.id,
+            name: user.name,
+            image: user.image,
+          },
+        })
+      }
 
       return res.json({ url: stripeSession.url })
     } catch (error) {
