@@ -57,7 +57,7 @@ const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
   return (
     <section
       aria-label="Billing form for various subscription plans"
-      className=" h-full w-full "
+      className="h-full w-full"
     >
       <div className="flex flex-col gap-8 overflow-x-auto">
         <div className="flex min-w-[480px] justify-end gap-5">
