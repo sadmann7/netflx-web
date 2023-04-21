@@ -56,6 +56,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
       name: data.name,
       iconId: profileIcon.id,
     })
+    reset()
 
     router.push("/profiles")
   }
@@ -104,7 +105,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
                   className="object-cover"
                 />
               </Button>
-              <fieldset className="grid w-full gap-5">
+              <fieldset className="grid w-full items-start gap-5">
                 <label htmlFor="name" className="sr-only">
                   Name
                 </label>

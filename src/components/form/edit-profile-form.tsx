@@ -13,7 +13,7 @@ const schema = z.object({
 })
 type Inputs = z.infer<typeof schema>
 
-const UpdateProfileForm = () => {
+const EditProfileForm = () => {
   // update profile mutation
   const updateProfileMutation = api.profile.update.useMutation({
     onMutate: () => toast.success("Profile updated"),
@@ -36,4 +36,4 @@ const UpdateProfileForm = () => {
   return <div>Update Profile Form</div>
 }
 
-export default UpdateProfileForm
+export default EditProfileForm

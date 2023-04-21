@@ -24,10 +24,19 @@ export default async function AddProfilePage() {
     },
   })
 
-  const icons = await prisma.icon.findMany()
+  const unusedIcons = await prisma.icon.findMany({
+    where: {
+      NOT: {
+        profiles: {
+          some: {
+            userId: user.id,
+          },
+        },
+      },
+    },
+  })
   const icon =
-    icons[Math.floor(Math.random() * icons.length)] ??
-    (await prisma.icon.findFirst())
+    unusedIcons && unusedIcons[Math.floor(Math.random() * unusedIcons.length)]
 
   return (
     <section className="w-full">

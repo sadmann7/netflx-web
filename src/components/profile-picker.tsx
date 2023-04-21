@@ -36,7 +36,7 @@ const ProfilePicker = ({
   const userQuery = api.profile.getCurrentUser.useQuery()
 
   // icons query
-  const iconsQuery = api.icon.getOthers.useQuery(profileIcon.id)
+  const iconsQuery = api.icon.getAllUnused.useQuery(profileIcon.id)
 
   return (
     <motion.div

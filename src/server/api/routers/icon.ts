@@ -7,7 +7,20 @@ export const iconRouter = createTRPCRouter({
     return icons
   }),
 
-  getOthers: protectedProcedure
+  getAllUsed: protectedProcedure.query(async ({ ctx }) => {
+    const icons = await ctx.prisma.icon.findMany({
+      where: {
+        profiles: {
+          some: {
+            userId: ctx.session.user.id,
+          },
+        },
+      },
+    })
+    return icons
+  }),
+
+  getAllUnused: protectedProcedure
     .input(z.string().optional())
     .query(async ({ ctx, input }) => {
       const profile = await ctx.prisma.profile.findUnique({
