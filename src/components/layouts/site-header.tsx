@@ -10,7 +10,7 @@ import { signOut } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
-import { api } from "@/lib/api/api"
+import { api } from "@/lib/api/client"
 import { searchShows } from "@/lib/fetcher"
 import { cn } from "@/lib/utils"
 import ExpandableSearchbar from "@/components/expandable-searchbar"
@@ -34,10 +34,10 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
   const [isScrolled, setIsScrolled] = React.useState(false)
 
   // change background color on scroll
-  const changeBgColor = () => {
-    window.scrollY > 0 ? setIsScrolled(true) : setIsScrolled(false)
-  }
   React.useEffect(() => {
+    const changeBgColor = () => {
+      window.scrollY > 0 ? setIsScrolled(true) : setIsScrolled(false)
+    }
     window.addEventListener("scroll", changeBgColor)
     return () => window.removeEventListener("scroll", changeBgColor)
   }, [isScrolled])
@@ -99,9 +99,12 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                 >
                   <Image
                     src={
-                      profileQuery.data?.image ?? "/images/who-is-watching.webp"
+                      profileQuery.data?.icon?.href ??
+                      "/images/classic-profile-icon-red.webp"
                     }
-                    alt="who is watching"
+                    alt={
+                      profileQuery.data?.name ?? "Classic profile icon (red)"
+                    }
                     width={755}
                     height={736}
                     className="h-auto w-7 cursor-pointer rounded-sm transition-opacity hover:opacity-75 active:opacity-100"

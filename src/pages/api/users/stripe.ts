@@ -68,6 +68,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       })
 
+      console.log(stripeSession.payment_status)
+
       // If the checkout session is successful, then create a profile for the user.
       // Check if profile exists first.
       console.log("creating profile if not exists")
@@ -75,13 +77,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         where: { id: user.id },
       })
 
-      if (!existingProfile && stripeSession.payment_status === "paid") {
+      // set random icon for user
+      const icons = await prisma.icon.findMany()
+      const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+      const firstIcon = await prisma.icon.findFirst()
+      // TODO: check if tripeSession.payment_status === "paid"
+      if (!existingProfile) {
         await prisma.profile.create({
           data: {
             user: { connect: { id: user.id } },
             id: user.id,
             name: user.name,
-            image: user.image,
+            icon: { connect: { id: randomIcon?.id ?? firstIcon?.id } },
           },
         })
       }

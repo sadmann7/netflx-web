@@ -22,6 +22,9 @@ export default async function ManageProfilesPage() {
     where: {
       id: user.id,
     },
+    include: {
+      icon: true,
+    },
   })
 
   return (

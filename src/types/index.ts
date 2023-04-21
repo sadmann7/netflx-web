@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client"
+import type { Icon, Profile, User } from "@prisma/client"
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -144,3 +144,7 @@ export type UserSubscriptionPlan = SubscriptionPlan &
   Pick<User, "stripeCustomerId" | "stripeSubscriptionId" | "stripePriceId"> & {
     stripeCurrentPeriodEnd: number
   }
+
+export interface ProfileWithIcon extends Profile {
+  icon: Icon
+}

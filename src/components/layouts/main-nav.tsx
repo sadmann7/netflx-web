@@ -38,7 +38,7 @@ export function MainNav({ items }: MainNavProps) {
         }}
       >
         <Image
-          src="/images/netflix-logo.svg"
+          src="/netflix-logo.svg"
           alt="netflix"
           width={1024}
           height={276.74}

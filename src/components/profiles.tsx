@@ -2,13 +2,13 @@
 
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import type { Profile } from "@prisma/client"
+import type { ProfileWithIcon } from "@/types"
 
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 
 interface ProfilesProps {
-  profiles: Profile[]
+  profiles: ProfileWithIcon[]
 }
 
 const Profiles = ({ profiles }: ProfilesProps) => {
@@ -20,7 +20,7 @@ const Profiles = ({ profiles }: ProfilesProps) => {
       <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {profiles.map(
           (profile) =>
-            profile.image && (
+            profile.icon && (
               <Button
                 aria-label="Navigate to edit profile page"
                 key={profile.id}
@@ -30,8 +30,8 @@ const Profiles = ({ profiles }: ProfilesProps) => {
               >
                 <div className="relative aspect-square w-32 overflow-hidden rounded group-hover:ring-2 group-hover:ring-slate-500">
                   <Image
-                    src={profile.image}
-                    alt={profile.name}
+                    src={profile.icon.href}
+                    alt={profile.icon.name}
                     fill
                     className="object-cover"
                   />

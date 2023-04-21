@@ -15,7 +15,7 @@ const config = {
       },
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com",
+        hostname: "res.cloudinary.com",
       },
     ],
   },

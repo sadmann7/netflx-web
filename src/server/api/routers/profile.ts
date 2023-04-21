@@ -39,17 +39,15 @@ export const profileRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx }) => {
     const profile = await ctx.prisma.profile.findUnique({
       where: { id: ctx.session.user.id },
+      include: {
+        icon: true,
+      },
     })
     return profile
   }),
 
   create: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        image: z.string(),
-      })
-    )
+    .input(z.string())
     .mutation(async ({ ctx, input }) => {
       const existingProfile = await ctx.prisma.profile.findUnique({
         where: { id: ctx.session.user.id },
@@ -60,11 +58,15 @@ export const profileRouter = createTRPCRouter({
           message: "Profile already exists",
         })
       }
+      const icons = await ctx.prisma.icon.findMany()
+      const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+      const firstIcon = await ctx.prisma.icon.findFirst()
+
       const profile = await ctx.prisma.profile.create({
         data: {
           user: { connect: { id: ctx.session.user.id } },
-          name: input.name,
-          image: input.image,
+          name: input,
+          icon: { connect: { id: randomIcon?.id ?? firstIcon?.id } },
         },
       })
       return profile
@@ -75,7 +77,7 @@ export const profileRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         name: z.string(),
-        image: z.string(),
+        iconId: z.string(),
         gameHandle: z.string().optional(),
       })
     )
@@ -84,7 +86,7 @@ export const profileRouter = createTRPCRouter({
         where: { id: input.id },
         data: {
           name: input.name,
-          image: input.image,
+          icon: { connect: { id: input.iconId } },
           gameHandle: input.gameHandle,
         },
       })

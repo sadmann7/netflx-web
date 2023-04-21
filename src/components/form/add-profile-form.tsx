@@ -3,6 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { z } from "zod"
@@ -22,6 +23,7 @@ type Inputs = z.infer<typeof schema>
 
 const AddProfileForm = () => {
   const [profilePicker, setProfilePicker] = React.useState(false)
+  const [iconId, setIconId] = React.useState("")
 
   // create profile mutation
   const createProfileMutation = api.profile.create.useMutation({
@@ -39,11 +41,22 @@ const AddProfileForm = () => {
   }
 
   return (
-    <>
+    <AnimatePresence>
       {profilePicker ? (
-        <ProfilePicker />
+        <ProfilePicker
+          profilePicker={profilePicker}
+          setProfilePicker={setProfilePicker}
+          iconId={iconId}
+          setIconId={setIconId}
+        />
       ) : (
-        <div className="container flex min-h-screen w-full max-w-3xl flex-col justify-center gap-3">
+        <motion.div
+          className="container flex min-h-screen w-full max-w-2xl flex-col justify-center gap-3"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.3 }}
+        >
           <div className="space-y-3">
             <h1 className="text-3xl font-medium sm:text-5xl">Add Profile</h1>
             <p className="text-sm text-neutral-500 sm:text-base">
@@ -63,7 +76,7 @@ const AddProfileForm = () => {
                 onClick={() => setProfilePicker(true)}
               >
                 <Image
-                  src="/images/who-is-watching.webp"
+                  src="/images/classic-profile-icon-red.webp"
                   alt="Profile"
                   fill
                   className="object-cover"
@@ -106,9 +119,9 @@ const AddProfileForm = () => {
               </Button>
             </div>
           </form>
-        </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   )
 }
 

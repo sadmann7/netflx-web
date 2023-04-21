@@ -75,14 +75,25 @@ model Profile {
     id         String   @id @default(cuid())
     userId     String
     name       String
-    image      String?
+    icon       Icon?    @relation(fields: [iconId], references: [id], onDelete: Cascade)
     language   LANGUAGE @default(ENGLISH)
     gameHandle String?
     user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
+    iconId     String
 
     @@index([userId])
+    @@index([iconId])
+}
+
+model Icon {
+    id        String    @id @default(cuid())
+    name      String
+    href      String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    profiles  Profile[]
 }
 
 model Show {
