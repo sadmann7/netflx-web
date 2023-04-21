@@ -3,6 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Icon } from "@prisma/client"
 import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -21,7 +22,11 @@ const schema = z.object({
 })
 type Inputs = z.infer<typeof schema>
 
-const AddProfileForm = () => {
+interface AddProfileFormProps {
+  icon: Icon | null
+}
+
+const AddProfileForm = ({ icon }: AddProfileFormProps) => {
   const [profilePicker, setProfilePicker] = React.useState(false)
   const [iconId, setIconId] = React.useState("")
 
@@ -76,8 +81,10 @@ const AddProfileForm = () => {
                 onClick={() => setProfilePicker(true)}
               >
                 <Image
-                  src="/images/classic-profile-icon-red.webp"
-                  alt="Profile"
+                  src={
+                    icon ? icon.href : "/images/classic-profile-icon-red.webp"
+                  }
+                  alt={icon ? icon.title : "Classic profile icon"}
                   fill
                   className="object-cover"
                 />

@@ -146,5 +146,5 @@ export type UserSubscriptionPlan = SubscriptionPlan &
   }
 
 export interface ProfileWithIcon extends Profile {
-  icon: Icon
+  icon: Icon | null
 }

@@ -31,7 +31,7 @@ const Profiles = ({ profiles }: ProfilesProps) => {
                 <div className="relative aspect-square w-32 overflow-hidden rounded group-hover:ring-2 group-hover:ring-slate-500">
                   <Image
                     src={profile.icon.href}
-                    alt={profile.icon.name}
+                    alt={profile.icon.title}
                     fill
                     className="object-cover"
                   />
