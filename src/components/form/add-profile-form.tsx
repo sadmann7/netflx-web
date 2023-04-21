@@ -3,18 +3,19 @@
 import * as React from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Icon } from "@prisma/client"
+import { Icon, Profile } from "@prisma/client"
 import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { z } from "zod"
 
-import { api } from "@/lib/api/api"
+import { api } from "@/lib/api/client"
 import { cn } from "@/lib/utils"
 import ProfilePicker from "@/components/profile-picker"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const schema = z.object({
   name: z.string(),
@@ -23,10 +24,11 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>
 
 interface AddProfileFormProps {
+  profiles: Profile[]
   icon: Icon | null
 }
 
-const AddProfileForm = ({ icon }: AddProfileFormProps) => {
+const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
   const [profilePicker, setProfilePicker] = React.useState(false)
   const [iconId, setIconId] = React.useState("")
 
@@ -77,17 +79,20 @@ const AddProfileForm = ({ icon }: AddProfileFormProps) => {
               <Button
                 aria-label="Show profile picker"
                 type="button"
-                className="relative aspect-square h-auto w-32 overflow-hidden rounded hover:opacity-80 group-hover:ring-2 group-hover:ring-slate-500"
+                className="relative aspect-square h-auto w-32 overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
                 onClick={() => setProfilePicker(true)}
+                disabled={!icon || profiles?.length >= 5}
               >
-                <Image
-                  src={
-                    icon ? icon.href : "/images/classic-profile-icon-red.webp"
-                  }
-                  alt={icon ? icon.title : "Classic profile icon"}
-                  fill
-                  className="object-cover"
-                />
+                {icon ? (
+                  <Image
+                    src={icon.href}
+                    alt={icon.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <Skeleton className="h-full w-full rounded bg-neutral-700" />
+                )}
               </Button>
               <fieldset className="grid w-full gap-5">
                 <label htmlFor="name" className="sr-only">

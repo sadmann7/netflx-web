@@ -1,4 +1,5 @@
 import * as React from "react"
+import Image from "next/image"
 import type { SetState } from "@/types"
 import { motion } from "framer-motion"
 
@@ -6,6 +7,7 @@ import { api } from "@/lib/api/client"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface ProfilePickerProps {
   profilePicker: boolean
@@ -33,6 +35,9 @@ const ProfilePicker = ({
 
   //  user query
   const userQuery = api.profile.getCurrentUser.useQuery()
+
+  // icons query
+  const iconsQuery = api.icon.getAll.useQuery()
 
   return (
     <motion.div
@@ -74,8 +79,42 @@ const ProfilePicker = ({
           )}
         </div>
       </div>
-      <div className="container w-full max-w-screen-2xl">
+      <div className="container flex w-full max-w-screen-2xl flex-col gap-2.5">
         <div className="text-xl font-medium sm:text-2xl">The Classics</div>
+        {iconsQuery.isError ? (
+          <div>Failed to load profiles</div>
+        ) : iconsQuery.isLoading ? (
+          <div className="flex flex-wrap items-center gap-2">
+            {Array.from({ length: 5 }, (_, i) => (
+              <Skeleton key={i} className="aspect-square w-32 bg-neutral-700" />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center gap-5 overflow-x-auto py-1.5">
+            {iconsQuery.data?.map((icon) => (
+              <Button
+                key={icon.id}
+                aria-label="Choose profile icon"
+                className="relative aspect-square h-auto w-32 min-w-[96px] overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
+                onClick={() => {
+                  setIconId(icon.id)
+                  setProfilePicker(false)
+                }}
+              >
+                {icon ? (
+                  <Image
+                    src={icon.href}
+                    alt={icon.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <Skeleton className="h-full w-full bg-neutral-700" />
+                )}
+              </Button>
+            ))}
+          </div>
+        )}
       </div>
     </motion.div>
   )

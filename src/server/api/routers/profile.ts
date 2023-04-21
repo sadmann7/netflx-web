@@ -18,23 +18,15 @@ export const profileRouter = createTRPCRouter({
     return user
   }),
 
-  getMany: protectedProcedure
-    .input(z.string())
-    .query(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.findUnique({
-        where: { id: input },
-        include: {
-          profiles: true,
-        },
-      })
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found",
-        })
-      }
-      return user.profiles
-    }),
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const profiles = await ctx.prisma.profile.findMany({
+      where: { userId: ctx.session.user.id },
+      include: {
+        icon: true,
+      },
+    })
+    return profiles
+  }),
 
   get: protectedProcedure.query(async ({ ctx }) => {
     const profile = await ctx.prisma.profile.findUnique({

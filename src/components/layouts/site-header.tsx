@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface SiteHeaderProps {
   session: Session | null
@@ -97,19 +98,18 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                   variant="ghost"
                   className="h-auto shrink-0 px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
                 >
-                  <Image
-                    src={
-                      profileQuery.data?.icon?.href ??
-                      "/images/classic-profile-icon-red.webp"
-                    }
-                    alt={
-                      profileQuery.data?.name ?? "Classic profile icon (red)"
-                    }
-                    width={755}
-                    height={736}
-                    className="h-auto w-7 cursor-pointer rounded-sm transition-opacity hover:opacity-75 active:opacity-100"
-                    loading="lazy"
-                  />
+                  {profileQuery.data?.icon ? (
+                    <Image
+                      src={profileQuery.data.icon.href}
+                      alt={profileQuery.data.icon.title}
+                      width={320}
+                      height={320}
+                      className="aspect-square w-7 cursor-pointer rounded-sm transition-opacity hover:opacity-75 active:opacity-100"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Skeleton className="aspect-square w-7 rounded-sm bg-neutral-700" />
+                  )}
                   <Icons.chevronDown className="ml-2 hidden h-4 w-4 transition-transform duration-200 lg:inline-block" />
                 </Button>
               </DropdownMenuTrigger>

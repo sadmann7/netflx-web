@@ -18,13 +18,19 @@ export default async function AddProfilePage() {
     redirect(authOptions?.pages?.signIn ?? "/login")
   }
 
+  const profiles = await prisma.profile.findMany({
+    where: {
+      userId: user.id,
+    },
+  })
+
   const icons = await prisma.icon.findMany()
   const randomIcon = icons[Math.floor(Math.random() * icons.length)]
   const firstIcon = await prisma.icon.findFirst()
 
   return (
     <section className="w-full">
-      <AddProfileForm icon={randomIcon ?? firstIcon} />
+      <AddProfileForm profiles={profiles} icon={randomIcon ?? firstIcon} />
     </section>
   )
 }
