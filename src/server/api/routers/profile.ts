@@ -29,14 +29,27 @@ export const profileRouter = createTRPCRouter({
   }),
 
   getOne: protectedProcedure.query(async ({ ctx }) => {
-    const profile = await ctx.prisma.profile.findUnique({
-      where: { id: ctx.session.user.id },
+    const profiles = await ctx.prisma.profile.findMany({
+      where: { userId: ctx.session.user.id },
       include: {
         icon: true,
       },
     })
-    return profile
+
+    return profiles[0]
   }),
+
+  getCurrent: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const profile = await ctx.prisma.profile.findUnique({
+        where: { id: input },
+        include: {
+          icon: true,
+        },
+      })
+      return profile
+    }),
 
   create: protectedProcedure
     .input(
@@ -106,6 +119,18 @@ export const profileRouter = createTRPCRouter({
           name: input.name,
           icon: { connect: { id: input.iconId } },
           gameHandle: input.gameHandle,
+        },
+      })
+      return profile
+    }),
+
+  updateStatus: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const profile = await ctx.prisma.profile.update({
+        where: { id: input },
+        data: {
+          watching: true,
         },
       })
       return profile

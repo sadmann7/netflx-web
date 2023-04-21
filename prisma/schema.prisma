@@ -76,6 +76,7 @@ model Profile {
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
     iconId     String   @unique
+    watching   Boolean  @default(false)
 
     @@index([userId])
     @@index([iconId])

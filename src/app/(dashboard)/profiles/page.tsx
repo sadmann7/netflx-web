@@ -4,7 +4,7 @@ import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
-import Profiles from "@/components/profiles"
+import ManageProfiles from "@/components/manage-profiles"
 
 export const metadata: Metadata = {
   title: "Manage Profiles",
@@ -29,7 +29,7 @@ export default async function ManageProfilesPage() {
 
   return (
     <section className="w-full shadow-md">
-      <Profiles profiles={profiles} />
+      <ManageProfiles profiles={profiles} />
     </section>
   )
 }

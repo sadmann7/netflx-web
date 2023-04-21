@@ -55,8 +55,6 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
 
   // profile query
   const profileQuery = api.profile.getOne.useQuery()
-  const profilesQuery = api.profile.getAll.useQuery()
-  console.log(profilesQuery.data)
 
   return (
     <header
