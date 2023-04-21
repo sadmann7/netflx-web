@@ -18,7 +18,7 @@ const Profiles = ({ profiles }: ProfilesProps) => {
   return (
     <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">
       <h1 className="text-3xl font-medium sm:text-4xl">Manage Profiles:</h1>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {profiles.map((profile) => (
           <Button
             aria-label="Navigate to edit profile page"

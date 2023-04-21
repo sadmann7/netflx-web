@@ -39,28 +39,54 @@ export const profileRouter = createTRPCRouter({
   }),
 
   create: protectedProcedure
-    .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      const existingProfile = await ctx.prisma.profile.findUnique({
-        where: { id: ctx.session.user.id },
+    .input(
+      z.object({
+        name: z.string(),
+        iconId: z.string(),
       })
-      if (existingProfile) {
+    )
+    .mutation(async ({ ctx, input }) => {
+      // check if user has 5 profiles already
+      const profiles = await ctx.prisma.profile.findMany({
+        where: { userId: ctx.session.user.id },
+      })
+      if (profiles.length >= 5) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Profile already exists",
+          message: "You can only have 5 profiles",
         })
       }
-      const icons = await ctx.prisma.icon.findMany()
-      const randomIcon = icons[Math.floor(Math.random() * icons.length)]
-      const firstIcon = await ctx.prisma.icon.findFirst()
+
+      // check if profile name is available
+      const profileName = await ctx.prisma.profile.findUnique({
+        where: { name: input.name },
+      })
+      if (profileName) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Profile name is already taken",
+        })
+      }
+
+      // check if profile icon is available
+      const profileIcon = await ctx.prisma.profile.findUnique({
+        where: { iconId: input.iconId },
+      })
+      if (profileIcon) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Profile icon is already taken",
+        })
+      }
 
       const profile = await ctx.prisma.profile.create({
         data: {
           user: { connect: { id: ctx.session.user.id } },
-          name: input,
-          icon: { connect: { id: randomIcon?.id ?? firstIcon?.id } },
+          name: input.name,
+          icon: { connect: { id: input.iconId } },
         },
       })
+
       return profile
     }),
 

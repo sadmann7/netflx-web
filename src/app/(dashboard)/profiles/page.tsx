@@ -18,9 +18,10 @@ export default async function ManageProfilesPage() {
     redirect(authOptions?.pages?.signIn ?? "/login")
   }
 
+  // get all profiles for the user
   const profiles = await prisma.profile.findMany({
     where: {
-      id: user.id,
+      userId: user.id,
     },
     include: {
       icon: true,

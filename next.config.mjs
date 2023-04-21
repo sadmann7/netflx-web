@@ -29,6 +29,7 @@ const config = {
 
   experimental: {
     appDir: true,
+    serverComponentsExternalPackages: ["@prisma/client"],
   },
 
   // i18n: {
