@@ -1,39 +1,191 @@
 "use client"
 
+import * as React from "react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { LANGUAGE, type Icon, type Profile } from "@prisma/client"
+import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { z } from "zod"
 
-import { api } from "@/lib/api/api"
+import { api } from "@/lib/api/client"
+import { cn } from "@/lib/utils"
+import { Icons } from "@/components/icons"
+import ProfilePicker from "@/components/profile-picker"
+import SelectInput from "@/components/select-input"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 
 const schema = z.object({
-  name: z.string(),
-  image: z.string(),
+  name: z.string().min(1, {
+    message: "Name must be at least 1 character long",
+  }),
+  language: z.nativeEnum(LANGUAGE),
+  gameHandle: z.string().optional(),
 })
 type Inputs = z.infer<typeof schema>
 
-const EditProfileForm = () => {
+interface EditProfileFormProps {
+  profileId: Profile["id"]
+  icon: Icon
+}
+
+const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
+  const router = useRouter()
+
+  const [profilePicker, setProfilePicker] = React.useState(false)
+  const [profileIcon, setProfileIcon] = React.useState<Icon>(icon)
+
+  // profile query
+  const profileQuery = api.profile.getOne.useQuery(profileId, {
+    enabled: !!profileId,
+  })
+
   // update profile mutation
   const updateProfileMutation = api.profile.update.useMutation({
-    onMutate: () => toast.success("Profile updated"),
-    onError: () => toast.error("Failed to update profile"),
+    onSuccess: () => {
+      toast.success("Profile created")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   // react-hook-form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    reset,
-  } = useForm<Inputs>({ resolver: zodResolver(schema) })
+  const { register, handleSubmit, formState, control, watch, reset } =
+    useForm<Inputs>({
+      resolver: zodResolver(schema),
+    })
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data)
+
+    // await updateProfileMutation.mutateAsync({
+    //   id: profileId,
+    //   name: data.name,
+    //   iconId: profileIcon.id,
+    //   language: data.language,
+    //   gameHandle: data.gameHandle,
+    // })
+    // reset()
+
+    // router.push("/profiles")
   }
 
-  return <div>Update Profile Form</div>
+  return (
+    <AnimatePresence>
+      {profilePicker ? (
+        <ProfilePicker
+          setProfilePicker={setProfilePicker}
+          profileIcon={profileIcon}
+          setProfileIcon={setProfileIcon}
+        />
+      ) : (
+        <motion.div
+          className="container flex w-full max-w-3xl flex-col justify-center gap-3 pb-5 pt-14"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.3 }}
+        >
+          <h1 className="text-3xl font-medium sm:text-5xl">Edit Profile</h1>
+          <Separator className="bg-neutral-600" />
+          <form
+            className="mt-2 grid w-full gap-5"
+            onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
+          >
+            <div className="flex w-full gap-5">
+              <Button
+                aria-label="Show profile picker"
+                type="button"
+                className="relative aspect-square h-32 overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
+                onClick={() => setProfilePicker(true)}
+              >
+                <Image
+                  src={profileIcon.href}
+                  alt={profileIcon.title}
+                  fill
+                  className="object-cover"
+                />
+              </Button>
+              <div className="w-full flex-1 space-y-5">
+                <fieldset className="grid w-full items-start gap-2">
+                  <label htmlFor="name" className="sr-only">
+                    Name
+                  </label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Name"
+                    className="rounded-none"
+                    {...register("name", { required: true })}
+                    defaultValue={profileQuery.data?.name}
+                  />
+                  {formState.errors.name && (
+                    <p className="text-sm text-red-500 dark:text-red-500">
+                      {formState.errors.name.message}
+                    </p>
+                  )}
+                </fieldset>
+                <fieldset className="grid w-full items-start gap-2">
+                  <label
+                    htmlFor="language"
+                    className="text-base text-neutral-400 sm:text-lg"
+                  >
+                    Language:
+                  </label>
+                  <SelectInput
+                    control={control}
+                    name="language"
+                    options={Object.values(LANGUAGE)}
+                    defaultValue={profileQuery.data?.language}
+                  />
+                  {formState.errors.language && (
+                    <p className="text-sm text-red-500 dark:text-red-500">
+                      {formState.errors.language.message}
+                    </p>
+                  )}
+                </fieldset>
+              </div>
+            </div>
+            <Separator className="bg-neutral-600" />
+            <div className="mt-2 flex items-center gap-4">
+              <Button
+                aria-label="Add profile"
+                variant="flat"
+                size="auto"
+                className={cn(
+                  watch("name")?.length > 0 &&
+                    "bg-red-500 text-slate-900 dark:bg-red-600 dark:text-slate-50"
+                )}
+                disabled={updateProfileMutation.isLoading}
+              >
+                {updateProfileMutation.isLoading && (
+                  <Icons.spinner
+                    className="mr-2 h-4 w-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                )}
+                Continue
+              </Button>
+              <Button
+                aria-label="Cancel"
+                type="button"
+                variant="outline"
+                className="rounded-none"
+                onClick={() => reset()}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
 }
 
 export default EditProfileForm

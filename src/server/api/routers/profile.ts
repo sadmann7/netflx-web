@@ -3,6 +3,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc"
+import { LANGUAGE } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
@@ -28,7 +29,7 @@ export const profileRouter = createTRPCRouter({
     return profiles
   }),
 
-  getOne: protectedProcedure.query(async ({ ctx }) => {
+  getFirst: protectedProcedure.query(async ({ ctx }) => {
     const profiles = await ctx.prisma.profile.findMany({
       where: { userId: ctx.session.user.id },
       include: {
@@ -39,17 +40,15 @@ export const profileRouter = createTRPCRouter({
     return profiles[0]
   }),
 
-  getCurrent: protectedProcedure
-    .input(z.string())
-    .query(async ({ ctx, input }) => {
-      const profile = await ctx.prisma.profile.findUnique({
-        where: { id: input },
-        include: {
-          icon: true,
-        },
-      })
-      return profile
-    }),
+  getOne: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const profile = await ctx.prisma.profile.findUnique({
+      where: { id: input },
+      include: {
+        icon: true,
+      },
+    })
+    return profile
+  }),
 
   create: protectedProcedure
     .input(
@@ -109,6 +108,7 @@ export const profileRouter = createTRPCRouter({
         id: z.string(),
         name: z.string(),
         iconId: z.string(),
+        language: z.nativeEnum(LANGUAGE),
         gameHandle: z.string().optional(),
       })
     )

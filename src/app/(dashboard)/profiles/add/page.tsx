@@ -39,7 +39,7 @@ export default async function AddProfilePage() {
     unusedIcons && unusedIcons[Math.floor(Math.random() * unusedIcons.length)]
 
   return (
-    <section className="w-full">
+    <section>
       {profiles && icon && <AddProfileForm profiles={profiles} icon={icon} />}
     </section>
   )

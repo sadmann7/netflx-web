@@ -1,4 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 export const iconRouter = createTRPCRouter({
@@ -38,4 +39,20 @@ export const iconRouter = createTRPCRouter({
       })
       return icons
     }),
+
+  getCurrent: protectedProcedure.query(async ({ ctx }) => {
+    const profile = await ctx.prisma.profile.findUnique({
+      where: { id: ctx.session.user.id },
+      include: {
+        icon: true,
+      },
+    })
+    if (!profile) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Profile not found",
+      })
+    }
+    return profile.icon
+  }),
 })

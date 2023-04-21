@@ -54,7 +54,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
   }
 
   // profile query
-  const profileQuery = api.profile.getOne.useQuery()
+  const profileQuery = api.profile.getFirst.useQuery()
 
   return (
     <header
@@ -173,8 +173,8 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               className={cn(
                 buttonVariants({
                   variant: "brand",
-                  size: "sm",
-                  className: "h-auto px-4 py-2",
+                  size: "auto",
+                  className: "h-auto rounded",
                 })
               )}
             >

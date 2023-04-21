@@ -38,7 +38,9 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
 
   // create profile mutation
   const createProfileMutation = api.profile.create.useMutation({
-    onSuccess: () => toast.success("Profile created"),
+    onSuccess: () => {
+      toast.success("Profile created")
+    },
     onError: (error) => {
       toast.error(error.message)
     },
@@ -92,7 +94,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
               <Button
                 aria-label="Show profile picker"
                 type="button"
-                className="relative aspect-square h-auto w-32 overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
+                className="relative aspect-square h-32 overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
                 onClick={() => setProfilePicker(true)}
                 disabled={
                   profiles.length >= 5 || createProfileMutation.isLoading
