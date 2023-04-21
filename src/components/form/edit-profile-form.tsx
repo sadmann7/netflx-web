@@ -47,6 +47,7 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
   // update profile mutation
   const updateProfileMutation = api.profile.update.useMutation({
     onSuccess: () => {
+      router.push("/profiles")
       toast.success("Profile created")
     },
     onError: (error) => {
@@ -55,10 +56,11 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
   })
 
   // react-hook-form
-  const { register, handleSubmit, formState, control, watch, reset } =
-    useForm<Inputs>({
+  const { register, handleSubmit, formState, control, watch } = useForm<Inputs>(
+    {
       resolver: zodResolver(schema),
-    })
+    }
+  )
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data)
@@ -71,9 +73,18 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
     //   gameHandle: data.gameHandle,
     // })
     // reset()
-
-    // router.push("/profiles")
   }
+
+  // delete profile mutation
+  const deleteProfileMutation = api.profile.delete.useMutation({
+    onSuccess: () => {
+      router.push("/profiles")
+      toast.success("Profile deleted")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   return (
     <AnimatePresence>
@@ -85,23 +96,23 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
         />
       ) : (
         <motion.div
-          className="container flex w-full max-w-3xl flex-col justify-center gap-3 pb-5 pt-14"
+          className="container flex w-full max-w-3xl flex-col justify-center gap-5 pb-5 pt-16"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.3 }}
         >
           <h1 className="text-3xl font-medium sm:text-5xl">Edit Profile</h1>
-          <Separator className="bg-neutral-600" />
+          <Separator className="bg-neutral-700" />
           <form
             className="mt-2 grid w-full gap-5"
             onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
           >
-            <div className="flex w-full gap-5">
+            <div className="flex w-full flex-col gap-6 sm:flex-row">
               <Button
                 aria-label="Show profile picker"
                 type="button"
-                className="relative aspect-square h-32 overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
+                className="relative aspect-square h-24 w-fit overflow-hidden rounded p-0 hover:opacity-80 active:scale-90 sm:h-28 md:h-32"
                 onClick={() => setProfilePicker(true)}
               >
                 <Image
@@ -149,10 +160,35 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
                     </p>
                   )}
                 </fieldset>
+                <fieldset className="grid w-full items-start gap-3">
+                  <label htmlFor="gameHandle" className="flex flex-col gap-2">
+                    <span className="text-base text-neutral-400 sm:text-lg">
+                      Game Handle:
+                    </span>
+                    <span>
+                      Your handle is a unique name {`that'll`} be used for
+                      playing with other Netflix members across all Netflix
+                      Games. Learn more
+                    </span>
+                  </label>
+                  <Input
+                    id="gameHandle"
+                    type="text"
+                    placeholder="Create Game Handle"
+                    className="rounded-none"
+                    {...register("name", { required: true })}
+                    defaultValue={profileQuery.data?.gameHandle ?? ""}
+                  />
+                  {formState.errors.gameHandle && (
+                    <p className="text-sm text-red-500 dark:text-red-500">
+                      {formState.errors.gameHandle.message}
+                    </p>
+                  )}
+                </fieldset>
               </div>
             </div>
-            <Separator className="bg-neutral-600" />
-            <div className="mt-2 flex items-center gap-4">
+            <Separator className="my-2 bg-neutral-700" />
+            <div className="mt-2 flex flex-wrap items-center gap-4">
               <Button
                 aria-label="Add profile"
                 variant="flat"
@@ -169,16 +205,32 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
                     aria-hidden="true"
                   />
                 )}
-                Continue
+                Save
               </Button>
               <Button
                 aria-label="Cancel"
                 type="button"
                 variant="outline"
                 className="rounded-none"
-                onClick={() => reset()}
+                onClick={() => router.back()}
               >
                 Cancel
+              </Button>
+              <Button
+                aria-label="Delete profile"
+                type="button"
+                variant="outline"
+                className="rounded-none"
+                onClick={() => deleteProfileMutation.mutate(profileId)}
+                disabled={deleteProfileMutation.isLoading}
+              >
+                {deleteProfileMutation.isLoading && (
+                  <Icons.spinner
+                    className="mr-2 h-4 w-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                )}
+                Delete Profile
               </Button>
             </div>
           </form>

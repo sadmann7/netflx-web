@@ -23,3 +23,7 @@ export function getYear(input: string | number): number {
 export function absoluteUrl(path: string) {
   return `${env.NEXT_PUBLIC_APP_URL}${path}`
 }
+
+export function capitalize(input: string): string {
+  return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase()
+}

@@ -59,7 +59,7 @@ const ProfilePicker = ({
             <Button
               aria-label="Go back"
               variant="ghost"
-              className="h-auto p-0 hover:bg-transparent dark:hover:bg-transparent"
+              className="h-auto rounded p-0 hover:bg-transparent dark:hover:bg-transparent"
               onClick={() => setProfilePicker(false)}
             >
               <Icons.arrowLeft className="h-10 w-10" aria-hidden="true" />

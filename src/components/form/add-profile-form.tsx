@@ -39,6 +39,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
   // create profile mutation
   const createProfileMutation = api.profile.create.useMutation({
     onSuccess: () => {
+      router.push("/profiles")
       toast.success("Profile created")
     },
     onError: (error) => {
@@ -59,8 +60,6 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
       iconId: profileIcon.id,
     })
     reset()
-
-    router.push("/profiles")
   }
 
   return (
@@ -85,16 +84,16 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
               Add a profile for another person watching Netflix.
             </p>
           </div>
-          <Separator className="bg-neutral-600" />
+          <Separator className="bg-neutral-700" />
           <form
             className="mt-2 grid w-full gap-5"
             onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
           >
-            <div className="flex w-full items-center gap-5">
+            <div className="flex w-full flex-col gap-6 sm:flex-row sm:items-center">
               <Button
                 aria-label="Show profile picker"
                 type="button"
-                className="relative aspect-square h-32 overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
+                className="relative aspect-square h-24 w-fit overflow-hidden rounded p-0 hover:opacity-80 active:scale-90 sm:h-28 md:h-32"
                 onClick={() => setProfilePicker(true)}
                 disabled={
                   profiles.length >= 5 || createProfileMutation.isLoading
@@ -107,7 +106,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
                   className="object-cover"
                 />
               </Button>
-              <fieldset className="grid w-full items-start gap-5">
+              <fieldset className="grid w-full flex-1 items-start gap-5">
                 <label htmlFor="name" className="sr-only">
                   Name
                 </label>
@@ -125,8 +124,8 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
                 )}
               </fieldset>
             </div>
-            <Separator className="bg-neutral-600" />
-            <div className="mt-2 flex items-center gap-4">
+            <Separator className="my-1 bg-neutral-700" />
+            <div className="mt-2 flex flex-wrap items-center gap-4">
               <Button
                 aria-label="Add profile"
                 variant="flat"
@@ -150,7 +149,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
                 type="button"
                 variant="outline"
                 className="rounded-none"
-                onClick={() => reset()}
+                onClick={() => router.back()}
               >
                 Cancel
               </Button>

@@ -24,10 +24,10 @@ const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
             aria-label="Navigate to edit profile page"
             key={profile.id}
             variant="ghost"
-            className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
+            className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.98] dark:hover:bg-transparent"
             onClick={() => router.push(`/profiles/${profile.id}`)}
           >
-            <div className="relative aspect-square w-32 overflow-hidden rounded shadow-sm group-hover:ring-4 group-hover:ring-slate-500">
+            <div className="relative aspect-square h-24 w-fit overflow-hidden rounded shadow-sm group-hover:ring-4 group-hover:ring-slate-500 sm:h-28 md:h-32">
               {profile.icon ? (
                 <Image
                   src={profile.icon.href}
@@ -58,7 +58,7 @@ const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
             className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
             onClick={() => router.push("/profiles/add")}
           >
-            <div className="relative aspect-square w-32 overflow-hidden rounded bg-neutral-800 group-hover:ring-4 group-hover:ring-slate-500">
+            <div className="relative aspect-square h-24 w-fit overflow-hidden rounded bg-neutral-800 group-hover:ring-4 group-hover:ring-slate-500 sm:h-28 md:h-32">
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 ring-2 ring-slate-50">
                 <Icons.add
                   className="h-8 w-8 text-slate-100"

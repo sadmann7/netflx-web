@@ -71,7 +71,7 @@ model Profile {
     name       String   @unique
     icon       Icon?    @relation(fields: [iconId], references: [id], onDelete: Cascade)
     language   LANGUAGE @default(ENGLISH)
-    gameHandle String?
+    gameHandle String?  @unique
     user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
