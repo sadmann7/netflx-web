@@ -145,6 +145,11 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     stripeCurrentPeriodEnd: number
   }
 
-export interface ProfileWithIcon extends Profile {
-  icon: Icon | null
+export type PickedIcon = Pick<Icon, "id" | "title" | "href">
+
+export type PickedProfile = Pick<
+  Profile,
+  "id" | "name" | "language" | "gameHandle" | "iconId"
+> & {
+  icon: PickedIcon
 }

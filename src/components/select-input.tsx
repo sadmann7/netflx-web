@@ -1,4 +1,3 @@
-import * as React from "react"
 import {
   Controller,
   type Control,
@@ -7,7 +6,7 @@ import {
   type PathValue,
 } from "react-hook-form"
 
-import { capitalize } from "@/lib/utils"
+import { formatEnum } from "@/lib/utils"
 import {
   Select,
   SelectContent,
@@ -55,7 +54,7 @@ const SelectInput = <TFieldValues extends FieldValues>({
                   value={option}
                   className="dark:focus:bg-neutral-800"
                 >
-                  {capitalize(option)}
+                  {formatEnum(option)}
                 </SelectItem>
               ))}
             </SelectGroup>

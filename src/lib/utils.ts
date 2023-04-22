@@ -24,6 +24,11 @@ export function absoluteUrl(path: string) {
   return `${env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
-export function capitalize(input: string): string {
-  return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase()
+export function formatEnum(input: string): string {
+  const words = input.split("_")
+  const capitalizedWords = words.map((word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  })
+  return capitalizedWords.join(" ")
 }
+    

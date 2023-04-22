@@ -2,14 +2,14 @@
 
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import type { ProfileWithIcon } from "@/types"
+import type { PickedProfile } from "@/types"
 
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface ManageProfilesProps {
-  profiles: ProfileWithIcon[]
+  profiles: PickedProfile[]
 }
 
 const ManageProfiles = ({ profiles }: ManageProfilesProps) => {

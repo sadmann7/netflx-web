@@ -1,7 +1,6 @@
 import * as React from "react"
 import Image from "next/image"
-import type { SetState } from "@/types"
-import type { Icon } from "@prisma/client"
+import type { PickedIcon, SetState } from "@/types"
 import { motion } from "framer-motion"
 
 import { api } from "@/lib/api/client"
@@ -12,8 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 interface ProfilePickerProps {
   setProfilePicker: SetState<boolean>
-  profileIcon: Icon
-  setProfileIcon: SetState<Icon>
+  profileIcon: PickedIcon
+  setProfileIcon: SetState<PickedIcon>
 }
 
 const ProfilePicker = ({

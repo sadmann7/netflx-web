@@ -22,7 +22,12 @@ export default async function ManageProfilesPage() {
     where: {
       userId: user.id,
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      language: true,
+      gameHandle: true,
+      iconId: true,
       icon: true,
     },
   })

@@ -3,8 +3,9 @@
 import * as React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import type { PickedIcon, PickedProfile } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LANGUAGE, type Icon, type Profile } from "@prisma/client"
+import { LANGUAGE } from "@prisma/client"
 import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -29,26 +30,20 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>
 
 interface EditProfileFormProps {
-  profileId: Profile["id"]
-  icon: Icon
+  profile: PickedProfile
 }
 
-const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
+const EditProfileForm = ({ profile }: EditProfileFormProps) => {
   const router = useRouter()
 
   const [profilePicker, setProfilePicker] = React.useState(false)
-  const [profileIcon, setProfileIcon] = React.useState<Icon>(icon)
-
-  // profile query
-  const profileQuery = api.profile.getOne.useQuery(profileId, {
-    enabled: !!profileId,
-  })
+  const [profileIcon, setProfileIcon] = React.useState<PickedIcon>(profile.icon)
 
   // update profile mutation
   const updateProfileMutation = api.profile.update.useMutation({
     onSuccess: () => {
       router.push("/profiles")
-      toast.success("Profile created")
+      toast.success("Profile updated")
     },
     onError: (error) => {
       toast.error(error.message)
@@ -62,18 +57,19 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
     }
   )
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data)
 
-    // await updateProfileMutation.mutateAsync({
-    //   id: profileId,
-    //   name: data.name,
-    //   iconId: profileIcon.id,
-    //   language: data.language,
-    //   gameHandle: data.gameHandle,
-    // })
-    // reset()
+    await updateProfileMutation.mutateAsync({
+      id: profile?.id,
+      name: data.name,
+      iconId: profileIcon.id,
+      language: data.language,
+      gameHandle: data.gameHandle,
+    })
   }
+
+  console.log(profileIcon)
 
   // delete profile mutation
   const deleteProfileMutation = api.profile.delete.useMutation({
@@ -133,7 +129,7 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
                     placeholder="Name"
                     className="rounded-none"
                     {...register("name", { required: true })}
-                    defaultValue={profileQuery.data?.name}
+                    defaultValue={profile?.name}
                   />
                   {formState.errors.name && (
                     <p className="text-sm text-red-500 dark:text-red-500">
@@ -152,7 +148,7 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
                     control={control}
                     name="language"
                     options={Object.values(LANGUAGE)}
-                    defaultValue={profileQuery.data?.language}
+                    defaultValue={profile?.language}
                   />
                   {formState.errors.language && (
                     <p className="text-sm text-red-500 dark:text-red-500">
@@ -176,8 +172,8 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
                     type="text"
                     placeholder="Create Game Handle"
                     className="rounded-none"
-                    {...register("name", { required: true })}
-                    defaultValue={profileQuery.data?.gameHandle ?? ""}
+                    {...register("gameHandle")}
+                    defaultValue={profile?.gameHandle ?? ""}
                   />
                   {formState.errors.gameHandle && (
                     <p className="text-sm text-red-500 dark:text-red-500">
@@ -221,7 +217,7 @@ const EditProfileForm = ({ profileId, icon }: EditProfileFormProps) => {
                 type="button"
                 variant="outline"
                 className="rounded-none"
-                onClick={() => deleteProfileMutation.mutate(profileId)}
+                onClick={() => deleteProfileMutation.mutate(profile?.id)}
                 disabled={deleteProfileMutation.isLoading}
               >
                 {deleteProfileMutation.isLoading && (

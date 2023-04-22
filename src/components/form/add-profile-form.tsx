@@ -3,8 +3,8 @@
 import * as React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import type { PickedIcon, PickedProfile } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { Icon, Profile } from "@prisma/client"
 import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -26,15 +26,15 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>
 
 interface AddProfileFormProps {
-  profiles: Profile[]
-  icon: Icon
+  profiles: PickedProfile[]
+  icon: PickedIcon
 }
 
 const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
   const router = useRouter()
 
   const [profilePicker, setProfilePicker] = React.useState(false)
-  const [profileIcon, setProfileIcon] = React.useState<Icon>(icon)
+  const [profileIcon, setProfileIcon] = React.useState<PickedIcon>(icon)
 
   // create profile mutation
   const createProfileMutation = api.profile.create.useMutation({

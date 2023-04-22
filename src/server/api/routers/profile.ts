@@ -124,18 +124,6 @@ export const profileRouter = createTRPCRouter({
       return profile
     }),
 
-  updateStatus: protectedProcedure
-    .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      const profile = await ctx.prisma.profile.update({
-        where: { id: input },
-        data: {
-          watching: true,
-        },
-      })
-      return profile
-    }),
-
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {

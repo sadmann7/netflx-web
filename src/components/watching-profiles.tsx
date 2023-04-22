@@ -2,13 +2,13 @@
 
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import type { ProfileWithIcon } from "@/types"
+import type { PickedProfile } from "@/types"
 
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface WatchingProfilesProps {
-  profiles: ProfileWithIcon[]
+  profiles: PickedProfile[]
 }
 
 const WatchingProfiles = ({ profiles }: WatchingProfilesProps) => {

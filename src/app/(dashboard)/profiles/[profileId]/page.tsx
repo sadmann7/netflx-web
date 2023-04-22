@@ -30,21 +30,29 @@ export default async function EditProfilePage({ params }: PageProps) {
     where: {
       id: profileId,
     },
+    select: {
+      id: true,
+      name: true,
+      language: true,
+      gameHandle: true,
+      iconId: true,
+      icon: {
+        select: {
+          id: true,
+          title: true,
+          href: true,
+        },
+      },
+    },
   })
 
   if (!profile) {
     redirect("/profiles")
   }
 
-  const icon = await prisma.icon.findUnique({
-    where: {
-      id: profile.iconId,
-    },
-  })
-
   return (
     <section>
-      {icon && <EditProfileForm profileId={profileId} icon={icon} />}
+      <EditProfileForm profile={profile} />
     </section>
   )
 }

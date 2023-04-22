@@ -22,6 +22,14 @@ export default async function AddProfilePage() {
     where: {
       userId: user.id,
     },
+    select: {
+      id: true,
+      name: true,
+      language: true,
+      gameHandle: true,
+      iconId: true,
+      icon: true,
+    },
   })
 
   const unusedIcons = await prisma.icon.findMany({
@@ -33,6 +41,11 @@ export default async function AddProfilePage() {
           },
         },
       },
+    },
+    select: {
+      id: true,
+      title: true,
+      href: true,
     },
   })
   const icon =
