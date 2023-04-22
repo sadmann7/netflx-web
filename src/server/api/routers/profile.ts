@@ -19,6 +19,20 @@ export const profileRouter = createTRPCRouter({
     return user
   }),
 
+  getUserWithProfile: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: ctx.session.user.id },
+      include: {
+        profiles: {
+          include: {
+            icon: true,
+          },
+        },
+      },
+    })
+    return user
+  }),
+
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const profiles = await ctx.prisma.profile.findMany({
       where: { userId: ctx.session.user.id },

@@ -31,4 +31,3 @@ export function formatEnum(input: string): string {
   })
   return capitalizedWords.join(" ")
 }
-    

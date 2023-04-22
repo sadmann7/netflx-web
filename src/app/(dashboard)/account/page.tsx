@@ -2,15 +2,11 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
-import { PickedUser } from "@/types"
-import { User } from "@prisma/client"
-import { Separator } from "@radix-ui/react-select"
 
 import { getCurrentUser } from "@/lib/session"
 import { stripe } from "@/lib/stripe"
-import { getUserSubscriptionPlan } from "@/lib/subscription"
+import { getPlanDetails, getUserSubscriptionPlan } from "@/lib/subscription"
 import Account from "@/components/account"
-import { Icons } from "@/components/icons"
 
 export const metadata: Metadata = {
   title: "Account",
@@ -28,42 +24,39 @@ export default async function AccountPage() {
   const subscriptionPlan = await getUserSubscriptionPlan(user.id)
 
   // if user has a subscription plan, check if it's active
+  let subStartDate: number | null = null
   let isCanceled = false
   if (subscriptionPlan && subscriptionPlan.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(
       subscriptionPlan.stripeSubscriptionId
     )
+    console.log(stripePlan)
+
+    subStartDate = stripePlan.start_date * 1000
     isCanceled = stripePlan.cancel_at_period_end
   }
 
-  const dbUser = await prisma.user.findUnique({
+  const subPlanDetails = getPlanDetails(subscriptionPlan?.name ?? "")
+
+  // if user has no profiles, redirect to profiles page
+  const profiles = await prisma.profile.findMany({
     where: {
-      id: user.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      profiles: {
-        select: {
-          id: true,
-          name: true,
-          language: true,
-          password: true,
-        },
-      },
+      userId: user.id,
     },
   })
 
+  if (!profiles.length) {
+    redirect("/profiles")
+  }
+
   return (
-    <section className="container w-full max-w-screen-2xl pb-16 pt-10">
-      {dbUser && (
-        <Account
-          user={dbUser}
-          subscriptionPlan={subscriptionPlan}
-          isCanceled={isCanceled}
-        />
-      )}
+    <section className="container w-full max-w-3xl pb-16 pt-10">
+      <Account
+        subscriptionPlan={subscriptionPlan}
+        subPlanDetails={subPlanDetails}
+        subStartDate={subStartDate}
+        isCanceled={isCanceled}
+      />
     </section>
   )
 }

@@ -108,7 +108,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                       loading="lazy"
                     />
                   ) : (
-                    <Skeleton className="aspect-square w-7 rounded-sm bg-neutral-700" />
+                    <Skeleton className="aspect-square w-7 rounded-sm bg-neutral-600" />
                   )}
                   <Icons.chevronDown className="ml-2 hidden h-4 w-4 transition-transform duration-200 lg:inline-block" />
                 </Button>
