@@ -95,6 +95,8 @@ export const profileRouter = createTRPCRouter({
         iconId: z.string(),
         language: z.nativeEnum(LANGUAGE),
         gameHandle: z.string().optional(),
+        email: z.string().optional(),
+        pin: z.number().optional().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -105,6 +107,8 @@ export const profileRouter = createTRPCRouter({
           icon: { connect: { id: input.iconId } },
           language: input.language,
           gameHandle: input.gameHandle,
+          email: input.email,
+          pin: input.pin,
         },
       })
       return profile

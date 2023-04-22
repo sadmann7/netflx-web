@@ -71,7 +71,7 @@ model Profile {
     userId     String
     name       String   @unique
     email      String?  @unique
-    pin        String?  @db.Text
+    pin        Int?     @unique
     icon       Icon     @relation(fields: [iconId], references: [id], onDelete: Cascade)
     language   LANGUAGE @default(ENGLISH)
     gameHandle String?  @unique

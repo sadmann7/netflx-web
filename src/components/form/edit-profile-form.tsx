@@ -22,7 +22,7 @@ import { Separator } from "@/components/ui/separator"
 
 const schema = z.object({
   name: z.string().min(1, {
-    message: "Name must be at least 1 character long",
+    message: "Must be at least 1 character",
   }),
   language: z.nativeEnum(LANGUAGE),
   gameHandle: z.string().optional(),
@@ -187,7 +187,7 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
             <Separator className="my-2 bg-neutral-700" />
             <div className="mt-2 flex flex-wrap items-center gap-4">
               <Button
-                aria-label="Add profile"
+                aria-label="Save profile"
                 variant="flat"
                 size="auto"
                 className={cn(

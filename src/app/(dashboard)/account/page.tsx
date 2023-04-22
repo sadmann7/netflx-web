@@ -30,7 +30,6 @@ export default async function AccountPage() {
     const stripePlan = await stripe.subscriptions.retrieve(
       subscriptionPlan.stripeSubscriptionId
     )
-    console.log(stripePlan)
 
     subStartDate = stripePlan.start_date * 1000
     isCanceled = stripePlan.cancel_at_period_end

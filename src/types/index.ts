@@ -145,6 +145,10 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     stripeCurrentPeriodEnd: number
   }
 
+export type ProfileWithIcon = Profile & {
+  icon: Icon
+}
+
 export type PickedIcon = Pick<Icon, "id" | "title" | "href">
 
 export type PickedProfile = Pick<

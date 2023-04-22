@@ -3,13 +3,29 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import type { SubscriptionPlan, UserSubscriptionPlan } from "@/types"
+import type {
+  ProfileWithIcon,
+  SubscriptionPlan,
+  UserSubscriptionPlan,
+} from "@/types"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { LANGUAGE } from "@prisma/client"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
+import { z } from "zod"
 
 import { api } from "@/lib/api/api"
 import { formatDate } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import SelectInput from "@/components/select-input"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -67,22 +83,22 @@ const Account = ({
   if (userQuery.isLoading) {
     return (
       <div className="flex flex-col gap-5">
-        <Skeleton className="h-8 w-32 bg-neutral-700" />
-        <Skeleton className="h-8 w-40 bg-neutral-700" />
-        <Separator className="bg-neutral-700" />
+        <Skeleton className="h-8 w-32 bg-neutral-600" />
+        <Skeleton className="h-8 w-40 bg-neutral-600" />
+        <Separator className="bg-neutral-600" />
         <div className="flex flex-col gap-5">
           <div className="space-y-6">
-            <Skeleton className="h-8 w-48 bg-neutral-700" />
-            <Skeleton className="h-8 w-32 bg-neutral-700" />
+            <Skeleton className="h-8 w-48 bg-neutral-600" />
+            <Skeleton className="h-8 w-32 bg-neutral-600" />
           </div>
-          <Separator className="bg-neutral-800" />
+          <Separator className="bg-neutral-700" />
           <div className="flex items-center justify-between gap-4">
-            <Skeleton className="h-8 w-32 bg-neutral-700" />
-            <Skeleton className="h-8 w-32 bg-neutral-700" />
+            <Skeleton className="h-8 w-32 bg-neutral-600" />
+            <Skeleton className="h-8 w-32 bg-neutral-600" />
           </div>
         </div>
-        <Separator className="bg-neutral-800" />
-        <Skeleton className="h-8 bg-neutral-700" />
+        <Separator className="bg-neutral-700" />
+        <Skeleton className="h-8 bg-neutral-600" />
       </div>
     )
   }
@@ -106,7 +122,7 @@ const Account = ({
           </p>
         </div>
       </div>
-      <Separator className="bg-neutral-700" />
+      <Separator className="bg-neutral-600" />
       <div className="flex flex-col gap-5 text-neutral-100">
         <div className="space-y-6">
           <h2 className="text-lg text-neutral-400 sm:text-xl">
@@ -114,7 +130,7 @@ const Account = ({
           </h2>
           <p>{userQuery.data?.email}</p>
         </div>
-        <Separator className="bg-neutral-800" />
+        <Separator className="bg-neutral-700" />
         <Link
           aria-label="Navigate to update account page"
           href="/account/update"
@@ -123,7 +139,7 @@ const Account = ({
           Update account
           <Icons.chevronRight className="h-5 w-5 text-neutral-500" />
         </Link>
-        <Separator className="bg-neutral-800" />
+        <Separator className="bg-neutral-700" />
         {subscriptionPlan === null ? (
           <div className="flex flex-col gap-2.5">
             <p>You are not currently subscribed to any plan.</p>
@@ -146,7 +162,7 @@ const Account = ({
             {formatDate(subscriptionPlan.stripeCurrentPeriodEnd)}.
           </p>
         )}
-        <Separator className="bg-neutral-800" />
+        <Separator className="bg-neutral-700" />
         <Button
           type="button"
           aria-label="Cancel membership"
@@ -162,7 +178,7 @@ const Account = ({
           )}
           Cancel Membership
         </Button>
-        <Separator className="bg-neutral-700" />
+        <Separator className="bg-neutral-600" />
         <div className="space-y-6">
           <h2 className="text-lg text-neutral-400 sm:text-xl">PLAN DETAILS</h2>
           <div className="flex items-center gap-2">
@@ -172,7 +188,7 @@ const Account = ({
             </span>
           </div>
         </div>
-        <Separator className="bg-neutral-800" />
+        <Separator className="bg-neutral-700" />
         <Link
           aria-label="Navigate to plans page"
           href="/login/plans"
@@ -181,29 +197,14 @@ const Account = ({
           Change plan
           <Icons.chevronRight className="h-5 w-5 text-neutral-400" />
         </Link>
-        <Separator className="bg-neutral-700" />
-        <div className="space-y-6">
+        <Separator className="bg-neutral-600" />
+        <div className="space-y-4">
           <h2 className="text-lg text-neutral-400 sm:text-xl">PROFILE</h2>
-          <div className="flex flex-col gap-2">
+          <Accordion type="single" collapsible className="w-full">
             {userQuery.data?.profiles.map((profile) => (
-              <div key={profile.id} className="space-y-5">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src={profile.icon.href}
-                      alt={profile.icon.title}
-                      width={60}
-                      height={60}
-                      className="rounded object-cover"
-                    />
-                    <p>{profile.name}</p>
-                  </div>
-                  <Icons.chevronDown className="h-5 w-5 text-neutral-400" />
-                </div>
-                <Separator className="bg-neutral-800" />
-              </div>
+              <ProfileCard key={profile.id} profile={profile} />
             ))}
-          </div>
+          </Accordion>
         </div>
       </div>
     </div>
@@ -211,3 +212,136 @@ const Account = ({
 }
 
 export default Account
+
+const schema = z.object({
+  email: z.string().optional(),
+  language: z.nativeEnum(LANGUAGE),
+  pin: z.number().optional(),
+})
+type Inputs = z.infer<typeof schema>
+
+const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
+  // update profile mutation
+  const updateProfileMutation = api.profile.update.useMutation({
+    onSuccess: () => {
+      toast.success("Profile updated successfully")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  // react-hook-form
+  const { register, handleSubmit, formState, control } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  })
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data)
+
+    await updateProfileMutation.mutateAsync({
+      id: profile?.id,
+      name: profile?.name,
+      iconId: profile?.icon?.id,
+      language: data.language,
+      email: data.email,
+      pin: data.pin,
+    })
+  }
+
+  return (
+    <>
+      <AccordionItem value={profile.id} className="border-neutral-700">
+        <AccordionTrigger>
+          <div className="flex items-center gap-4">
+            <Image
+              src={profile.icon.href}
+              alt={profile.icon.title}
+              width={60}
+              height={60}
+              className="rounded object-cover"
+              loading="lazy"
+            />
+            <p>{profile.name}</p>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent className="px-1">
+          <form
+            className="mt-2 grid w-full gap-5"
+            onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
+          >
+            <fieldset className="grid w-full items-start gap-2">
+              <label htmlFor="email" className="text-sm sm:text-base">
+                Profile Email:
+              </label>
+              <Input
+                id="email"
+                type="text"
+                placeholder="Profile Email"
+                className="rounded-none"
+                {...register("email")}
+              />
+              {formState.errors.email && (
+                <p className="text-sm text-red-500 dark:text-red-500">
+                  {formState.errors.email.message}
+                </p>
+              )}
+            </fieldset>
+            <fieldset className="grid w-full items-start gap-2">
+              <label htmlFor="language" className="text-sm sm:text-base">
+                Language:
+              </label>
+              <SelectInput
+                control={control}
+                name="language"
+                options={Object.values(LANGUAGE)}
+                defaultValue={profile?.language}
+              />
+              {formState.errors.language && (
+                <p className="text-sm text-red-500 dark:text-red-500">
+                  {formState.errors.language.message}
+                </p>
+              )}
+            </fieldset>
+            <fieldset className="grid w-full items-start gap-3.5">
+              <label htmlFor="pin" className="text-sm sm:text-base">
+                Profile Lock PIN:
+              </label>
+              <Input
+                id="pin"
+                type="text"
+                placeholder="Profile Lock PIN"
+                className="rounded-none"
+                {...register("pin", {
+                  setValueAs: (v: string) =>
+                    v === "" ? undefined : parseInt(v, 10),
+                })}
+                defaultValue={profile?.pin ? "********" : ""}
+              />
+              {formState.errors.pin && (
+                <p className="-mt-1.5 text-sm text-red-500 dark:text-red-500">
+                  {formState.errors.pin.message}
+                </p>
+              )}
+            </fieldset>
+            <Button
+              aria-label="Save profile"
+              variant="flat"
+              size="auto"
+              className="active:scale-[0.98]"
+              disabled={updateProfileMutation.isLoading}
+            >
+              {updateProfileMutation.isLoading && (
+                <Icons.spinner
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
+                />
+              )}
+              Save
+            </Button>
+          </form>
+        </AccordionContent>
+      </AccordionItem>
+    </>
+  )
+}
