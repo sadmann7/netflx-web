@@ -72,7 +72,7 @@ const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
               <div className="text-xl font-medium sm:text-2xl">
                 {userQuery.data.name}
               </div>
-              <div className="relative aspect-square h-16 w-fit overflow-hidden rounded shadow-sm group-hover:ring-4 sm:h-20 md:h-24">
+              <div className="relative aspect-square h-16 w-fit overflow-hidden rounded shadow-sm group-hover:ring-4 sm:h-20">
                 {icon ? (
                   <Image
                     src={icon.href}
@@ -107,7 +107,7 @@ const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
             </Button>
           </div>
         ) : (
-          <div className="flex items-center gap-4 overflow-x-auto py-1.5 sm:gap-5">
+          <div className="flex items-center gap-2.5 overflow-x-auto py-1.5 sm:gap-5">
             {iconsQuery.isLoading
               ? Array.from({ length: 4 }, (_, i) => (
                   <Skeleton
@@ -119,7 +119,7 @@ const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
                   <Button
                     key={icon.id}
                     aria-label="Choose profile icon"
-                    className="relative aspect-square h-auto w-32 min-w-[96px] overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
+                    className="relative aspect-square h-auto w-32 min-w-[80px] overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
                     onClick={() => {
                       setIcon(icon)
                       setIconPicker(false)

@@ -11,13 +11,15 @@ export const metadata: Metadata = {
   description: "Edit your profile",
 }
 
-interface PageProps {
+interface EditProfilePageProps {
   params: {
     profileId: string
   }
 }
 
-export default async function EditProfilePage({ params }: PageProps) {
+export default async function EditProfilePage({
+  params,
+}: EditProfilePageProps) {
   const { profileId } = params
 
   const user = await getCurrentUser()
@@ -35,7 +37,6 @@ export default async function EditProfilePage({ params }: PageProps) {
       name: true,
       language: true,
       gameHandle: true,
-      iconId: true,
       icon: {
         select: {
           id: true,

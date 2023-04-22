@@ -44,6 +44,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    phoneNumber   String?   @unique
     createdAt     DateTime  @default(now()) @map(name: "created_at")
     updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
@@ -69,6 +70,8 @@ model Profile {
     id         String   @id @default(cuid())
     userId     String
     name       String   @unique
+    email      String?  @unique
+    password   String?  @db.Text
     icon       Icon     @relation(fields: [iconId], references: [id], onDelete: Cascade)
     language   LANGUAGE @default(ENGLISH)
     gameHandle String?  @unique

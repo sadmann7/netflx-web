@@ -42,7 +42,7 @@ export function MainNav({ items }: MainNavProps) {
           alt="netflix"
           width={1024}
           height={276.74}
-          className="h-auto w-28 object-cover transition-opacity hover:opacity-75 active:opacity-100"
+          className="h-auto w-28 object-cover transition-opacity hover:opacity-80 active:opacity-100"
           priority
         />
       </Link>

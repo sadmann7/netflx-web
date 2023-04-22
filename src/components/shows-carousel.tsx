@@ -120,7 +120,7 @@ const ShowCard = ({ show }: { show: Show }) => {
         sizes="(max-width: 768px) 100vw, 
           (max-width: 1200px) 50vw, 33vw"
         loading="lazy"
-        className={cn("object-cover", isHoverd && "hidden")}
+        className={cn("h-auto w-full object-cover", isHoverd && "hidden")}
       />
       <div
         className={cn(

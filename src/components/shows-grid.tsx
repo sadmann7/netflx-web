@@ -43,7 +43,7 @@ const ShowsGrid = ({ shows }: SearchedShowsProps) => {
               sizes="(max-width: 768px) 100vw, 
                 (max-width: 1200px) 50vw, 33vw"
               loading="lazy"
-              className="object-cover"
+              className="h-auto w-full object-cover"
             />
           </div>
         ))}

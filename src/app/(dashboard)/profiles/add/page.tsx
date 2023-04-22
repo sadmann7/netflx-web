@@ -27,7 +27,6 @@ export default async function AddProfilePage() {
       name: true,
       language: true,
       gameHandle: true,
-      iconId: true,
       icon: true,
     },
   })

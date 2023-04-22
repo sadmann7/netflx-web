@@ -48,7 +48,7 @@ const Hero = ({ shows }: HeroProps) => {
                 randomShow?.poster_path ?? randomShow?.backdrop_path
               }`}
               alt={randomShow?.title ?? "poster"}
-              className="object-cover"
+              className="h-auto w-full object-cover"
               fill
               priority
             />
