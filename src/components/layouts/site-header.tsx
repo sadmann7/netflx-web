@@ -10,7 +10,7 @@ import { signOut } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
-import { api } from "@/lib/api/client"
+import { api } from "@/lib/api/api"
 import { searchShows } from "@/lib/fetcher"
 import { cn } from "@/lib/utils"
 import ExpandableSearchbar from "@/components/expandable-searchbar"

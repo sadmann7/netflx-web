@@ -153,7 +153,3 @@ export type PickedProfile = Pick<
 > & {
   icon: PickedIcon
 }
-
-export type PickedUser = Pick<User, "id" | "name" | "email"> & {
-  profiles: Pick<Profile, "id" | "name" | "language" | "password">[]
-}

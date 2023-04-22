@@ -62,14 +62,27 @@ const Account = ({
   }
 
   // user query
-  const userQuery = api.profile.getUserWithProfile.useQuery()
+  const userQuery = api.user.getCurrentWithProfile.useQuery()
 
   if (userQuery.isLoading) {
     return (
       <div className="flex flex-col gap-5">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 bg-neutral-700" />
-        ))}
+        <Skeleton className="h-8 w-32 bg-neutral-700" />
+        <Skeleton className="h-8 w-40 bg-neutral-700" />
+        <Separator className="bg-neutral-700" />
+        <div className="flex flex-col gap-5">
+          <div className="space-y-6">
+            <Skeleton className="h-8 w-48 bg-neutral-700" />
+            <Skeleton className="h-8 w-32 bg-neutral-700" />
+          </div>
+          <Separator className="bg-neutral-800" />
+          <div className="flex items-center justify-between gap-4">
+            <Skeleton className="h-8 w-32 bg-neutral-700" />
+            <Skeleton className="h-8 w-32 bg-neutral-700" />
+          </div>
+        </div>
+        <Separator className="bg-neutral-800" />
+        <Skeleton className="h-8 bg-neutral-700" />
       </div>
     )
   }
@@ -95,7 +108,7 @@ const Account = ({
       </div>
       <Separator className="bg-neutral-700" />
       <div className="flex flex-col gap-5 text-neutral-100">
-        <div className="space-y-7">
+        <div className="space-y-6">
           <h2 className="text-lg text-neutral-400 sm:text-xl">
             MEMBERSHIP & BILLING
           </h2>
@@ -110,7 +123,7 @@ const Account = ({
           Update account
           <Icons.chevronRight className="h-5 w-5 text-neutral-500" />
         </Link>
-        <Separator className="bg-neutral-700" />
+        <Separator className="bg-neutral-800" />
         {subscriptionPlan === null ? (
           <div className="flex flex-col gap-2.5">
             <p>You are not currently subscribed to any plan.</p>
@@ -133,25 +146,24 @@ const Account = ({
             {formatDate(subscriptionPlan.stripeCurrentPeriodEnd)}.
           </p>
         )}
-        <Separator className="bg-neutral-700" />
+        <Separator className="bg-neutral-800" />
         <Button
           type="button"
           aria-label="Cancel membership"
           variant="flat"
-          size="lg"
           className="rounded-none"
           onClick={() => void handleSubscription()}
         >
-          Cancel Membership
           {isLoading && (
             <Icons.spinner
               className="mr-2 h-4 w-4 animate-spin"
               aria-hidden="true"
             />
           )}
+          Cancel Membership
         </Button>
         <Separator className="bg-neutral-700" />
-        <div className="space-y-7">
+        <div className="space-y-6">
           <h2 className="text-lg text-neutral-400 sm:text-xl">PLAN DETAILS</h2>
           <div className="flex items-center gap-2">
             <p>{subscriptionPlan?.name}</p>
@@ -170,20 +182,25 @@ const Account = ({
           <Icons.chevronRight className="h-5 w-5 text-neutral-400" />
         </Link>
         <Separator className="bg-neutral-700" />
-        <div className="space-y-7">
+        <div className="space-y-6">
           <h2 className="text-lg text-neutral-400 sm:text-xl">PROFILE</h2>
           <div className="flex flex-col gap-2">
             {userQuery.data?.profiles.map((profile) => (
-              <div key={profile.id} className="flex items-center gap-7">
-                <Image
-                  src={profile.icon.href}
-                  alt={profile.icon.title}
-                  width={40}
-                  height={40}
-                  className="rounded object-cover"
-                />
-                <p className="flex-1">{profile.name}</p>
-                <Icons.chevronDown className="h-5 w-5 text-neutral-400" />
+              <div key={profile.id} className="space-y-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <Image
+                      src={profile.icon.href}
+                      alt={profile.icon.title}
+                      width={60}
+                      height={60}
+                      className="rounded object-cover"
+                    />
+                    <p>{profile.name}</p>
+                  </div>
+                  <Icons.chevronDown className="h-5 w-5 text-neutral-400" />
+                </div>
+                <Separator className="bg-neutral-800" />
               </div>
             ))}
           </div>

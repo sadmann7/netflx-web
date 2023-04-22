@@ -1,38 +1,9 @@
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/server/api/trpc"
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { LANGUAGE } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 export const profileRouter = createTRPCRouter({
-  // get current user for quick access to any client-side data
-  getCurrentUser: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.session || !ctx.session.user) {
-      return null
-    }
-    const user = await ctx.prisma.user.findUnique({
-      where: { id: ctx.session.user.id },
-    })
-    return user
-  }),
-
-  getUserWithProfile: protectedProcedure.query(async ({ ctx }) => {
-    const user = await ctx.prisma.user.findUnique({
-      where: { id: ctx.session.user.id },
-      include: {
-        profiles: {
-          include: {
-            icon: true,
-          },
-        },
-      },
-    })
-    return user
-  }),
-
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const profiles = await ctx.prisma.profile.findMany({
       where: { userId: ctx.session.user.id },
