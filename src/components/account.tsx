@@ -287,7 +287,7 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
                 placeholder="Profile Email"
                 className="rounded-none"
                 {...register("email")}
-                defaultValue={profile?.email ? (profile.email as string) : ""}
+                defaultValue={profile?.email as string}
               />
               {formState.errors.email && (
                 <p className="text-sm text-red-500 dark:text-red-500">
@@ -324,7 +324,7 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
                   setValueAs: (v: string) =>
                     v === "" ? undefined : parseInt(v, 10),
                 })}
-                defaultValue={profile?.pin ? (profile.pin as number) : ""}
+                defaultValue={profile?.pin as number}
               />
               {formState.errors.pin && (
                 <p className="-mt-1.5 text-sm text-red-500 dark:text-red-500">

@@ -3,7 +3,7 @@ import Image from "next/image"
 import type { PickedIcon, SetState } from "@/types"
 import { motion } from "framer-motion"
 
-import { api } from "@/lib/api/client"
+import { api } from "@/lib/api/api"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
@@ -28,7 +28,7 @@ const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
   }, [isScrolled])
 
   //  user query
-  const userQuery = api.profile.getCurrentUser.useQuery()
+  const userQuery = api.user.getCurrent.useQuery()
 
   // icons query
   const iconsQuery = api.icon.getAllUnused.useQuery()
