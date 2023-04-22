@@ -123,90 +123,94 @@ const Account = ({
         </div>
       </div>
       <Separator className="bg-neutral-600" />
-      <div className="flex flex-col gap-5 text-neutral-100">
-        <div className="space-y-6">
-          <h2 className="text-lg text-neutral-400 sm:text-xl">
-            MEMBERSHIP & BILLING
-          </h2>
-          <p>{userQuery.data?.email}</p>
-        </div>
-        <Separator className="bg-neutral-700" />
-        <Link
-          aria-label="Navigate to update account page"
-          href="/account/update"
-          className="flex items-center justify-between gap-4 hover:underline"
-        >
-          Update account
-          <Icons.chevronRight className="h-5 w-5 text-neutral-500" />
-        </Link>
-        <Separator className="bg-neutral-700" />
-        {subscriptionPlan === null ? (
-          <div className="flex flex-col gap-2.5">
-            <p>You are not currently subscribed to any plan.</p>
+      {userQuery.data && (
+        <div className="flex flex-col gap-5 text-neutral-100">
+          <div className="space-y-5">
+            <h2 className="text-lg text-neutral-400 sm:text-xl">
+              MEMBERSHIP & BILLING
+            </h2>
+            <p>{userQuery.data?.email}</p>
+          </div>
+          <Separator className="bg-neutral-700" />
+          <Link
+            aria-label="Navigate to update account page"
+            href={`/account/${userQuery.data.id}`}
+            className="flex items-center justify-between gap-4 hover:underline"
+          >
+            Update account
+            <Icons.chevronRight className="h-5 w-5 text-neutral-500" />
+          </Link>
+          <Separator className="bg-neutral-700" />
+          {subscriptionPlan === null ? (
+            <div className="flex flex-col gap-2.5">
+              <p>You are not currently subscribed to any plan.</p>
+              <p>
+                Click{" "}
+                <Link
+                  href="/login/plans"
+                  className="cursor-pointer text-blue-400 hover:underline"
+                >
+                  here
+                </Link>{" "}
+                to subscribe.
+              </p>
+            </div>
+          ) : (
             <p>
-              Click{" "}
-              <Link
-                href="/login/plans"
-                className="cursor-pointer text-blue-400 hover:underline"
-              >
-                here
-              </Link>{" "}
-              to subscribe.
+              {isCanceled
+                ? "Your plan will be canceled on "
+                : "Your plan renews on "}
+              {formatDate(subscriptionPlan.stripeCurrentPeriodEnd)}.
             </p>
-          </div>
-        ) : (
-          <p>
-            {isCanceled
-              ? "Your plan will be canceled on "
-              : "Your plan renews on "}
-            {formatDate(subscriptionPlan.stripeCurrentPeriodEnd)}.
-          </p>
-        )}
-        <Separator className="bg-neutral-700" />
-        <Button
-          type="button"
-          aria-label="Cancel membership"
-          variant="flat"
-          className="rounded-none"
-          onClick={() => void handleSubscription()}
-        >
-          {isLoading && (
-            <Icons.spinner
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
           )}
-          Cancel Membership
-        </Button>
-        <Separator className="bg-neutral-600" />
-        <div className="space-y-6">
-          <h2 className="text-lg text-neutral-400 sm:text-xl">PLAN DETAILS</h2>
-          <div className="flex items-center gap-2">
-            <p>{subscriptionPlan?.name}</p>
-            <span className="rounded-sm px-1 text-neutral-100 ring-2 ring-slate-100">
-              {subPlanDetails?.resolution}
-            </span>
+          <Separator className="bg-neutral-700" />
+          <Button
+            type="button"
+            aria-label="Cancel membership"
+            variant="flat"
+            className="rounded-none"
+            onClick={() => void handleSubscription()}
+          >
+            {isLoading && (
+              <Icons.spinner
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            Cancel Membership
+          </Button>
+          <Separator className="bg-neutral-600" />
+          <div className="space-y-5">
+            <h2 className="text-lg text-neutral-400 sm:text-xl">
+              PLAN DETAILS
+            </h2>
+            <div className="flex items-center gap-2">
+              <p>{subscriptionPlan?.name}</p>
+              <span className="rounded-sm px-1 text-neutral-100 ring-2 ring-slate-100">
+                {subPlanDetails?.resolution}
+              </span>
+            </div>
+          </div>
+          <Separator className="bg-neutral-700" />
+          <Link
+            aria-label="Navigate to plans page"
+            href="/login/plans"
+            className="flex items-center justify-between gap-4 hover:underline"
+          >
+            Change plan
+            <Icons.chevronRight className="h-5 w-5 text-neutral-400" />
+          </Link>
+          <Separator className="bg-neutral-600" />
+          <div className="space-y-2">
+            <h2 className="text-lg text-neutral-400 sm:text-xl">PROFILE</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {userQuery.data?.profiles.map((profile) => (
+                <ProfileCard key={profile.id} profile={profile} />
+              ))}
+            </Accordion>
           </div>
         </div>
-        <Separator className="bg-neutral-700" />
-        <Link
-          aria-label="Navigate to plans page"
-          href="/login/plans"
-          className="flex items-center justify-between gap-4 hover:underline"
-        >
-          Change plan
-          <Icons.chevronRight className="h-5 w-5 text-neutral-400" />
-        </Link>
-        <Separator className="bg-neutral-600" />
-        <div className="space-y-4">
-          <h2 className="text-lg text-neutral-400 sm:text-xl">PROFILE</h2>
-          <Accordion type="single" collapsible className="w-full">
-            {userQuery.data?.profiles.map((profile) => (
-              <ProfileCard key={profile.id} profile={profile} />
-            ))}
-          </Accordion>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
@@ -221,9 +225,12 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>
 
 const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
+  const apiUtils = api.useContext()
+
   // update profile mutation
   const updateProfileMutation = api.profile.update.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await apiUtils.user.getCurrentWithProfile.invalidate()
       toast.success("Profile updated successfully")
     },
     onError: (error) => {
@@ -280,6 +287,7 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
                 placeholder="Profile Email"
                 className="rounded-none"
                 {...register("email")}
+                defaultValue={profile?.email ? (profile.email as string) : ""}
               />
               {formState.errors.email && (
                 <p className="text-sm text-red-500 dark:text-red-500">
@@ -316,7 +324,7 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
                   setValueAs: (v: string) =>
                     v === "" ? undefined : parseInt(v, 10),
                 })}
-                defaultValue={profile?.pin ? "********" : ""}
+                defaultValue={profile?.pin ? (profile.pin as number) : ""}
               />
               {formState.errors.pin && (
                 <p className="-mt-1.5 text-sm text-red-500 dark:text-red-500">

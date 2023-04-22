@@ -3,6 +3,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc"
+import { z } from "zod"
 
 export const userRouter = createTRPCRouter({
   getSession: publicProcedure.query(({ ctx }) => {
@@ -32,4 +33,23 @@ export const userRouter = createTRPCRouter({
     })
     return user
   }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        email: z.string().optional(),
+        phoneNumber: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.update({
+        where: { id: input.id },
+        data: {
+          email: input.email,
+          phoneNumber: input.phoneNumber,
+        },
+      })
+      return user
+    }),
 })
