@@ -69,7 +69,7 @@ export const profileRouter = createTRPCRouter({
         })
       }
 
-      // check if profile name is available
+      // check if profile name is unique
       const profileName = await ctx.prisma.profile.findUnique({
         where: { name: input.name },
       })
@@ -80,7 +80,7 @@ export const profileRouter = createTRPCRouter({
         })
       }
 
-      // check if profile icon is available
+      // check if profile icon is unique
       const profileIcon = await ctx.prisma.profile.findUnique({
         where: { iconId: input.iconId },
       })
@@ -118,6 +118,7 @@ export const profileRouter = createTRPCRouter({
         data: {
           name: input.name,
           icon: { connect: { id: input.iconId } },
+          language: input.language,
           gameHandle: input.gameHandle,
         },
       })

@@ -9,17 +9,13 @@ import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
-interface ProfilePickerProps {
-  setProfilePicker: SetState<boolean>
-  profileIcon: PickedIcon
-  setProfileIcon: SetState<PickedIcon>
+interface IconPickerProps {
+  setIconPicker: SetState<boolean>
+  icon: PickedIcon
+  setIcon: SetState<PickedIcon>
 }
 
-const ProfilePicker = ({
-  setProfilePicker,
-  profileIcon,
-  setProfileIcon,
-}: ProfilePickerProps) => {
+const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
   const [isScrolled, setIsScrolled] = React.useState(false)
 
   // change background color on scroll
@@ -35,7 +31,7 @@ const ProfilePicker = ({
   const userQuery = api.profile.getCurrentUser.useQuery()
 
   // icons query
-  const iconsQuery = api.icon.getAllUnused.useQuery(profileIcon.id)
+  const iconsQuery = api.icon.getAllUnused.useQuery()
 
   return (
     <motion.div
@@ -59,7 +55,7 @@ const ProfilePicker = ({
               aria-label="Go back"
               variant="ghost"
               className="h-auto rounded p-0 hover:bg-transparent dark:hover:bg-transparent"
-              onClick={() => setProfilePicker(false)}
+              onClick={() => setIconPicker(false)}
             >
               <Icons.arrowLeft className="h-10 w-10" aria-hidden="true" />
             </Button>
@@ -71,8 +67,25 @@ const ProfilePicker = ({
             </div>
           </div>
           {userQuery.data && (
-            <div className="text-xl font-medium sm:text-2xl">
-              {userQuery.data.name}
+            // eslint-disable-next-line tailwindcss/classnames-order
+            <div className="flex flex-col-reverse items-center gap-1 xs:flex-row xs:gap-4">
+              <div className="text-xl font-medium sm:text-2xl">
+                {userQuery.data.name}
+              </div>
+              <div className="relative aspect-square h-16 w-fit overflow-hidden rounded shadow-sm group-hover:ring-4 sm:h-20 md:h-24">
+                {icon ? (
+                  <Image
+                    src={icon.href}
+                    alt={icon.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 
+                      (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <Skeleton className="h-full w-full bg-neutral-700" />
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -108,8 +121,8 @@ const ProfilePicker = ({
                     aria-label="Choose profile icon"
                     className="relative aspect-square h-auto w-32 min-w-[96px] overflow-hidden rounded p-0 hover:opacity-80 active:scale-90"
                     onClick={() => {
-                      setProfileIcon(icon)
-                      setProfilePicker(false)
+                      setIcon(icon)
+                      setIconPicker(false)
                     }}
                   >
                     {icon ? (
@@ -131,4 +144,4 @@ const ProfilePicker = ({
   )
 }
 
-export default ProfilePicker
+export default IconPicker

@@ -3,7 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import type { PickedIcon, PickedProfile } from "@/types"
+import type { PickedProfile } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LANGUAGE } from "@prisma/client"
 import { AnimatePresence, motion } from "framer-motion"
@@ -13,8 +13,8 @@ import { z } from "zod"
 
 import { api } from "@/lib/api/client"
 import { cn } from "@/lib/utils"
+import IconPicker from "@/components/icon-picker"
 import { Icons } from "@/components/icons"
-import ProfilePicker from "@/components/profile-picker"
 import SelectInput from "@/components/select-input"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,8 +36,8 @@ interface EditProfileFormProps {
 const EditProfileForm = ({ profile }: EditProfileFormProps) => {
   const router = useRouter()
 
-  const [profilePicker, setProfilePicker] = React.useState(false)
-  const [profileIcon, setProfileIcon] = React.useState<PickedIcon>(profile.icon)
+  const [iconPicker, setIconPicker] = React.useState(false)
+  const [icon, setIcon] = React.useState(profile.icon)
 
   // update profile mutation
   const updateProfileMutation = api.profile.update.useMutation({
@@ -63,13 +63,11 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
     await updateProfileMutation.mutateAsync({
       id: profile?.id,
       name: data.name,
-      iconId: profileIcon.id,
+      iconId: icon.id,
       language: data.language,
       gameHandle: data.gameHandle,
     })
   }
-
-  console.log(profileIcon)
 
   // delete profile mutation
   const deleteProfileMutation = api.profile.delete.useMutation({
@@ -84,11 +82,11 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
 
   return (
     <AnimatePresence>
-      {profilePicker ? (
-        <ProfilePicker
-          setProfilePicker={setProfilePicker}
-          profileIcon={profileIcon}
-          setProfileIcon={setProfileIcon}
+      {iconPicker ? (
+        <IconPicker
+          icon={icon}
+          setIconPicker={setIconPicker}
+          setIcon={setIcon}
         />
       ) : (
         <motion.div
@@ -109,12 +107,15 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
                 aria-label="Show profile picker"
                 type="button"
                 className="relative aspect-square h-24 w-fit overflow-hidden rounded p-0 hover:opacity-80 active:scale-90 sm:h-28 md:h-32"
-                onClick={() => setProfilePicker(true)}
+                onClick={() => setIconPicker(true)}
               >
                 <Image
-                  src={profileIcon.href}
-                  alt={profileIcon.title}
+                  src={icon.href}
+                  alt={icon.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 
+                    (max-width: 1200px) 50vw, 33vw"
+                  priority
                   className="object-cover"
                 />
               </Button>
@@ -156,7 +157,7 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
                     </p>
                   )}
                 </fieldset>
-                <fieldset className="grid w-full items-start gap-3">
+                <fieldset className="grid w-full items-start gap-3.5">
                   <label htmlFor="gameHandle" className="flex flex-col gap-2">
                     <span className="text-base text-neutral-400 sm:text-lg">
                       Game Handle:
@@ -176,7 +177,7 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
                     defaultValue={profile?.gameHandle ?? ""}
                   />
                   {formState.errors.gameHandle && (
-                    <p className="text-sm text-red-500 dark:text-red-500">
+                    <p className="-mt-1.5 text-sm text-red-500 dark:text-red-500">
                       {formState.errors.gameHandle.message}
                     </p>
                   )}

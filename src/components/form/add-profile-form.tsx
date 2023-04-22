@@ -12,8 +12,8 @@ import { z } from "zod"
 
 import { api } from "@/lib/api/client"
 import { cn } from "@/lib/utils"
+import ProfilePicker from "@/components/icon-picker"
 import { Icons } from "@/components/icons"
-import ProfilePicker from "@/components/profile-picker"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
@@ -27,14 +27,14 @@ type Inputs = z.infer<typeof schema>
 
 interface AddProfileFormProps {
   profiles: PickedProfile[]
-  icon: PickedIcon
+  profileIcon: PickedIcon
 }
 
-const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
+const AddProfileForm = ({ profiles, profileIcon }: AddProfileFormProps) => {
   const router = useRouter()
 
-  const [profilePicker, setProfilePicker] = React.useState(false)
-  const [profileIcon, setProfileIcon] = React.useState<PickedIcon>(icon)
+  const [iconPicker, setIconPicker] = React.useState(false)
+  const [icon, setIcon] = React.useState(profileIcon)
 
   // create profile mutation
   const createProfileMutation = api.profile.create.useMutation({
@@ -57,18 +57,18 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
 
     await createProfileMutation.mutateAsync({
       name: data.name,
-      iconId: profileIcon.id,
+      iconId: icon.id,
     })
     reset()
   }
 
   return (
     <AnimatePresence>
-      {profilePicker ? (
+      {iconPicker ? (
         <ProfilePicker
-          setProfilePicker={setProfilePicker}
-          profileIcon={profileIcon}
-          setProfileIcon={setProfileIcon}
+          icon={icon}
+          setIconPicker={setIconPicker}
+          setIcon={setIcon}
         />
       ) : (
         <motion.div
@@ -94,7 +94,7 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
                 aria-label="Show profile picker"
                 type="button"
                 className="relative aspect-square h-24 w-fit overflow-hidden rounded p-0 hover:opacity-80 active:scale-90 sm:h-28 md:h-32"
-                onClick={() => setProfilePicker(true)}
+                onClick={() => setIconPicker(true)}
                 disabled={
                   profiles.length >= 5 || createProfileMutation.isLoading
                 }
@@ -103,10 +103,13 @@ const AddProfileForm = ({ profiles, icon }: AddProfileFormProps) => {
                   src={profileIcon.href}
                   alt={profileIcon.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 
+                    (max-width: 1200px) 50vw, 33vw"
+                  priority
                   className="object-cover"
                 />
               </Button>
-              <fieldset className="grid w-full flex-1 items-start gap-5">
+              <fieldset className="grid w-full flex-1 items-start gap-2">
                 <label htmlFor="name" className="sr-only">
                   Name
                 </label>
