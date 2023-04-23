@@ -4,24 +4,20 @@ import { usePathname } from "next/navigation"
 import { useMounted } from "@/hooks/use-mounted"
 import { useModalStore } from "@/stores/modal"
 import { useMyListStore } from "@/stores/my-list"
-import { useProfileStore } from "@/stores/profile"
 import { useSearchStore } from "@/stores/search"
 import type { CategorizedShows } from "@/types"
-import type { Session } from "next-auth"
 
 import { cn } from "@/lib/utils"
-import ProfilesScreen from "@/components/screens/profiles-screen"
 import ShowModal from "@/components/show-modal"
 import ShowsCarousel from "@/components/shows-carousel"
 import ShowsGrid from "@/components/shows-grid"
 import ShowsSkeleton from "@/components/shows-skeleton"
 
 interface ShowsContainerProps {
-  session: Session | null
   shows: CategorizedShows[]
 }
 
-const ShowsContainer = ({ session, shows }: ShowsContainerProps) => {
+const ShowsContainer = ({ shows }: ShowsContainerProps) => {
   const path = usePathname()
   const mounted = useMounted()
 
@@ -29,17 +25,12 @@ const ShowsContainer = ({ session, shows }: ShowsContainerProps) => {
   const modalStore = useModalStore()
   const searchStore = useSearchStore()
   const myListStore = useMyListStore()
-  const profileStore = useProfileStore()
 
   // check if component is mounted
   if (!mounted) return <ShowsSkeleton />
 
   if (searchStore.query.length > 0) {
     return <ShowsGrid shows={searchStore.shows} />
-  }
-
-  if (session && !profileStore.profile) {
-    return <ProfilesScreen />
   }
 
   return (

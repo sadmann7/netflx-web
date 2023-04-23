@@ -33,6 +33,7 @@ interface SiteHeaderProps {
 
 const SiteHeader = ({ session }: SiteHeaderProps) => {
   const path = usePathname()
+  const mounted = useMounted()
   const [isScrolled, setIsScrolled] = React.useState(false)
 
   // change background color on scroll
@@ -54,9 +55,6 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     const shows = await searchShows(searchStore.query)
     void searchStore.setShows(shows.results)
   }
-
-  // check if component is mounted
-  const mounted = useMounted()
 
   return (
     <header
@@ -80,7 +78,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               onChange={(e) => void searchShowsByQuery(e)}
             />
           ) : (
-            <Skeleton className="aspect-square h-8 bg-neutral-700" />
+            <Skeleton className="aspect-square h-7 bg-neutral-700" />
           )}
           {mounted ? (
             <Button
@@ -99,7 +97,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               />
             </Button>
           ) : (
-            <Skeleton className="aspect-square h-8 bg-neutral-700" />
+            <Skeleton className="aspect-square h-7 bg-neutral-700" />
           )}
           {mounted ? (
             session ? (
@@ -119,7 +117,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         loading="lazy"
                       />
                     ) : (
-                      <Skeleton className="aspect-square w-7 rounded-sm bg-neutral-600" />
+                      <Skeleton className="aspect-square h-7 rounded-sm bg-neutral-600" />
                     )}
                     <Icons.chevronDown className="ml-2 hidden h-4 w-4 transition-transform duration-200 lg:inline-block" />
                   </Button>
@@ -136,11 +134,16 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                       className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                     >
                       <Button
-                        aria-label="Switch profile"
                         key={profile.id}
                         variant="ghost"
                         className="h-auto w-full justify-between space-x-2 px-2 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-100 dark:hover:bg-transparent"
-                        onClick={() => profileStore.setProfile(profile)}
+                        onClick={() => {
+                          profileStore.setProfile(profile)
+                          profileStore.setOtherProfiles(
+                            profile,
+                            profileStore.profiles ?? []
+                          )
+                        }}
                       >
                         <div className="flex items-center gap-2">
                           {profile.icon ? (
@@ -153,7 +156,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                               loading="lazy"
                             />
                           ) : (
-                            <Skeleton className="h-full w-full bg-neutral-700" />
+                            <Skeleton className="aspect-square h-7 bg-neutral-700" />
                           )}
                           <p>{profile.name}</p>
                         </div>
@@ -230,7 +233,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               </Link>
             )
           ) : (
-            <Skeleton className="h-8 w-14 bg-neutral-700" />
+            <Skeleton className="h-7 w-10 bg-neutral-700" />
           )}
         </div>
       </nav>

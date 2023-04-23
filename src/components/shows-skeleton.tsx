@@ -16,7 +16,7 @@ const ShowsSkeleton = ({
     <>
       {variant === "with-title" ? (
         <div className="no-scrollbar container mx-0 w-full overflow-x-auto overflow-y-hidden">
-          <Skeleton className="h-5 w-28 rounded bg-neutral-700" />
+          <Skeleton className="h-[1.62rem] w-28 rounded bg-neutral-700" />
           <motion.div
             className="mt-2.5 flex w-full items-center gap-1.5"
             initial="hidden"

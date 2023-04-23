@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import type { CategorizedShows } from "@/types"
 
 import { getNewAndPopularShows } from "@/lib/fetchers"
-import { getSession } from "@/lib/session"
 import ShowsContainer from "@/components/shows-container"
 
 export const metadata: Metadata = {
@@ -11,8 +10,6 @@ export const metadata: Metadata = {
 }
 
 export default async function NewAndPopularPage() {
-  const session = await getSession()
-
   const allShows = await getNewAndPopularShows()
 
   const allShowsByCategory: CategorizedShows[] = [
@@ -36,7 +33,7 @@ export default async function NewAndPopularPage() {
 
   return (
     <section className="pb-16 pt-10">
-      <ShowsContainer session={session} shows={allShowsByCategory} />
+      <ShowsContainer shows={allShowsByCategory} />
     </section>
   )
 }
