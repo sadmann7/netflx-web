@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import type { CategorizedShows } from "@/types"
 
 import { getShows } from "@/lib/fetcher"
+import { getSession } from "@/lib/session"
 import LoadingScreen from "@/components/screens/loading-screen"
 import ShowsContainer from "@/components/shows-container"
 
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
 }
 
 export default async function MoviesPage() {
+  const session = await getSession()
+
   const allShows = await getShows("movie")
 
   const allShowsByCategory: CategorizedShows[] = [
@@ -48,7 +51,7 @@ export default async function MoviesPage() {
   return (
     <section className="pb-16 pt-10">
       <Suspense fallback={<LoadingScreen />}>
-        <ShowsContainer shows={allShowsByCategory} />
+        <ShowsContainer session={session} shows={allShowsByCategory} />
       </Suspense>
     </section>
   )

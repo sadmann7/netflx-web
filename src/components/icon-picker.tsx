@@ -116,7 +116,7 @@ const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
               ? Array.from({ length: 4 }, (_, i) => (
                   <Skeleton
                     key={i}
-                    className="aspect-square w-32 rounded bg-neutral-700"
+                    className="aspect-square h-32 rounded bg-neutral-700"
                   />
                 ))
               : iconsQuery.data?.map((icon) => (

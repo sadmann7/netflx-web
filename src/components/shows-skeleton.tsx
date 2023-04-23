@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 import { itemFade, itemsReveal } from "@/lib/constants"
 import { Skeleton } from "@/components/ui/skeleton"
 
-interface ShowSkeletonProps {
+interface ShowsSkeletonProps {
   count?: number
   variant?: "with-title" | "without-title"
 }
@@ -11,7 +11,7 @@ interface ShowSkeletonProps {
 const ShowsSkeleton = ({
   count = 8,
   variant = "with-title",
-}: ShowSkeletonProps) => {
+}: ShowsSkeletonProps) => {
   return (
     <>
       {variant === "with-title" ? (
