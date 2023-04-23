@@ -15,36 +15,24 @@ type ProfileState = {
 }
 
 export const useProfileStore = create<ProfileState>()(
-  devtools((set) => ({
-    profile: null,
-    setProfile: (profile: ProfileWithIcon) => set({ profile }),
-    profiles: null,
-    setProfiles: (profiles: ProfileWithIcon[]) => set({ profiles }),
-    otherProfiles: null,
-    setOtherProfiles: (profile: ProfileWithIcon, profiles: ProfileWithIcon[]) =>
-      set({ otherProfiles: profiles.filter((p) => p.id !== profile.id) }),
-  }))
+  devtools(
+    persist(
+      (set) => ({
+        profile: null,
+        setProfile: (profile: ProfileWithIcon) => set({ profile }),
+        profiles: null,
+        setProfiles: (profiles: ProfileWithIcon[]) => set({ profiles }),
+        otherProfiles: null,
+        setOtherProfiles: (
+          profile: ProfileWithIcon,
+          profiles: ProfileWithIcon[]
+        ) =>
+          set({ otherProfiles: profiles.filter((p) => p.id !== profile.id) }),
+      }),
+      {
+        name: "test-store",
+        storage: createJSONStorage(() => sessionStorage),
+      }
+    )
+  )
 )
-
-// export const useProfileStore = create<ProfileState>()(
-//   devtools(
-//     persist(
-//       (set) => ({
-//         profile: null,
-//         setProfile: (profile: ProfileWithIcon) => set({ profile }),
-//         profiles: null,
-//         setProfiles: (profiles: ProfileWithIcon[]) => set({ profiles }),
-//         otherProfiles: null,
-//         setOtherProfiles: (
-//           profile: ProfileWithIcon,
-//           profiles: ProfileWithIcon[]
-//         ) =>
-//           set({ otherProfiles: profiles.filter((p) => p.id !== profile.id) }),
-//       }),
-//       {
-//         name: "profile-store",
-//         storage: createJSONStorage(() => sessionStorage),
-//       }
-//     )
-//   )
-// )

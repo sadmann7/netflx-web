@@ -14,6 +14,8 @@ const ShowsGrid = ({ shows }: SearchedShowsProps) => {
   // modal store
   const modalStore = useModalStore()
 
+  console.log(modalStore.show)
+
   return (
     <section
       aria-label="Grid of shows"

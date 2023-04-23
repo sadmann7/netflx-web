@@ -10,6 +10,7 @@ import { stripe } from "@/lib/stripe"
 import { getUserSubscriptionPlan } from "@/lib/subscription"
 import { absoluteUrl } from "@/lib/utils"
 
+const successUrl = absoluteUrl("/")
 const billingUrl = absoluteUrl("/login/plans")
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -51,7 +52,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       // Create a checkout session to upgrade.
       console.log("creating stripe checkout session")
       const stripeSession = await stripe.checkout.sessions.create({
-        success_url: billingUrl,
+        success_url: successUrl,
         cancel_url: billingUrl,
         payment_method_types: ["card"],
         mode: "subscription",
@@ -97,6 +98,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const randomIcon =
         unusedIcons &&
         unusedIcons[Math.floor(Math.random() * unusedIcons.length)]
+
       // TODO: check if stripeSession.payment_status === "paid"
       if (!existingProfile) {
         await prisma.profile.create({

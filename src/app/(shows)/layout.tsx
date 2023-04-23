@@ -12,7 +12,7 @@ export default async function ShowsLayout({ children }: ShowsLayotutProps) {
   // useProfileStore().getState().profile should return the profile
   // but it returns null
   // so sending the nested layout to the profiles screen
-  // TODO: find a way to use zustand profile state here
+  // TODO: look for a way to use zustand profile state here
 
   return <ProfilesScreen session={session}>{children}</ProfilesScreen>
 }

@@ -43,4 +43,52 @@ export const myListRouter = createTRPCRouter({
       })
       return createdShow
     }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        tmdbId: z.number(),
+        name: z.string(),
+        poster: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const show = await ctx.prisma.myListShow.findUnique({
+        where: { tmdbId: input.tmdbId },
+      })
+      if (!show) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Show not found",
+        })
+      }
+
+      const updatedShow = await ctx.prisma.myListShow.update({
+        where: { tmdbId: input.tmdbId },
+        data: {
+          name: input.name,
+          poster: input.poster,
+        },
+      })
+      return updatedShow
+    }),
+
+  delete: protectedProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const show = await ctx.prisma.myListShow.findUnique({
+        where: { tmdbId: input },
+      })
+      if (!show) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Show not found",
+        })
+      }
+
+      const deletedShow = await ctx.prisma.myListShow.delete({
+        where: { tmdbId: input },
+      })
+      return deletedShow
+    }),
 })

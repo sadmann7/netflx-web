@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { env } from "@/env.mjs"
 import { useModalStore } from "@/stores/modal"
 import { useMyListStore } from "@/stores/my-list"
+import { useProfileStore } from "@/stores/profile"
 import type { Genre, Show } from "@/types"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
@@ -29,6 +30,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
   // stores
   const modalStore = useModalStore()
   const myListStore = useMyListStore()
+  const profileStore = useProfileStore()
 
   const [trailer, setTrailer] = useState("")
   const [genres, setGenres] = useState<Genre[]>([])
@@ -83,10 +85,25 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     }
   }, [isPlaying])
 
+  // user query
+  const userQuery = api.user.getCurrent.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  })
+
   // add show mutation
   const addShowMutation = api.myList.create.useMutation({
     onSuccess: () => {
       toast.success("Added to My List")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  // delete show mutation
+  const deleteShowMutation = api.myList.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Removed from My List")
     },
     onError: (error) => {
       toast.error(error.message)
@@ -158,7 +175,11 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                       modalStore.show
                         ? myListStore.removeShow(modalStore.show)
                         : null
-                      toast.success("Removed from My List")
+                      !userQuery.data && toast.success("Removed from My List")
+
+                      modalStore.show && userQuery.data && profileStore.profile
+                        ? deleteShowMutation.mutate(modalStore.show.id)
+                        : null
                     }}
                   >
                     <Icons.check className="h-5 w-5" aria-hidden="true" />
@@ -171,14 +192,14 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {
-                      // modalStore.show
-                      //   ? myListStore.addShow(modalStore.show)
-                      //   : null
-                      // toast.success("Added to My List")
-
                       modalStore.show
+                        ? myListStore.addShow(modalStore.show)
+                        : null
+                      !userQuery.data && toast.success("Added to My List")
+
+                      modalStore.show && userQuery.data && profileStore.profile
                         ? addShowMutation.mutate({
-                            profileId: "clgq7526x0000u400kdxq3rvx",
+                            profileId: profileStore.profile.id,
                             tmdbId: modalStore.show.id,
                             name: modalStore.show.name ?? modalStore.show.title,
                             poster:
