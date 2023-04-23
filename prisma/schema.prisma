@@ -69,16 +69,16 @@ model VerificationToken {
 model Profile {
     id         String       @id @default(cuid())
     userId     String
-    name       String       @unique
+    name       String
     email      String?      @unique
-    pin        Int?         @unique
+    pin        Int?
     icon       Icon         @relation(fields: [iconId], references: [id], onDelete: Cascade)
     language   LANGUAGE     @default(ENGLISH)
     gameHandle String?      @unique
     user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt  DateTime     @default(now())
     updatedAt  DateTime     @updatedAt
-    iconId     String       @unique
+    iconId     String
     myList     MyListShow[]
 
     @@index([userId])

@@ -59,10 +59,10 @@ export const profileRouter = createTRPCRouter({
         })
       }
 
-      // check if profile name is unique
-      const profileName = await ctx.prisma.profile.findUnique({
-        where: { name: input.name },
-      })
+      // check if user has a profile with the same name
+      const profileName = profiles.find(
+        (profile) => profile.name === input.name
+      )
       if (profileName) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -70,10 +70,10 @@ export const profileRouter = createTRPCRouter({
         })
       }
 
-      // check if profile icon is unique
-      const profileIcon = await ctx.prisma.profile.findUnique({
-        where: { iconId: input.iconId },
-      })
+      // check if user has a profile with the same icon
+      const profileIcon = profiles.find(
+        (profile) => profile.iconId === input.iconId
+      )
       if (profileIcon) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -127,16 +127,4 @@ export const profileRouter = createTRPCRouter({
       })
       return profile
     }),
-
-  // if all profiles are deleted, delete the user
-  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    const profiles = await ctx.prisma.profile.findMany({
-      where: { userId: ctx.session.user.id },
-    })
-    if (profiles.length === 0) {
-      await ctx.prisma.user.delete({
-        where: { id: ctx.session.user.id },
-      })
-    }
-  }),
 })

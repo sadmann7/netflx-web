@@ -47,16 +47,16 @@ export default async function AddProfilePage() {
       href: true,
     },
   })
-  const profileIcon =
+  const randomIcon =
     unusedIcons && unusedIcons[Math.floor(Math.random() * unusedIcons.length)]
 
-  if (!profiles || !profileIcon) {
+  if (!profiles || !randomIcon) {
     redirect("/profiles")
   }
 
   return (
     <section>
-      <AddProfileForm profiles={profiles} profileIcon={profileIcon} />
+      <AddProfileForm profiles={profiles} profileIcon={randomIcon} />
     </section>
   )
 }

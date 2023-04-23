@@ -51,7 +51,6 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
                   variant="ghost"
                   className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.98] dark:hover:bg-transparent"
                   onClick={() => {
-                    console.log(profile)
                     profileStore.setProfile(profile)
                     profileStore.setProfiles(profilesQuery.data)
                     profileStore.setOtherProfiles(profile, profilesQuery.data)

@@ -78,17 +78,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })
 
       // set random icon for user
-      const icons = await prisma.icon.findMany()
-      const randomIcon = icons[Math.floor(Math.random() * icons.length)]
-      const firstIcon = await prisma.icon.findFirst()
-      // TODO: check if tripeSession.payment_status === "paid"
+      const unusedIcons = await prisma.icon.findMany({
+        where: {
+          NOT: {
+            profiles: {
+              some: {
+                userId: user.id,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          href: true,
+        },
+      })
+      const randomIcon =
+        unusedIcons &&
+        unusedIcons[Math.floor(Math.random() * unusedIcons.length)]
+      // TODO: check if stripeSession.payment_status === "paid"
       if (!existingProfile) {
         await prisma.profile.create({
           data: {
             user: { connect: { id: user.id } },
             id: user.id,
             name: user.name,
-            icon: { connect: { id: randomIcon?.id ?? firstIcon?.id } },
+            icon: { connect: { id: randomIcon?.id } },
           },
         })
       }
