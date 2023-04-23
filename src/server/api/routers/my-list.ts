@@ -3,9 +3,9 @@ import { MEDIA_TYPE } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-export const showRouter = createTRPCRouter({
+export const myListRouter = createTRPCRouter({
   getAll: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const shows = await ctx.prisma.show.findMany({
+    const shows = await ctx.prisma.myListShow.findMany({
       where: { profileId: input },
     })
     return shows
@@ -22,7 +22,7 @@ export const showRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const show = await ctx.prisma.show.findUnique({
+      const show = await ctx.prisma.myListShow.findUnique({
         where: { tmdbId: input.tmdbId },
       })
       if (show) {
@@ -32,7 +32,7 @@ export const showRouter = createTRPCRouter({
         })
       }
 
-      const createdShow = await ctx.prisma.show.create({
+      const createdShow = await ctx.prisma.myListShow.create({
         data: {
           profileId: input.profileId,
           tmdbId: input.tmdbId,

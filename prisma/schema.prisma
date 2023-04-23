@@ -67,19 +67,19 @@ model VerificationToken {
 }
 
 model Profile {
-    id         String   @id @default(cuid())
+    id         String       @id @default(cuid())
     userId     String
-    name       String   @unique
-    email      String?  @unique
-    pin        Int?     @unique
-    icon       Icon     @relation(fields: [iconId], references: [id], onDelete: Cascade)
-    language   LANGUAGE @default(ENGLISH)
-    gameHandle String?  @unique
-    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    iconId     String   @unique
-    shows      Show[]
+    name       String       @unique
+    email      String?      @unique
+    pin        Int?         @unique
+    icon       Icon         @relation(fields: [iconId], references: [id], onDelete: Cascade)
+    language   LANGUAGE     @default(ENGLISH)
+    gameHandle String?      @unique
+    user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt  DateTime     @default(now())
+    updatedAt  DateTime     @updatedAt
+    iconId     String       @unique
+    myList     MyListShow[]
 
     @@index([userId])
     @@index([iconId])
@@ -94,7 +94,7 @@ model Icon {
     profiles  Profile[]
 }
 
-model Show {
+model MyListShow {
     id        String     @id @default(cuid())
     tmdbId    Int        @unique
     name      String
@@ -109,8 +109,8 @@ model Show {
 }
 
 enum MEDIA_TYPE {
-    MOVIE
-    TV
+    movie
+    tv
 }
 
 enum LANGUAGE {

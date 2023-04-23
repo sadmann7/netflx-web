@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
 import { api } from "@/lib/api/api"
-import { cn, convertToMediaTypeEnum, getYear } from "@/lib/utils"
+import { cn, getYear } from "@/lib/utils"
 import DynamicTooltip from "@/components/dynamic-tooltip"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
@@ -84,7 +84,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
   }, [isPlaying])
 
   // add show mutation
-  const addShowMutation = api.show.create.useMutation({
+  const addShowMutation = api.myList.create.useMutation({
     onSuccess: () => {
       toast.success("Added to My List")
     },
@@ -185,9 +185,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                               modalStore.show.poster_path ??
                               modalStore.show.backdrop_path ??
                               "",
-                            mediaType: convertToMediaTypeEnum(
-                              modalStore.show.media_type
-                            ),
+                            mediaType: modalStore.show.media_type,
                           })
                         : null
                     }}

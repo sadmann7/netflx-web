@@ -1,4 +1,4 @@
-import type { Icon, Profile, User } from "@prisma/client"
+import type { Icon, MEDIA_TYPE, Profile, User } from "@prisma/client"
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -45,8 +45,6 @@ export type Genre = {
   name: string | null
 }
 
-export type MediaType = "movie" | "tv"
-
 export type VideoType =
   | "Bloopers"
   | "Featurette"
@@ -58,7 +56,7 @@ export type VideoType =
 export type Show = {
   adult: boolean
   backdrop_path: string
-  media_type: MediaType
+  media_type: MEDIA_TYPE
   belongs_to_collection: null
   budget: number
   genres: Genre[]
