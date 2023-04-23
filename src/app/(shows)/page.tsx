@@ -47,7 +47,7 @@ export default async function Home() {
     <section>
       <Suspense fallback={<LoadingScreen />}>
         <div className="pb-16 pt-10">
-          <Hero session={session} shows={allShows.netflix ?? []} />
+          <Hero shows={allShows.netflix ?? []} />
           <ShowsContainer session={session} shows={allShowsByCategory} />
         </div>
       </Suspense>

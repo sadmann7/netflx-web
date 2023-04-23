@@ -4,6 +4,7 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useMounted } from "@/hooks/use-mounted"
 import { useProfileStore } from "@/stores/profile"
 import { useSearchStore } from "@/stores/search"
 import type { Session } from "next-auth"
@@ -11,7 +12,6 @@ import { signOut } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
-import { api } from "@/lib/api/api"
 import { searchShows } from "@/lib/fetchers"
 import { cn } from "@/lib/utils"
 import ExpandableSearchbar from "@/components/expandable-searchbar"
@@ -55,15 +55,8 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     void searchStore.setShows(shows.results)
   }
 
-  // other profiles query
-  const otherProfilesQuery = profileStore.profileId
-    ? api.profile.getOthers.useQuery(profileStore.profileId)
-    : null
-
-  // profile query
-  const profileQuery = profileStore.profileId
-    ? api.profile.getOne.useQuery(profileStore.profileId)
-    : null
+  // check if component is mounted
+  const mounted = useMounted()
 
   return (
     <header
@@ -76,59 +69,67 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
       <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center space-x-1.5">
-          <ExpandableSearchbar
-            containerClassName={cn(
-              path === "/login" || path === "/login/plans" ? "hidden" : "flex"
-            )}
-            setQuery={searchStore.setQuery}
-            setData={searchStore.setShows}
-            value={searchStore.query}
-            onChange={(e) => void searchShowsByQuery(e)}
-          />
-          <Button
-            aria-label="Notifications"
-            variant="ghost"
-            className="hidden h-auto rounded-full p-1 hover:bg-transparent dark:hover:bg-transparent lg:flex"
-            onClick={() =>
-              toast.success("Do a kickflip", {
-                icon: "🛹",
-              })
-            }
-          >
-            <Icons.bell
-              className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:scale-95"
-              aria-hidden="true"
+          {mounted ? (
+            <ExpandableSearchbar
+              containerClassName={cn(
+                path === "/login" || path === "/login/plans" ? "hidden" : "flex"
+              )}
+              setQuery={searchStore.setQuery}
+              setData={searchStore.setShows}
+              value={searchStore.query}
+              onChange={(e) => void searchShowsByQuery(e)}
             />
-          </Button>
-          {session ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="h-auto shrink-0 px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
+          ) : (
+            <Skeleton className="aspect-square h-8 bg-neutral-700" />
+          )}
+          {mounted ? (
+            <Button
+              aria-label="Notifications"
+              variant="ghost"
+              className="hidden h-auto rounded-full p-1 hover:bg-transparent dark:hover:bg-transparent lg:flex"
+              onClick={() =>
+                toast.success("Do a kickflip", {
+                  icon: "🛹",
+                })
+              }
+            >
+              <Icons.bell
+                className="h-5 w-5 cursor-pointer text-white transition-opacity hover:opacity-75 active:scale-95"
+                aria-hidden="true"
+              />
+            </Button>
+          ) : (
+            <Skeleton className="aspect-square h-8 bg-neutral-700" />
+          )}
+          {mounted ? (
+            session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="h-auto shrink-0 px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
+                  >
+                    {profileStore.profile?.icon ? (
+                      <Image
+                        src={profileStore.profile.icon.href}
+                        alt={profileStore.profile.icon.title}
+                        width={28}
+                        height={28}
+                        className="rounded-sm object-cover transition-opacity hover:opacity-80"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <Skeleton className="aspect-square w-7 rounded-sm bg-neutral-600" />
+                    )}
+                    <Icons.chevronDown className="ml-2 hidden h-4 w-4 transition-transform duration-200 lg:inline-block" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={20}
+                  className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/90 dark:text-slate-200"
                 >
-                  {profileQuery && profileQuery.data?.icon ? (
-                    <Image
-                      src={profileQuery.data.icon.href}
-                      alt={profileQuery.data.icon.title}
-                      width={28}
-                      height={28}
-                      className="rounded-sm object-cover transition-opacity hover:opacity-80"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <Skeleton className="aspect-square w-7 rounded-sm bg-neutral-600" />
-                  )}
-                  <Icons.chevronDown className="ml-2 hidden h-4 w-4 transition-transform duration-200 lg:inline-block" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                sideOffset={20}
-                className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/90 dark:text-slate-200"
-              >
-                {otherProfilesQuery?.isSuccess &&
-                  otherProfilesQuery.data?.map((profile) => (
+                  {profileStore.otherProfiles?.map((profile) => (
                     <DropdownMenuItem
                       key={profile.id}
                       asChild
@@ -138,87 +139,98 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         aria-label="Switch profile"
                         key={profile.id}
                         variant="ghost"
-                        className="h-auto w-full justify-start space-x-2 px-2 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-100 dark:hover:bg-transparent"
-                        onClick={() => profileStore.setProfileId(profile.id)}
+                        className="h-auto w-full justify-between space-x-2 px-2 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-100 dark:hover:bg-transparent"
+                        onClick={() => profileStore.setProfile(profile)}
                       >
-                        {profile.icon ? (
-                          <Image
-                            src={profile.icon.href}
-                            alt={profile.icon.title}
-                            width={28}
-                            height={28}
-                            className="rounded object-cover"
-                            loading="lazy"
+                        <div className="flex items-center gap-2">
+                          {profile.icon ? (
+                            <Image
+                              src={profile.icon.href}
+                              alt={profile.icon.title}
+                              width={28}
+                              height={28}
+                              className="rounded object-cover"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <Skeleton className="h-full w-full bg-neutral-700" />
+                          )}
+                          <p>{profile.name}</p>
+                        </div>
+                        {profile.pin && (
+                          <Icons.lock
+                            className="h-3.5 w-3.5 text-slate-400"
+                            aria-label="Private profile"
                           />
-                        ) : (
-                          <Skeleton className="h-full w-full bg-neutral-700" />
                         )}
-                        <p>{profile.name}</p>
                       </Button>
                     </DropdownMenuItem>
                   ))}
-                {siteConfig.profileDropdownItems.map(
-                  (item, index) =>
-                    item.href &&
-                    item !==
-                      siteConfig.profileDropdownItems[
-                        siteConfig.profileDropdownItems.length - 1
-                      ] && (
-                      <DropdownMenuItem
-                        key={index}
-                        asChild
-                        className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                      >
-                        <Link href={item.href}>
-                          {item.icon && (
-                            <item.icon
-                              className="mr-3 h-4 w-4"
-                              aria-hidden="true"
-                            />
-                          )}
-                          <span className="line-clamp-1">{item.title}</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    )
-                )}
-                <DropdownMenuSeparator />
-                {siteConfig.profileDropdownItems.map(
-                  (item, index) =>
-                    item.href &&
-                    item ===
-                      siteConfig.profileDropdownItems[
-                        siteConfig.profileDropdownItems.length - 1
-                      ] && (
-                      <DropdownMenuItem
-                        key={index}
-                        asChild
-                        className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
-                      >
-                        <span
-                          className="line-clamp-1 grid place-items-center"
-                          onClick={() => void signOut()}
+                  {siteConfig.profileDropdownItems.map(
+                    (item, index) =>
+                      item.href &&
+                      item !==
+                        siteConfig.profileDropdownItems[
+                          siteConfig.profileDropdownItems.length - 1
+                        ] && (
+                        <DropdownMenuItem
+                          key={index}
+                          asChild
+                          className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                         >
-                          {item.title}
-                        </span>
-                      </DropdownMenuItem>
-                    )
+                          <Link href={item.href}>
+                            {item.icon && (
+                              <item.icon
+                                className="mr-3 h-4 w-4 text-slate-400"
+                                aria-hidden="true"
+                              />
+                            )}
+                            <span className="line-clamp-1">{item.title}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      )
+                  )}
+                  <DropdownMenuSeparator />
+                  {siteConfig.profileDropdownItems.map(
+                    (item, index) =>
+                      item.href &&
+                      item ===
+                        siteConfig.profileDropdownItems[
+                          siteConfig.profileDropdownItems.length - 1
+                        ] && (
+                        <DropdownMenuItem
+                          key={index}
+                          asChild
+                          className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
+                        >
+                          <span
+                            className="line-clamp-1 grid place-items-center"
+                            onClick={() => void signOut()}
+                          >
+                            {item.title}
+                          </span>
+                        </DropdownMenuItem>
+                      )
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                href="/login"
+                aria-label="Sign in"
+                className={cn(
+                  buttonVariants({
+                    variant: "brand",
+                    size: "auto",
+                    className: "h-auto rounded",
+                  })
                 )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              >
+                Sign In
+              </Link>
+            )
           ) : (
-            <Link
-              href="/login"
-              aria-label="Sign in"
-              className={cn(
-                buttonVariants({
-                  variant: "brand",
-                  size: "auto",
-                  className: "h-auto rounded",
-                })
-              )}
-            >
-              Sign In
-            </Link>
+            <Skeleton className="h-8 w-14 bg-neutral-700" />
           )}
         </div>
       </nav>
