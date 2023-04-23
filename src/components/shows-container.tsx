@@ -38,7 +38,7 @@ const ShowsContainer = ({ session, shows }: ShowsContainerProps) => {
     return <ShowsGrid shows={searchStore.shows} />
   }
 
-  if (session && !profileStore.profile) {
+  if (session && !profileStore.profileId) {
     return <ProfilesScreen />
   }
 

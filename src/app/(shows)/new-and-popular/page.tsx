@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import type { CategorizedShows } from "@/types"
 
-import { getNewAndPopularShows } from "@/lib/fetcher"
+import { getNewAndPopularShows } from "@/lib/fetchers"
 import { getSession } from "@/lib/session"
 import ShowsContainer from "@/components/shows-container"
 

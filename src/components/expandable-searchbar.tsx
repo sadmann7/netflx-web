@@ -12,6 +12,7 @@ interface ExpandableSearchbarProps<TData extends object> extends InputProps {
   containerClassName?: string
   setQuery: (query: string) => void
   setData: (data: TData[]) => void
+  disabled?: boolean
 }
 
 const ExpandableSearchbar = <TData extends object>({

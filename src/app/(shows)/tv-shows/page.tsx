@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import type { Metadata } from "next"
 import type { CategorizedShows } from "@/types"
 
-import { getShows } from "@/lib/fetcher"
+import { getShows } from "@/lib/fetchers"
 import { getSession } from "@/lib/session"
 import LoadingScreen from "@/components/screens/loading-screen"
 import ShowsContainer from "@/components/shows-container"

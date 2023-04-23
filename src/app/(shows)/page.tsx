@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import type { CategorizedShows } from "@/types"
 
-import { getShows } from "@/lib/fetcher"
+import { getShows } from "@/lib/fetchers"
 import { getSession } from "@/lib/session"
 import Hero from "@/components/hero"
 import LoadingScreen from "@/components/screens/loading-screen"
@@ -47,7 +47,7 @@ export default async function Home() {
     <section>
       <Suspense fallback={<LoadingScreen />}>
         <div className="pb-16 pt-10">
-          <Hero shows={allShows.netflix ?? []} />
+          <Hero session={session} shows={allShows.netflix ?? []} />
           <ShowsContainer session={session} shows={allShowsByCategory} />
         </div>
       </Suspense>

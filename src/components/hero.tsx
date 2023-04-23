@@ -22,10 +22,8 @@ const Hero = ({ shows }: HeroProps) => {
     setRandomShow(shows[randomNumber] ?? null)
   }, [shows])
 
-  // modal store
+  // stores
   const modalStore = useModalStore()
-
-  // search store
   const searchStore = useSearchStore()
 
   if (searchStore.query.length > 0) {
