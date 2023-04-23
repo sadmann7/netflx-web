@@ -79,6 +79,7 @@ model Profile {
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
     iconId     String   @unique
+    shows      Show[]
 
     @@index([userId])
     @@index([iconId])
@@ -94,32 +95,17 @@ model Icon {
 }
 
 model Show {
-    id           String     @id @default(cuid())
-    tmdbId       Int        @unique
-    title        String
-    name         String
-    overview     String?
-    poster       String?
-    firstAirDate DateTime?
-    lastAirDate  DateTime?
-    voteAverage  Float
-    adult        Boolean
-    mediaType    MEDIA_TYPE
-    trailer      String?
-    genres       Genre[]
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
-}
-
-model Genre {
-    tmdbId    Int      @unique
+    id        String     @id @default(cuid())
+    tmdbId    Int        @unique
     name      String
-    Show      Show?    @relation(fields: [showId], references: [id])
-    showId    String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    poster    String?
+    mediaType MEDIA_TYPE
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    profile   Profile?   @relation(fields: [profileId], references: [id])
+    profileId String?
 
-    @@index([showId])
+    @@index([profileId])
 }
 
 enum MEDIA_TYPE {

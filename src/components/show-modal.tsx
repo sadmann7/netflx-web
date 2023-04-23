@@ -8,7 +8,8 @@ import type { Genre, Show } from "@/types"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
-import { cn, getYear } from "@/lib/utils"
+import { api } from "@/lib/api/api"
+import { cn, convertToMediaTypeEnum, getYear } from "@/lib/utils"
 import DynamicTooltip from "@/components/dynamic-tooltip"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
@@ -81,6 +82,16 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
       setIsMuted(true)
     }
   }, [isPlaying])
+
+  // add show mutation
+  const addShowMutation = api.show.create.useMutation({
+    onSuccess: () => {
+      toast.success("Added to My List")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   return (
     <Dialog
@@ -160,10 +171,25 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {
+                      // modalStore.show
+                      //   ? myListStore.addShow(modalStore.show)
+                      //   : null
+                      // toast.success("Added to My List")
+
                       modalStore.show
-                        ? myListStore.addShow(modalStore.show)
+                        ? addShowMutation.mutate({
+                            profileId: "clgq7526x0000u400kdxq3rvx",
+                            tmdbId: modalStore.show.id,
+                            name: modalStore.show.name ?? modalStore.show.title,
+                            poster:
+                              modalStore.show.poster_path ??
+                              modalStore.show.backdrop_path ??
+                              "",
+                            mediaType: convertToMediaTypeEnum(
+                              modalStore.show.media_type
+                            ),
+                          })
                         : null
-                      toast.success("Added to My List")
                     }}
                   >
                     <Icons.add className="h-5 w-5" aria-hidden="true" />

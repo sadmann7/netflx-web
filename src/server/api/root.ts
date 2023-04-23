@@ -1,5 +1,6 @@
 import { iconRouter } from "@/server/api/routers/icon"
 import { profileRouter } from "@/server/api/routers/profile"
+import { showRouter } from "@/server/api/routers/show"
 import { userRouter } from "@/server/api/routers/user"
 import { createTRPCRouter } from "@/server/api/trpc"
 
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   profile: profileRouter,
   icon: iconRouter,
+  show: showRouter,
 })
 
 // export type definition of API

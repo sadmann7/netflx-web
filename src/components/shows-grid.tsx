@@ -38,7 +38,7 @@ const ShowsGrid = ({ shows }: SearchedShowsProps) => {
               src={`https://image.tmdb.org/t/p/w500/${
                 show.backdrop_path ?? show.poster_path
               }`}
-              alt={show.title ?? "poster"}
+              alt={show.title ?? show.name ?? "poster"}
               fill
               sizes="(max-width: 768px) 100vw, 
                 (max-width: 1200px) 50vw, 33vw"

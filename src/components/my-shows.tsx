@@ -3,11 +3,18 @@
 import { useMounted } from "@/hooks/use-mounted"
 import { useMyListStore } from "@/stores/my-list"
 import { useSearchStore } from "@/stores/search"
+import type { Show } from "@prisma/client"
 
 import ShowsGrid from "@/components/shows-grid"
 import ShowSkeleton from "@/components/shows-skeleton"
 
-const MyShows = () => {
+interface MyShowsProps {
+  shows: Show[] | null
+}
+
+const MyShows = ({ shows }: MyShowsProps) => {
+  console.log(shows)
+
   // stores
   const searchStore = useSearchStore()
   const myListStore = useMyListStore()

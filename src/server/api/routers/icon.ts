@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { TRPCError } from "@trpc/server"
+import { z } from "zod"
 
 export const iconRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
@@ -20,20 +21,25 @@ export const iconRouter = createTRPCRouter({
     return icons
   }),
 
-  getAllUnused: protectedProcedure.query(async ({ ctx }) => {
-    const unusedIcons = await ctx.prisma.icon.findMany({
-      where: {
-        NOT: {
+  getAllUnused: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const icons = await ctx.prisma.icon.findMany({
+        where: {
+          id: {
+            not: input,
+          },
           profiles: {
-            some: {
-              userId: ctx.session.user.id,
+            every: {
+              userId: {
+                not: ctx.session.user.id,
+              },
             },
           },
         },
-      },
-    })
-    return unusedIcons
-  }),
+      })
+      return icons
+    }),
 
   getCurrent: protectedProcedure.query(async ({ ctx }) => {
     const profile = await ctx.prisma.profile.findUnique({

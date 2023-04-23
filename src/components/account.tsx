@@ -177,7 +177,7 @@ const Account = ({
                 aria-hidden="true"
               />
             )}
-            Cancel Membership
+            {isCanceled ? "Renew Membership" : "Cancel Membership"}
           </Button>
           <Separator className="bg-neutral-600" />
           <div className="space-y-5">

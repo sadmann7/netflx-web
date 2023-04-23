@@ -100,8 +100,8 @@ const AddProfileForm = ({ profiles, profileIcon }: AddProfileFormProps) => {
                 }
               >
                 <Image
-                  src={profileIcon.href}
-                  alt={profileIcon.title}
+                  src={icon.href}
+                  alt={icon.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 
                     (max-width: 1200px) 50vw, 33vw"
