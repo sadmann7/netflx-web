@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { env } from "@/env.mjs"
 import { useModalStore } from "@/stores/modal"
-import { useMyListStore } from "@/stores/my-list"
 import { useProfileStore } from "@/stores/profile"
 import type { Genre, ShowWithGenreAndVideo } from "@/types"
 import { toast } from "react-hot-toast"
@@ -27,9 +27,10 @@ interface ShowModalProps {
 }
 
 const ShowModal = ({ open, setOpen }: ShowModalProps) => {
+  const router = useRouter()
+
   // stores
   const modalStore = useModalStore()
-  const myListStore = useMyListStore()
   const profileStore = useProfileStore()
 
   const [trailer, setTrailer] = useState("")
@@ -89,6 +90,13 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
   const userQuery = api.user.getCurrent.useQuery(undefined, {
     refetchOnWindowFocus: false,
   })
+
+  // my shows query
+  const myShowsQuery = profileStore.profile
+    ? api.myList.getAll.useQuery(profileStore.profile.id, {
+        enabled: !!profileStore.profile,
+      })
+    : null
 
   // add show mutation
   const addShowMutation = api.myList.create.useMutation({
@@ -165,20 +173,20 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                   </>
                 )}
               </Button>
-              {myListStore.shows.some((s) => s.id === modalStore.show?.id) ? (
+              {myShowsQuery?.data?.some((s) => s.id === modalStore.show?.id) ? (
                 <DynamicTooltip text="Remove from My List">
                   <Button
                     aria-label="Remove show from my list"
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {
-                      modalStore.show
-                        ? myListStore.removeShow(modalStore.show)
-                        : null
-                      !userQuery.data && toast.success("Removed from My List")
+                      !userQuery.data && router.push("/login")
 
                       modalStore.show && userQuery.data && profileStore.profile
-                        ? deleteShowMutation.mutate(modalStore.show.id)
+                        ? deleteShowMutation.mutate({
+                            id: modalStore.show.id,
+                            profileId: profileStore.profile.id,
+                          })
                         : null
                     }}
                   >
@@ -192,12 +200,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {
-                      console.log(modalStore.show)
-
-                      modalStore.show
-                        ? myListStore.addShow(modalStore.show)
-                        : null
-                      !userQuery.data && toast.success("Added to My List")
+                      !userQuery.data && router.push("/login")
 
                       modalStore.show && userQuery.data && profileStore.profile
                         ? addShowMutation.mutate({

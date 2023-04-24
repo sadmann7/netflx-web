@@ -1,4 +1,4 @@
-import type { Icon, MEDIA_TYPE, MyShow, Profile, User } from "@prisma/client"
+import type { Icon, MEDIA_TYPE, Profile, User } from "@prisma/client"
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -100,10 +100,6 @@ export type ShowWithGenreAndVideo = Show & {
   videos?: {
     results: VideoResult[]
   }
-}
-
-export type PickedShow = {
-  [K in keyof Show & keyof MyShow]: Show[K] | MyShow[K]
 }
 
 export type SessionUser = {

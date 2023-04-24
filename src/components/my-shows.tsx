@@ -1,7 +1,6 @@
 "use client"
 
 import { useMounted } from "@/hooks/use-mounted"
-import { useMyListStore } from "@/stores/my-list"
 import { useProfileStore } from "@/stores/profile"
 import { useSearchStore } from "@/stores/search"
 import type { SessionUser } from "@/types"
@@ -19,21 +18,20 @@ const MyShows = ({ user }: MyShowsProps) => {
 
   // stores
   const searchStore = useSearchStore()
-  const myListStore = useMyListStore()
   const profileStore = useProfileStore()
 
   // my shows query
   const myShowsQuery = profileStore.profile
-    ? api.myList.getAll.useQuery(profileStore.profile.id)
+    ? api.myList.getAll.useQuery(profileStore.profile.id, {
+        enabled: !!profileStore.profile,
+      })
     : null
-
-  console.log(myShowsQuery?.data)
 
   if (!mounted) {
     return <ShowSkeleton variant="without-title" />
   }
 
-  if (!myListStore.shows.length) {
+  if (myShowsQuery?.data?.length === 0) {
     return (
       <div className="container flex w-full max-w-screen-2xl flex-col gap-2.5">
         <h1 className="text-2xl font-bold sm:text-3xl">Your list is empty</h1>
@@ -49,7 +47,9 @@ const MyShows = ({ user }: MyShowsProps) => {
   }
 
   return (
-    <ShowsGrid shows={user ? myShowsQuery?.data ?? [] : myListStore.shows} />
+    <ShowsGrid
+      shows={user && myShowsQuery?.isSuccess ? myShowsQuery.data : []}
+    />
   )
 }
 

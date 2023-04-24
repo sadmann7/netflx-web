@@ -34,9 +34,19 @@ export const myListRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const show = await ctx.prisma.myShow.findUnique({
-        where: { id: input.id },
+      const profile = await ctx.prisma.profile.findUnique({
+        where: { id: input.profileId },
+        include: { myList: true },
       })
+      if (!profile) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Profile not found",
+        })
+      }
+
+      const show = profile.myList.find((show) => show.id === input.id)
+
       if (show) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -127,11 +137,27 @@ export const myListRouter = createTRPCRouter({
     }),
 
   delete: protectedProcedure
-    .input(z.number())
-    .mutation(async ({ ctx, input }) => {
-      const show = await ctx.prisma.myShow.findUnique({
-        where: { id: input },
+    .input(
+      z.object({
+        profileId: z.string(),
+        id: z.number(),
       })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const profile = await ctx.prisma.profile.findUnique({
+        where: { id: input.profileId },
+        include: { myList: true },
+      })
+
+      if (!profile) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Profile not found",
+        })
+      }
+
+      const show = profile.myList.find((show) => show.id === input.id)
+
       if (!show) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -140,7 +166,7 @@ export const myListRouter = createTRPCRouter({
       }
 
       const deletedShow = await ctx.prisma.myShow.delete({
-        where: { id: input },
+        where: { id: input.id },
       })
       return deletedShow
     }),

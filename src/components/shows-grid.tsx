@@ -2,12 +2,12 @@
 
 import Image from "next/image"
 import { useModalStore } from "@/stores/modal"
-import type { PickedShow } from "@/types"
+import type { Show } from "@/types"
 
 import ShowModal from "@/components/show-modal"
 
 interface SearchedShowsProps {
-  shows: PickedShow[]
+  shows: Show[]
 }
 
 const ShowsGrid = ({ shows }: SearchedShowsProps) => {
