@@ -30,19 +30,6 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
   // profile store
   const profileStore = useProfileStore()
 
-  // if (session && profilesQuery.isLoading) {
-  //   return (
-  //     <div className="container flex min-h-screen w-full max-w-5xl flex-wrap items-center justify-center gap-2 sm:gap-4">
-  //       {Array.from({ length: 5 }, (_, i) => (
-  //         <Skeleton
-  //           key={i}
-  //           className="aspect-square h-24 rounded bg-neutral-700 sm:h-28 md:h-32"
-  //         />
-  //       ))}
-  //     </div>
-  //   )
-  // }
-
   if (session && !profileStore.profile && mounted) {
     return (
       <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">

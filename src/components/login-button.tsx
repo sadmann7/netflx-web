@@ -19,7 +19,7 @@ const LoginButton = () => {
         error instanceof Error ? error.message : "Something went wrong"
       )
     } finally {
-      setIsLoading(false)
+      setTimeout(() => setIsLoading(false), 2500)
     }
   }
 

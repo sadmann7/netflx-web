@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import type { PickedProfile } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LANGUAGE } from "@prisma/client"
+import { useIsMutating } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -35,6 +36,7 @@ interface EditProfileFormProps {
 
 const EditProfileForm = ({ profile }: EditProfileFormProps) => {
   const router = useRouter()
+  const apiUtils = api.useContext()
 
   const [iconPicker, setIconPicker] = React.useState(false)
   const [icon, setIcon] = React.useState(profile.icon)
@@ -79,6 +81,13 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
       toast.error(error.message)
     },
   })
+
+  // refetch queries
+  const mutationCount = useIsMutating()
+  React.useEffect(() => {
+    void apiUtils.profile.getAll.invalidate()
+    void apiUtils.profile.getOthers.invalidate()
+  }, [apiUtils, mutationCount])
 
   return (
     <AnimatePresence>

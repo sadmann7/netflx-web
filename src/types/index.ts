@@ -72,6 +72,7 @@ export type Show = {
   media_type: MEDIA_TYPE
   budget: number | null
   homepage: string | null
+  showId: string
   id: number
   imdb_id: string | null
   original_language: string

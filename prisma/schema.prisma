@@ -95,6 +95,7 @@ model Icon {
 }
 
 model MyShow {
+    showId             String     @id @default(cuid())
     id                 Int        @unique
     name               String?
     title              String?
@@ -119,11 +120,10 @@ model MyShow {
     number_of_episodes Int?
     revenue            Int?
     runtime            Int?
-
-    adult     Boolean  @default(false)
-    video     Boolean  @default(false)
-    Profile   Profile? @relation(fields: [profileId], references: [id])
-    profileId String?
+    adult              Boolean    @default(false)
+    video              Boolean    @default(false)
+    profile            Profile?   @relation(fields: [profileId], references: [id])
+    profileId          String?
 
     @@index([profileId])
 }

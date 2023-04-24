@@ -12,6 +12,7 @@ import { signOut } from "next-auth/react"
 import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
+import { api } from "@/lib/api/api"
 import { searchShows } from "@/lib/fetchers"
 import { cn } from "@/lib/utils"
 import ExpandableSearchbar from "@/components/expandable-searchbar"
@@ -55,6 +56,13 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     const shows = await searchShows(searchStore.query)
     void searchStore.setShows(shows.results)
   }
+
+  // other profiles query
+  const otherProfilesQuery = profileStore.profile
+    ? api.profile.getOthers.useQuery(profileStore.profile.id, {
+        enabled: !!session?.user && !!profileStore.profile,
+      })
+    : null
 
   return (
     <header
@@ -127,7 +135,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                   sideOffset={20}
                   className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/90 dark:text-slate-200"
                 >
-                  {profileStore.otherProfiles?.map((profile) => (
+                  {otherProfilesQuery?.data?.map((profile) => (
                     <DropdownMenuItem
                       key={profile.id}
                       asChild
@@ -139,10 +147,6 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         className="h-auto w-full justify-between space-x-2 px-2 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-100 dark:hover:bg-transparent"
                         onClick={() => {
                           profileStore.setProfile(profile)
-                          profileStore.setOtherProfiles(
-                            profile,
-                            profileStore.profiles ?? []
-                          )
                         }}
                       >
                         <div className="flex items-center gap-2">

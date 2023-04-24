@@ -32,13 +32,16 @@ interface AddProfileFormProps {
 
 const AddProfileForm = ({ profiles, profileIcon }: AddProfileFormProps) => {
   const router = useRouter()
+  const apiUtils = api.useContext()
 
   const [iconPicker, setIconPicker] = React.useState(false)
   const [icon, setIcon] = React.useState(profileIcon)
 
   // create profile mutation
   const createProfileMutation = api.profile.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await apiUtils.profile.getAll.invalidate()
+      await apiUtils.profile.getOthers.invalidate()
       router.push("/profiles")
       toast.success("Profile created")
     },

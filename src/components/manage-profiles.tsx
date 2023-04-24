@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import type { PickedProfile } from "@/types"
 
+import { api } from "@/lib/api/api"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -15,13 +16,16 @@ interface ManageProfilesProps {
 const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
   const router = useRouter()
 
+  // profiles query
+  const profilesQuery = api.profile.getAll.useQuery()
+
   return (
     <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-6">
       <h1 className="text-center text-3xl font-medium sm:text-4xl">
         Manage Profiles:
       </h1>
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-        {profiles.map((profile) => (
+        {profilesQuery.data?.map((profile) => (
           <Button
             aria-label="Navigate to edit profile page"
             key={profile.id}
@@ -56,7 +60,7 @@ const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
             </h2>
           </Button>
         ))}
-        {profiles.length < 5 && (
+        {profilesQuery.isSuccess && profilesQuery.data.length < 5 && (
           <Button
             aria-label="Navigate to add profile page"
             variant="ghost"

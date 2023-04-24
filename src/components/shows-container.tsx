@@ -31,7 +31,7 @@ const ShowsContainer = ({ user, shows }: ShowsContainerProps) => {
   // my shows query
   const myShowsQuery = profileStore.profile
     ? api.myList.getAll.useQuery(profileStore.profile.id, {
-        enabled: !!profileStore.profile,
+        enabled: !!user,
       })
     : null
 

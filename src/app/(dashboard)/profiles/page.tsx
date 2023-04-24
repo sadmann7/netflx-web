@@ -32,6 +32,8 @@ export default async function ManageProfilesPage() {
     },
   })
 
+  // TODO: refetch profiles on mutation
+
   return (
     <section className="w-full shadow-md">
       <ManageProfiles profiles={profiles} />

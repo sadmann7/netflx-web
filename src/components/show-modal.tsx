@@ -119,9 +119,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
   // refetch my shows query
   const mutationCount = useIsMutating()
   React.useEffect(() => {
-    if (mutationCount > 0) {
-      void apiUtils.myList.getAll.invalidate()
-    }
+    void apiUtils.myList.getAll.invalidate()
   }, [apiUtils, mutationCount])
 
   return (
