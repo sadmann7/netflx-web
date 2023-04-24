@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { prisma } from "@/server/db"
-import { useProfileStore } from "@/stores/profile"
 
 import { getCurrentUser } from "@/lib/session"
-import MyListShows from "@/components/my-list-shows"
+import MyShows from "@/components/my-shows"
 
 export const metadata: Metadata = {
   title: "My List",
@@ -18,15 +16,9 @@ export default async function MyListPage() {
     redirect("/login")
   }
 
-  const shows = await prisma.myListShow.findMany({
-    where: {
-      profileId: useProfileStore.getState().profile?.id,
-    },
-  })
-
   return (
     <section className="pb-16 pt-10">
-      <MyListShows shows={shows} />
+      <MyShows />
     </section>
   )
 }

@@ -67,19 +67,19 @@ model VerificationToken {
 }
 
 model Profile {
-    id         String       @id @default(cuid())
+    id         String   @id @default(cuid())
     userId     String
     name       String
-    email      String?      @unique
+    email      String?  @unique
     pin        Int?
-    icon       Icon         @relation(fields: [iconId], references: [id], onDelete: Cascade)
-    language   LANGUAGE     @default(ENGLISH)
-    gameHandle String?      @unique
-    user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt  DateTime     @default(now())
-    updatedAt  DateTime     @updatedAt
+    icon       Icon     @relation(fields: [iconId], references: [id], onDelete: Cascade)
+    language   LANGUAGE @default(ENGLISH)
+    gameHandle String?  @unique
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
     iconId     String
-    myList     MyListShow[]
+    myList     MyShow[]
 
     @@index([userId])
     @@index([iconId])
@@ -94,16 +94,25 @@ model Icon {
     profiles  Profile[]
 }
 
-model MyListShow {
-    id        String     @id @default(cuid())
-    tmdbId    Int        @unique
-    name      String
-    poster    String?
-    mediaType MEDIA_TYPE
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    profile   Profile?   @relation(fields: [profileId], references: [id])
-    profileId String?
+model MyShow {
+    id                Int        @unique
+    name              String?
+    title             String?
+    original_title    String?
+    poster_path       String?
+    backdrop_path     String?
+    overview          String?    @db.Text
+    original_language String
+    media_type        MEDIA_TYPE
+    popularity        Float
+    vote_average      Float
+    vote_count        Int
+    release_date      String?
+    first_air_date    String?
+    adult             Boolean    @default(false)
+    video             Boolean    @default(false)
+    Profile           Profile?   @relation(fields: [profileId], references: [id])
+    profileId         String?
 
     @@index([profileId])
 }

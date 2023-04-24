@@ -192,6 +192,8 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     variant="ghost"
                     className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                     onClick={() => {
+                      console.log(modalStore.show)
+
                       modalStore.show
                         ? myListStore.addShow(modalStore.show)
                         : null
@@ -200,13 +202,27 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                       modalStore.show && userQuery.data && profileStore.profile
                         ? addShowMutation.mutate({
                             profileId: profileStore.profile.id,
-                            tmdbId: modalStore.show.id,
-                            name: modalStore.show.name ?? modalStore.show.title,
-                            poster:
-                              modalStore.show.poster_path ??
-                              modalStore.show.backdrop_path ??
-                              "",
-                            mediaType: modalStore.show.media_type,
+                            id: modalStore.show.id,
+                            name: modalStore.show.name ?? "",
+                            title: modalStore.show.title ?? "",
+                            original_title:
+                              modalStore.show.original_title ?? "",
+                            poster_path: modalStore.show.poster_path ?? "",
+                            backdrop_path: modalStore.show.backdrop_path ?? "",
+                            overview: modalStore.show.overview ?? "",
+                            original_language:
+                              modalStore.show.original_language,
+                            media_type:
+                              modalStore.show.media_type === "tv"
+                                ? "tv"
+                                : "movie",
+                            popularity: modalStore.show.popularity,
+                            vote_average: modalStore.show.vote_average,
+                            vote_count: modalStore.show.vote_count,
+                            release_date: modalStore.show.release_date,
+                            first_air_date: modalStore.show.first_air_date,
+                            adult: modalStore.show.adult,
+                            video: modalStore.show.video,
                           })
                         : null
                     }}

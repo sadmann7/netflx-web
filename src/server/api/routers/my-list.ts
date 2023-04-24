@@ -5,7 +5,7 @@ import { z } from "zod"
 
 export const myListRouter = createTRPCRouter({
   getAll: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const shows = await ctx.prisma.myListShow.findMany({
+    const shows = await ctx.prisma.myShow.findMany({
       where: { profileId: input },
     })
     return shows
@@ -15,15 +15,27 @@ export const myListRouter = createTRPCRouter({
     .input(
       z.object({
         profileId: z.string(),
-        tmdbId: z.number(),
+        id: z.number(),
         name: z.string(),
-        poster: z.string().optional(),
-        mediaType: z.nativeEnum(MEDIA_TYPE),
+        title: z.string(),
+        original_title: z.string().optional(),
+        poster_path: z.string().optional(),
+        backdrop_path: z.string().optional(),
+        overview: z.string().optional(),
+        original_language: z.string(),
+        media_type: z.nativeEnum(MEDIA_TYPE),
+        popularity: z.number(),
+        vote_average: z.number(),
+        vote_count: z.number(),
+        release_date: z.string().optional(),
+        first_air_date: z.string().optional(),
+        adult: z.boolean().default(false),
+        video: z.boolean().default(false),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const show = await ctx.prisma.myListShow.findUnique({
-        where: { tmdbId: input.tmdbId },
+      const show = await ctx.prisma.myShow.findUnique({
+        where: { id: input.id },
       })
       if (show) {
         throw new TRPCError({
@@ -32,13 +44,25 @@ export const myListRouter = createTRPCRouter({
         })
       }
 
-      const createdShow = await ctx.prisma.myListShow.create({
+      const createdShow = await ctx.prisma.myShow.create({
         data: {
           profileId: input.profileId,
-          tmdbId: input.tmdbId,
+          id: input.id,
           name: input.name,
-          poster: input.poster,
-          mediaType: input.mediaType,
+          title: input.title,
+          original_title: input.original_title,
+          poster_path: input.poster_path,
+          backdrop_path: input.backdrop_path,
+          overview: input.overview,
+          original_language: input.original_language,
+          media_type: input.media_type,
+          popularity: input.popularity,
+          vote_average: input.vote_average,
+          vote_count: input.vote_count,
+          release_date: input.release_date,
+          first_air_date: input.first_air_date,
+          adult: input.adult,
+          video: input.video,
         },
       })
       return createdShow
@@ -47,14 +71,28 @@ export const myListRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        tmdbId: z.number(),
+        profileId: z.string(),
+        id: z.number(),
         name: z.string(),
-        poster: z.string().optional(),
+        title: z.string(),
+        original_title: z.string().optional(),
+        poster_path: z.string().optional(),
+        backdrop_path: z.string().optional(),
+        overview: z.string().optional(),
+        original_language: z.string(),
+        media_type: z.nativeEnum(MEDIA_TYPE),
+        popularity: z.number(),
+        vote_average: z.number(),
+        vote_count: z.number(),
+        release_date: z.string().optional(),
+        first_air_date: z.string().optional(),
+        adult: z.boolean().default(false),
+        video: z.boolean().default(false),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const show = await ctx.prisma.myListShow.findUnique({
-        where: { tmdbId: input.tmdbId },
+      const show = await ctx.prisma.myShow.findUnique({
+        where: { id: input.id },
       })
       if (!show) {
         throw new TRPCError({
@@ -63,11 +101,26 @@ export const myListRouter = createTRPCRouter({
         })
       }
 
-      const updatedShow = await ctx.prisma.myListShow.update({
-        where: { tmdbId: input.tmdbId },
+      const updatedShow = await ctx.prisma.myShow.update({
+        where: { id: input.id },
         data: {
+          profileId: input.profileId,
+          id: input.id,
           name: input.name,
-          poster: input.poster,
+          title: input.title,
+          original_title: input.original_title,
+          poster_path: input.poster_path,
+          backdrop_path: input.backdrop_path,
+          overview: input.overview,
+          original_language: input.original_language,
+          media_type: input.media_type,
+          popularity: input.popularity,
+          vote_average: input.vote_average,
+          vote_count: input.vote_count,
+          release_date: input.release_date,
+          first_air_date: input.first_air_date,
+          adult: input.adult,
+          video: input.video,
         },
       })
       return updatedShow
@@ -76,8 +129,8 @@ export const myListRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
-      const show = await ctx.prisma.myListShow.findUnique({
-        where: { tmdbId: input },
+      const show = await ctx.prisma.myShow.findUnique({
+        where: { id: input },
       })
       if (!show) {
         throw new TRPCError({
@@ -86,8 +139,8 @@ export const myListRouter = createTRPCRouter({
         })
       }
 
-      const deletedShow = await ctx.prisma.myListShow.delete({
-        where: { tmdbId: input },
+      const deletedShow = await ctx.prisma.myShow.delete({
+        where: { id: input },
       })
       return deletedShow
     }),

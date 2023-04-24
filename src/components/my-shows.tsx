@@ -2,25 +2,27 @@
 
 import { useMounted } from "@/hooks/use-mounted"
 import { useMyListStore } from "@/stores/my-list"
+import { useProfileStore } from "@/stores/profile"
 import { useSearchStore } from "@/stores/search"
-import type { MyListShow } from "@prisma/client"
 
+import { api } from "@/lib/api/api"
 import ShowsGrid from "@/components/shows-grid"
 import ShowSkeleton from "@/components/shows-skeleton"
 
-interface MyListShowsProps {
-  shows: MyListShow[]
-}
-
-const MyListShows = ({ shows }: MyListShowsProps) => {
-  console.log(shows)
+const MyShows = () => {
+  const mounted = useMounted()
 
   // stores
   const searchStore = useSearchStore()
   const myListStore = useMyListStore()
+  const profileStore = useProfileStore()
 
-  // check if component is mounted
-  const mounted = useMounted()
+  // my shows query
+  const myShowsQuery = profileStore.profile
+    ? api.myList.getAll.useQuery(profileStore.profile.id)
+    : null
+
+  console.log(myShowsQuery?.data)
 
   if (!mounted) {
     return <ShowSkeleton variant="without-title" />
@@ -44,4 +46,4 @@ const MyListShows = ({ shows }: MyListShowsProps) => {
   return <ShowsGrid shows={myListStore.shows} />
 }
 
-export default MyListShows
+export default MyShows

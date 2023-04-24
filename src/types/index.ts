@@ -60,11 +60,11 @@ export type Show = {
   belongs_to_collection: null
   budget: number
   genres: Genre[]
+  genre_ids: number[] | null
   homepage: string
   id: number
   imdb_id: string | null
   original_language: string
-  original_title: string
   overview: string | null
   popularity: number
   poster_path: string | null
@@ -102,8 +102,9 @@ export type Show = {
   }[]
   status: string
   tagline: string | null
-  title: string
-  name: string
+  title: string | null
+  original_title: string | null
+  name: string | null
   video: boolean
   videos?: {
     results: {
