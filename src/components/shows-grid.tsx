@@ -2,12 +2,12 @@
 
 import Image from "next/image"
 import { useModalStore } from "@/stores/modal"
-import type { Show } from "@/types"
+import type { PickedShow } from "@/types"
 
 import ShowModal from "@/components/show-modal"
 
 interface SearchedShowsProps {
-  shows: Show[]
+  shows: PickedShow[]
 }
 
 const ShowsGrid = ({ shows }: SearchedShowsProps) => {
@@ -36,7 +36,7 @@ const ShowsGrid = ({ shows }: SearchedShowsProps) => {
           >
             <Image
               src={`https://image.tmdb.org/t/p/w500/${
-                show.backdrop_path ?? show.poster_path
+                show.backdrop_path ?? show.poster_path ?? ""
               }`}
               alt={show.title ?? show.name ?? "poster"}
               fill

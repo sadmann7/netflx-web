@@ -5,7 +5,7 @@ import { env } from "@/env.mjs"
 import { useModalStore } from "@/stores/modal"
 import { useMyListStore } from "@/stores/my-list"
 import { useProfileStore } from "@/stores/profile"
-import type { Genre, Show } from "@/types"
+import type { Genre, ShowWithGenreAndVideo } from "@/types"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
@@ -50,7 +50,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
             env.NEXT_PUBLIC_TMDB_API_KEY
           }&language=en-US&append_to_response=videos`
         )
-        const data = (await response.json()) as Show
+        const data = (await response.json()) as ShowWithGenreAndVideo
         if (data?.videos) {
           const trailerIndex = data.videos.results.findIndex(
             (item) => item.type === "Trailer"
@@ -219,8 +219,9 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                             popularity: modalStore.show.popularity,
                             vote_average: modalStore.show.vote_average,
                             vote_count: modalStore.show.vote_count,
-                            release_date: modalStore.show.release_date,
-                            first_air_date: modalStore.show.first_air_date,
+                            release_date: modalStore.show.release_date ?? "",
+                            first_air_date:
+                              modalStore.show.first_air_date ?? "",
                             adult: modalStore.show.adult,
                             video: modalStore.show.video,
                           })

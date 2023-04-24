@@ -18,7 +18,7 @@ export default async function MyListPage() {
 
   return (
     <section className="pb-16 pt-10">
-      <MyShows />
+      <MyShows user={user} />
     </section>
   )
 }

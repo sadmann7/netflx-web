@@ -1,4 +1,4 @@
-import type { Icon, MEDIA_TYPE, Profile, User } from "@prisma/client"
+import type { Icon, MEDIA_TYPE, MyShow, Profile, User } from "@prisma/client"
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -53,75 +53,65 @@ export type VideoType =
   | "Trailer"
   | "Teaser"
 
+export type VideoResult = {
+  iso_639_1: string
+  iso_3166_1: string
+  name: string
+  key: string
+  site: string
+  size: number
+  type: VideoType
+  official: boolean
+  published_at: string
+  id: string
+}
+
 export type Show = {
   adult: boolean
-  backdrop_path: string
+  backdrop_path: string | null
   media_type: MEDIA_TYPE
-  belongs_to_collection: null
-  budget: number
-  genres: Genre[]
-  genre_ids: number[] | null
-  homepage: string
+  budget: number | null
+  homepage: string | null
   id: number
   imdb_id: string | null
   original_language: string
+  original_title: string | null
   overview: string | null
   popularity: number
   poster_path: string | null
-  production_companies: {
-    id: number
-    logo_path: string | null
-    name: string
-    origin_country: string
-  }[]
-  production_countries: {
-    iso_3166_1: string
-    name: string
-  }[]
-  number_of_seasons?: number
-  number_of_episodes?: number
-  episode_run_time?: number[]
-  seasons?: {
-    air_date: string
-    episode_count: number
-    id: number
-    name: string
-    overview: string
-    poster_path: string
-    season_number: number
-  }[]
-  release_date: string
-  first_air_date?: string
-  last_air_date?: string
-  revenue: number
+  number_of_seasons: number | null
+  number_of_episodes: number | null
+  release_date: string | null
+  first_air_date: string | null
+  last_air_date: string | null
+  revenue: number | null
   runtime: number | null
-  spoken_languages: {
-    english_name: string
-    iso_639_1: string
-    name: string
-  }[]
-  status: string
+  status: string | null
   tagline: string | null
   title: string | null
-  original_title: string | null
   name: string | null
   video: boolean
-  videos?: {
-    results: {
-      iso_639_1: string
-      iso_3166_1: string
-      name: string
-      key: string
-      site: string
-      size: number
-      type: VideoType
-      official: boolean
-      published_at: string
-      id: string
-    }[]
-  }
   vote_average: number
   vote_count: number
+}
+
+export type ShowWithGenreAndVideo = Show & {
+  genres: Genre[]
+  videos?: {
+    results: VideoResult[]
+  }
+}
+
+export type PickedShow = {
+  [K in keyof Show & keyof MyShow]: Show[K] | MyShow[K]
+}
+
+export type SessionUser = {
+  id: string
+} & {
+  name?: string | null
+  email?: string | null
+  image?: string | null
 }
 
 export type CategorizedShows = {

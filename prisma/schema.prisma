@@ -95,24 +95,35 @@ model Icon {
 }
 
 model MyShow {
-    id                Int        @unique
-    name              String?
-    title             String?
-    original_title    String?
-    poster_path       String?
-    backdrop_path     String?
-    overview          String?    @db.Text
-    original_language String
-    media_type        MEDIA_TYPE
-    popularity        Float
-    vote_average      Float
-    vote_count        Int
-    release_date      String?
-    first_air_date    String?
-    adult             Boolean    @default(false)
-    video             Boolean    @default(false)
-    Profile           Profile?   @relation(fields: [profileId], references: [id])
-    profileId         String?
+    id                 Int        @unique
+    name               String?
+    title              String?
+    original_title     String?
+    poster_path        String?
+    backdrop_path      String?
+    overview           String?    @db.Text
+    original_language  String
+    media_type         MEDIA_TYPE
+    status             String?
+    tagline            String?
+    budget             Int?
+    homepage           String?
+    imdb_id            String?
+    popularity         Float
+    vote_average       Float
+    vote_count         Int
+    release_date       String?
+    first_air_date     String?
+    last_air_date      String?
+    number_of_seasons  Int?
+    number_of_episodes Int?
+    revenue            Int?
+    runtime            Int?
+
+    adult     Boolean  @default(false)
+    video     Boolean  @default(false)
+    Profile   Profile? @relation(fields: [profileId], references: [id])
+    profileId String?
 
     @@index([profileId])
 }

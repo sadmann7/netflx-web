@@ -113,7 +113,7 @@ const ShowCard = ({ show }: { show: Show }) => {
     >
       <Image
         src={`https://image.tmdb.org/t/p/w500/${
-          show.backdrop_path ?? show.poster_path
+          show.backdrop_path ?? show.poster_path ?? ""
         }`}
         alt={show.title ?? "poster"}
         fill
@@ -130,7 +130,7 @@ const ShowCard = ({ show }: { show: Show }) => {
       >
         <Image
           src={`https://image.tmdb.org/t/p/w500/${
-            show.backdrop_path ?? show.poster_path
+            show.backdrop_path ?? show.poster_path ?? ""
           }`}
           alt={show.title ?? "poster"}
           fill

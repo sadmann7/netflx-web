@@ -4,12 +4,17 @@ import { useMounted } from "@/hooks/use-mounted"
 import { useMyListStore } from "@/stores/my-list"
 import { useProfileStore } from "@/stores/profile"
 import { useSearchStore } from "@/stores/search"
+import type { SessionUser } from "@/types"
 
 import { api } from "@/lib/api/api"
 import ShowsGrid from "@/components/shows-grid"
 import ShowSkeleton from "@/components/shows-skeleton"
 
-const MyShows = () => {
+interface MyShowsProps {
+  user?: SessionUser
+}
+
+const MyShows = ({ user }: MyShowsProps) => {
   const mounted = useMounted()
 
   // stores
@@ -43,7 +48,9 @@ const MyShows = () => {
     return <ShowsGrid shows={searchStore.shows} />
   }
 
-  return <ShowsGrid shows={myListStore.shows} />
+  return (
+    <ShowsGrid shows={user ? myShowsQuery?.data ?? [] : myListStore.shows} />
+  )
 }
 
 export default MyShows
