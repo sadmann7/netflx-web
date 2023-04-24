@@ -28,13 +28,11 @@ const IconPicker = ({ setIconPicker, icon, setIcon }: IconPickerProps) => {
   }, [isScrolled])
 
   //  user query
-  const userQuery = api.user.getCurrent.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-  })
+  const userQuery = api.user.getCurrent.useQuery()
 
   // icons query
   const iconsQuery = api.icon.getAllUnused.useQuery(icon.id, {
-    refetchOnWindowFocus: false,
+    enabled: !!icon.id,
   })
 
   return (

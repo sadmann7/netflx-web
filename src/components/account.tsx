@@ -134,7 +134,7 @@ const Account = ({
           <Separator className="bg-neutral-700" />
           <Link
             aria-label="Navigate to update account page"
-            href={`/account/${userQuery.data.id}`}
+            href={`/account/users/${userQuery.data.id}`}
             className="flex items-center justify-between gap-4 hover:underline"
           >
             Update account

@@ -1,25 +1,22 @@
 import type { Metadata } from "next"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
-import EditProfileForm from "@/components/form/edit-profile-form"
 
 export const metadata: Metadata = {
-  title: "Edit Profile",
-  description: "Edit your profile",
+  title: "Reset Profile Pin",
+  description: "Reset your profile pin.",
 }
 
-interface EditProfilePageProps {
+interface ResetPinPageProps {
   params: {
     profileId: string
   }
 }
 
-export default async function EditProfilePage({
-  params,
-}: EditProfilePageProps) {
+export default async function ResetPinPage({ params }: ResetPinPageProps) {
   const { profileId } = params
 
   const user = await getCurrentUser()
@@ -38,23 +35,20 @@ export default async function EditProfilePage({
       language: true,
       gameHandle: true,
       pin: true,
-      icon: {
-        select: {
-          id: true,
-          title: true,
-          href: true,
-        },
-      },
     },
   })
 
   if (!profile) {
-    redirect("/profiles")
+    notFound()
   }
 
   return (
-    <section>
-      <EditProfileForm profile={profile} />
+    <section className="container min-h-screen w-full max-w-5xl items-center justify-center pb-16 pt-10">
+      <div>
+        <h1 className="text-center text-3xl font-medium sm:text-4xl">
+          Profile Lock
+        </h1>
+      </div>
     </section>
   )
 }

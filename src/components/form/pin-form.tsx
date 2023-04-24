@@ -8,9 +8,9 @@ import { Icons } from "@/components/icons"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 const PinForm = () => {
-  const [error, setError] = React.useState<string | null>(null)
-
   const profileStore = useProfileStore()
+
+  const [error, setError] = React.useState<string | null>(null)
 
   function handleSubmit(value: string) {
     if (!profileStore.profile) return
@@ -26,7 +26,7 @@ const PinForm = () => {
       <Button
         variant="ghost"
         size="sm"
-        className="absolute right-0 top-0 mr-4 mt-4 rounded-none"
+        className="absolute right-0 top-8 rounded-none"
         onClick={() => {
           useProfileStore.setState({ pinForm: false, profile: null })
         }}
@@ -83,10 +83,9 @@ const PinForm = () => {
         </div>
       </fieldset>
       <Link
-        href="/account/reset-pin"
+        href={`/account/reset-pin/${profileStore.profile?.id ?? ""}`}
         className={buttonVariants({
           variant: "ghost",
-          size: "sm",
           className: "mt-10 rounded-none",
         })}
       >

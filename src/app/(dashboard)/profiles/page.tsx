@@ -27,8 +27,14 @@ export default async function ManageProfilesPage() {
       name: true,
       language: true,
       gameHandle: true,
-      iconId: true,
-      icon: true,
+      pin: true,
+      icon: {
+        select: {
+          id: true,
+          title: true,
+          href: true,
+        },
+      },
     },
   })
 

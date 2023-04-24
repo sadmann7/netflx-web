@@ -24,7 +24,7 @@ const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
       <h1 className="text-center text-3xl font-medium sm:text-4xl">
         Manage Profiles:
       </h1>
-      <div className="flex flex-wrap items-center justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
+      <div className="flex flex-wrap items-start justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
         {profilesQuery.data?.map((profile) => (
           <Button
             aria-label="Navigate to edit profile page"

@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
@@ -41,6 +41,10 @@ export default async function EditAccountPage({
     },
   })
 
+  if (!dbUser) {
+    notFound()
+  }
+
   return (
     <section className="container w-full max-w-3xl pb-16 pt-10">
       <Suspense
@@ -56,7 +60,7 @@ export default async function EditAccountPage({
           </div>
         }
       >
-        {dbUser && <EditUserForm user={dbUser} />}
+        <EditUserForm user={dbUser} />
       </Suspense>
     </section>
   )

@@ -54,7 +54,7 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
         <h1 className="text-center text-3xl font-medium sm:text-4xl">
           {`Who's`} watching?
         </h1>
-        <div className="flex flex-wrap items-center justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
+        <div className="flex flex-wrap items-start justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
           {profilesQuery.isSuccess &&
             profilesQuery.data.map((profile) => (
               <Button

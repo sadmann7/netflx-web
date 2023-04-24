@@ -139,7 +139,7 @@ export type PickedIcon = Pick<Icon, "id" | "title" | "href">
 
 export type PickedProfile = Pick<
   Profile,
-  "id" | "name" | "language" | "gameHandle"
+  "id" | "name" | "language" | "gameHandle" | "pin"
 > & {
   icon: PickedIcon
 }
