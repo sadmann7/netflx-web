@@ -96,7 +96,7 @@ model Icon {
 
 model MyShow {
     showId             String     @id @default(cuid())
-    id                 Int        @unique
+    id                 Int // tmdbId
     name               String?
     title              String?
     original_title     String?

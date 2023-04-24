@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useMounted } from "@/hooks/use-mounted"
@@ -29,6 +30,13 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
 
   // profile store
   const profileStore = useProfileStore()
+
+  // reset profile store on sign out
+  React.useEffect(() => {
+    if (!session?.user) {
+      useProfileStore.persist.clearStorage()
+    }
+  }, [session?.user])
 
   if (session && !profileStore.profile && mounted) {
     return (

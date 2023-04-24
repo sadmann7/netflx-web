@@ -14,8 +14,8 @@ export const myListRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        profileId: z.string(),
         id: z.number(),
+        profileId: z.string(),
         name: z.string(),
         title: z.string(),
         original_title: z.string().optional(),
@@ -56,8 +56,8 @@ export const myListRouter = createTRPCRouter({
 
       const createdShow = await ctx.prisma.myShow.create({
         data: {
-          profileId: input.profileId,
           id: input.id,
+          profileId: input.profileId,
           name: input.name,
           title: input.title,
           original_title: input.original_title,
@@ -81,8 +81,8 @@ export const myListRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        profileId: z.string(),
         id: z.number(),
+        profileId: z.string(),
         name: z.string(),
         title: z.string(),
         original_title: z.string().optional(),
@@ -114,8 +114,8 @@ export const myListRouter = createTRPCRouter({
       const updatedShow = await ctx.prisma.myShow.update({
         where: { id: input.id },
         data: {
-          profileId: input.profileId,
           id: input.id,
+          profileId: input.profileId,
           name: input.name,
           title: input.title,
           original_title: input.original_title,
@@ -139,8 +139,8 @@ export const myListRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(
       z.object({
-        profileId: z.string(),
         id: z.number(),
+        profileId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {

@@ -12,7 +12,6 @@ type ProfileState = {
     profile: ProfileWithIcon,
     profiles: ProfileWithIcon[]
   ) => void
-  onSettled: () => void
 }
 
 export const useProfileStore = create<ProfileState>()(
@@ -29,9 +28,6 @@ export const useProfileStore = create<ProfileState>()(
           profiles: ProfileWithIcon[]
         ) =>
           set({ otherProfiles: profiles.filter((p) => p.id !== profile.id) }),
-        onSettled: () => {
-          set({ profile: null, profiles: null, otherProfiles: null })
-        },
       }),
       {
         name: "test-store",
