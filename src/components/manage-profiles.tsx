@@ -20,11 +20,11 @@ const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
   const profilesQuery = api.profile.getAll.useQuery()
 
   return (
-    <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-6">
+    <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">
       <h1 className="text-center text-3xl font-medium sm:text-4xl">
         Manage Profiles:
       </h1>
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
         {profilesQuery.data?.map((profile) => (
           <Button
             aria-label="Navigate to edit profile page"
@@ -55,16 +55,24 @@ const ManageProfiles = ({ profiles }: ManageProfilesProps) => {
                 />
               </div>
             </div>
-            <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
-              {profile.name}
-            </h2>
+            <div className="flex flex-col items-center justify-center gap-5">
+              <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
+                {profile.name}
+              </h2>
+              {profile.pin && (
+                <Icons.lock
+                  className="h-4 w-4 text-slate-400"
+                  aria-label="Private profile"
+                />
+              )}
+            </div>
           </Button>
         ))}
         {profilesQuery.isSuccess && profilesQuery.data.length < 5 && (
           <Button
             aria-label="Navigate to add profile page"
             variant="ghost"
-            className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
+            className="group h-auto flex-col space-y-2 p-0 pb-8 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.99] dark:hover:bg-transparent"
             onClick={() => router.push("/profiles/add")}
           >
             <div className="relative aspect-square h-24 w-fit overflow-hidden rounded bg-neutral-800 group-hover:border-2 group-hover:border-slate-500 sm:h-28 md:h-32">

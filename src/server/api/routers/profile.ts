@@ -105,7 +105,18 @@ export const profileRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const profile = await ctx.prisma.profile.update({
+      const profile = await ctx.prisma.profile.findUnique({
+        where: { email: input.email },
+      })
+
+      if (profile && profile.id !== input.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Email is already taken",
+        })
+      }
+
+      const updatedProfile = await ctx.prisma.profile.update({
         where: { id: input.id },
         data: {
           name: input.name,
@@ -116,7 +127,7 @@ export const profileRouter = createTRPCRouter({
           pin: input.pin,
         },
       })
-      return profile
+      return updatedProfile
     }),
 
   delete: protectedProcedure

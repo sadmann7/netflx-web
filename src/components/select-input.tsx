@@ -24,7 +24,7 @@ interface SelectInputProps<
   control: Control<TFieldValues, TContext>
   name: Path<TFieldValues>
   options: PathValue<TFieldValues, Path<TFieldValues>>[]
-  defaultValue: PathValue<TFieldValues, Path<TFieldValues>>
+  defaultValue?: PathValue<TFieldValues, Path<TFieldValues>>
   label?: string
 }
 

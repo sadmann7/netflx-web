@@ -8,6 +8,8 @@ import { useProfileStore } from "@/stores/profile"
 import type { Session } from "next-auth"
 
 import { api } from "@/lib/api/api"
+import PinForm from "@/components/form/pin-form"
+import { Icons } from "@/components/icons"
 import SiteFooter from "@/components/layouts/site-footer"
 import SiteHeader from "@/components/layouts/site-header"
 import { Button } from "@/components/ui/button"
@@ -38,13 +40,21 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
     }
   }, [session?.user])
 
+  if (profileStore.pinForm && mounted) {
+    return (
+      <div className="container w-full max-w-screen-2xl">
+        <PinForm />
+      </div>
+    )
+  }
+
   if (session && !profileStore.profile && mounted) {
     return (
       <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">
         <h1 className="text-center text-3xl font-medium sm:text-4xl">
           {`Who's`} watching?
         </h1>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
           {profilesQuery.isSuccess &&
             profilesQuery.data.map((profile) => (
               <Button
@@ -53,9 +63,10 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
                 variant="ghost"
                 className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.98] dark:hover:bg-transparent"
                 onClick={() => {
-                  profileStore.setProfile(profile)
-                  profileStore.setProfiles(profilesQuery.data)
-                  profileStore.setOtherProfiles(profile, profilesQuery.data)
+                  useProfileStore.setState({
+                    profile: profile,
+                    pinForm: profile.pin ? true : false,
+                  })
                 }}
               >
                 <div className="relative aspect-square h-24 w-fit overflow-hidden rounded shadow-sm group-hover:ring-2 group-hover:ring-slate-50 sm:h-28 md:h-32">
@@ -73,9 +84,17 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
                     <Skeleton className="h-full w-full bg-neutral-700" />
                   )}
                 </div>
-                <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
-                  {profile.name}
-                </h2>
+                <div className="flex flex-col items-center justify-center gap-5">
+                  <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
+                    {profile.name}
+                  </h2>
+                  {profile.pin && (
+                    <Icons.lock
+                      className="h-4 w-4 text-slate-400"
+                      aria-label="Private profile"
+                    />
+                  )}
+                </div>
               </Button>
             ))}
         </div>

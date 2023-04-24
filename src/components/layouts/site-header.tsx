@@ -146,6 +146,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         variant="ghost"
                         className="h-auto w-full justify-between space-x-2 px-2 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-100 dark:hover:bg-transparent"
                         onClick={() => {
+                          profileStore.setPinForm(profile.pin ? true : false)
                           profileStore.setProfile(profile)
                         }}
                       >
