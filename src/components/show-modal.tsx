@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import * as React from "react"
 import { useRouter } from "next/navigation"
 import { env } from "@/env.mjs"
 import { useModalStore } from "@/stores/modal"
 import { useProfileStore } from "@/stores/profile"
 import type { Genre, ShowWithGenreAndVideo } from "@/types"
+import { useIsMutating } from "@tanstack/react-query"
 import { toast } from "react-hot-toast"
 import ReactPlayer from "react-player/lazy"
 
@@ -28,18 +29,20 @@ interface ShowModalProps {
 
 const ShowModal = ({ open, setOpen }: ShowModalProps) => {
   const router = useRouter()
+  const apiUtils = api.useContext()
 
   // stores
   const modalStore = useModalStore()
   const profileStore = useProfileStore()
 
-  const [trailer, setTrailer] = useState("")
-  const [genres, setGenres] = useState<Genre[]>([])
-  const [isMuted, setIsMuted] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [trailer, setTrailer] = React.useState("")
+  const [genres, setGenres] = React.useState<Genre[]>([])
+  const [isMuted, setIsMuted] = React.useState(false)
+  const [isPlaying, setIsPlaying] = React.useState(false)
+  const [isAdded, setIsAdded] = React.useState(false)
 
   // get trailer and genres of show
-  useEffect(() => {
+  React.useEffect(() => {
     const getShow = async () => {
       if (!modalStore.show) return
 
@@ -70,7 +73,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     void getShow()
   }, [modalStore.show])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (modalStore.play) {
       setIsPlaying(true)
     } else {
@@ -78,7 +81,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     }
   }, [modalStore.play])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isPlaying) {
       setIsMuted(false)
     } else {
@@ -91,16 +94,10 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     refetchOnWindowFocus: false,
   })
 
-  // my shows query
-  const myShowsQuery = profileStore.profile
-    ? api.myList.getAll.useQuery(profileStore.profile.id, {
-        enabled: !!profileStore.profile,
-      })
-    : null
-
   // add show mutation
   const addShowMutation = api.myList.create.useMutation({
     onSuccess: () => {
+      setIsAdded(true)
       toast.success("Added to My List")
     },
     onError: (error) => {
@@ -108,15 +105,24 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     },
   })
 
-  // delete show mutation
-  const deleteShowMutation = api.myList.delete.useMutation({
+  // remove show mutation
+  const removeShowMuation = api.myList.delete.useMutation({
     onSuccess: () => {
+      setIsAdded(false)
       toast.success("Removed from My List")
     },
     onError: (error) => {
       toast.error(error.message)
     },
   })
+
+  // refetch my shows query
+  const mutationCount = useIsMutating()
+  React.useEffect(() => {
+    if (mutationCount > 0) {
+      void apiUtils.myList.getAll.invalidate()
+    }
+  }, [apiUtils, mutationCount])
 
   return (
     <Dialog
@@ -173,37 +179,26 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                   </>
                 )}
               </Button>
-              {myShowsQuery?.data?.some((s) => s.id === modalStore.show?.id) ? (
-                <DynamicTooltip text="Remove from My List">
-                  <Button
-                    aria-label="Remove show from my list"
-                    variant="ghost"
-                    className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
-                    onClick={() => {
-                      !userQuery.data && router.push("/login")
+              <DynamicTooltip
+                text={isAdded ? "Remove from My List" : "Add to My List"}
+              >
+                <Button
+                  aria-label={
+                    isAdded ? "Remove from My List" : "Add to My List"
+                  }
+                  variant="ghost"
+                  className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+                  onClick={() => {
+                    !userQuery.data && router.push("/login")
 
-                      modalStore.show && userQuery.data && profileStore.profile
-                        ? deleteShowMutation.mutate({
+                    modalStore.show &&
+                      profileStore.profile &&
+                      (isAdded
+                        ? removeShowMuation.mutate({
                             id: modalStore.show.id,
                             profileId: profileStore.profile.id,
                           })
-                        : null
-                    }}
-                  >
-                    <Icons.check className="h-5 w-5" aria-hidden="true" />
-                  </Button>
-                </DynamicTooltip>
-              ) : (
-                <DynamicTooltip text="Add to My List">
-                  <Button
-                    aria-label="Add show to my list"
-                    variant="ghost"
-                    className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
-                    onClick={() => {
-                      !userQuery.data && router.push("/login")
-
-                      modalStore.show && userQuery.data && profileStore.profile
-                        ? addShowMutation.mutate({
+                        : addShowMutation.mutate({
                             profileId: profileStore.profile.id,
                             id: modalStore.show.id,
                             name: modalStore.show.name ?? "",
@@ -227,14 +222,22 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                               modalStore.show.first_air_date ?? "",
                             adult: modalStore.show.adult,
                             video: modalStore.show.video,
-                          })
-                        : null
-                    }}
-                  >
+                          }))
+                  }}
+                  disabled={
+                    !userQuery.data ||
+                    !modalStore.show ||
+                    !profileStore.profile ||
+                    mutationCount > 0
+                  }
+                >
+                  {isAdded ? (
+                    <Icons.check className="h-5 w-5" aria-hidden="true" />
+                  ) : (
                     <Icons.add className="h-5 w-5" aria-hidden="true" />
-                  </Button>
-                </DynamicTooltip>
-              )}
+                  )}
+                </Button>
+              </DynamicTooltip>
             </div>
             <Button
               aria-label={`${isMuted ? "Unmute" : "Mute"} video`}
