@@ -1,9 +1,12 @@
-import type { ServerRuntime } from "next"
+import type { PageConfig } from "next"
+import type { NextRequest } from "next/server"
 import { ImageResponse } from "@vercel/og"
 
-export const runtime: ServerRuntime = "edge"
+export const config: PageConfig = {
+  runtime: "edge",
+}
 
-export default function GET(req: Request) {
+export default function handler(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
 
