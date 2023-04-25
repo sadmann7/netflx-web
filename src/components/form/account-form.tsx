@@ -231,6 +231,8 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
   const updateProfileMutation = api.profile.update.useMutation({
     onSuccess: async () => {
       await apiUtils.user.getCurrentWithProfile.invalidate()
+      await apiUtils.profile.getAll.invalidate()
+      await apiUtils.profile.getOthers.invalidate()
       toast.success("Profile updated successfully")
     },
     onError: (error) => {

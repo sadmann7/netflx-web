@@ -105,11 +105,11 @@ export const profileRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const profile = await ctx.prisma.profile.findUnique({
+      const profile = await ctx.prisma.profile.findFirst({
         where: { email: input.email },
       })
 
-      if (profile && profile.id !== input.id) {
+      if (profile && profile.email && profile.id !== input.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Email is already taken",
@@ -124,7 +124,7 @@ export const profileRouter = createTRPCRouter({
           language: input.language,
           gameHandle: input.gameHandle,
           email: input.email,
-          pin: input.pin,
+          pin: input.pin ? input.pin : null,
         },
       })
       return updatedProfile
@@ -133,8 +133,8 @@ export const profileRouter = createTRPCRouter({
   updatePin: protectedProcedure
     .input(
       z.object({
-        id: z.string().min(4).max(4),
-        pin: z.number().min(4).max(4).optional(),
+        id: z.string(),
+        pin: z.number().optional(),
         pinStatus: z.boolean(),
       })
     )

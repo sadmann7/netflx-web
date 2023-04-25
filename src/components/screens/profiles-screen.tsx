@@ -26,8 +26,7 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
 
   // profiles query
   const profilesQuery = api.profile.getAll.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-    enabled: !!session,
+    enabled: !!session?.user,
   })
 
   // profile store
@@ -55,48 +54,55 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
           {`Who's`} watching?
         </h1>
         <div className="flex flex-wrap items-start justify-center gap-2 pb-8 sm:gap-4 md:gap-8">
-          {profilesQuery.isSuccess &&
-            profilesQuery.data.map((profile) => (
-              <Button
-                aria-label="Select profile"
-                key={profile.id}
-                variant="ghost"
-                className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.98] dark:hover:bg-transparent"
-                onClick={() => {
-                  useProfileStore.setState({
-                    profile: profile,
-                    pinForm: profile.pin ? true : false,
-                  })
-                }}
-              >
-                <div className="relative aspect-square h-24 w-fit overflow-hidden rounded shadow-sm group-hover:ring-2 group-hover:ring-slate-50 sm:h-28 md:h-32">
-                  {profile.icon ? (
-                    <Image
-                      src={profile.icon.href}
-                      alt={profile.icon.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 
+          {profilesQuery.isLoading
+            ? Array.from({ length: 4 }, (_, i) => (
+                <Skeleton
+                  key={i}
+                  className="aspect-square h-24 rounded bg-neutral-700 sm:h-28 md:h-32"
+                />
+              ))
+            : profilesQuery.isSuccess &&
+              profilesQuery.data.map((profile) => (
+                <Button
+                  aria-label="Select profile"
+                  key={profile.id}
+                  variant="ghost"
+                  className="group h-auto flex-col space-y-2 p-0 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-[0.98] dark:hover:bg-transparent"
+                  onClick={() => {
+                    useProfileStore.setState({
+                      profile: profile,
+                      pinForm: profile.pin ? true : false,
+                    })
+                  }}
+                >
+                  <div className="relative aspect-square h-24 w-fit overflow-hidden rounded shadow-sm group-hover:ring-2 group-hover:ring-slate-50 sm:h-28 md:h-32">
+                    {profile.icon ? (
+                      <Image
+                        src={profile.icon.href}
+                        alt={profile.icon.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 
                     (max-width: 1200px) 50vw, 33vw"
-                      priority
-                      className="object-cover"
-                    />
-                  ) : (
-                    <Skeleton className="h-full w-full bg-neutral-700" />
-                  )}
-                </div>
-                <div className="flex flex-col items-center justify-center gap-5">
-                  <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
-                    {profile.name}
-                  </h2>
-                  {profile.pin && (
-                    <Icons.lock
-                      className="h-4 w-4 text-slate-400"
-                      aria-label="Private profile"
-                    />
-                  )}
-                </div>
-              </Button>
-            ))}
+                        priority
+                        className="object-cover"
+                      />
+                    ) : (
+                      <Skeleton className="h-full w-full bg-neutral-700" />
+                    )}
+                  </div>
+                  <div className="flex flex-col items-center justify-center gap-5">
+                    <h2 className="text-sm text-slate-400 group-hover:text-slate-50 sm:text-base">
+                      {profile.name}
+                    </h2>
+                    {profile.pin && (
+                      <Icons.lock
+                        className="h-4 w-4 text-slate-400"
+                        aria-label="Private profile"
+                      />
+                    )}
+                  </div>
+                </Button>
+              ))}
         </div>
         <Button
           aria-label="Navigate to manage profiles page"

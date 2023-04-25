@@ -14,9 +14,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const schema = z.object({
-  pin: z.number().min(4).max(4).optional(),
+  pin: z.number().optional(),
   pinStatus: z.boolean(),
 })
+
 type Inputs = z.infer<typeof schema>
 
 interface ResetPinFormProps {
@@ -56,8 +57,6 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
     })
   }
 
-  console.log(watch("pinStatus"))
-
   return (
     <form
       className="grid w-full gap-5"
@@ -68,17 +67,17 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
           control={control}
           name="pinStatus"
           id="pinStatus"
-          label="Enable Profile Lock"
+          label="Require a PIN to access Sadman's profile."
+          defaultChecked={!!profile.pin}
         />
-
         {formState.errors.pinStatus && (
           <p className="text-sm text-red-500 dark:text-red-500">
             {formState.errors.pinStatus.message}
           </p>
         )}
       </fieldset>
-      {watch("pinStatus") !== undefined && watch("pinStatus") && (
-        <fieldset className="grid w-full max-w-xs items-start gap-2.5">
+      {profile.pin && (
+        <fieldset className="grid w-full items-start gap-2">
           <label htmlFor="pin" className="sr-only">
             Profile Lock PIN
           </label>
@@ -86,15 +85,15 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
             id="pin"
             type="text"
             placeholder="Profile Lock PIN"
-            className="rounded-none"
+            className="max-w-[6.25rem] rounded-none"
             {...register("pin", {
               setValueAs: (v: string) =>
                 v === "" ? undefined : parseInt(v, 10),
             })}
-            defaultValue={profile?.pin as number}
+            defaultValue={profile?.pin}
           />
           {formState.errors.pin && (
-            <p className="-mt-1.5 text-sm text-red-500 dark:text-red-500">
+            <p className="text-sm text-red-500 dark:text-red-500">
               {formState.errors.pin.message}
             </p>
           )}
@@ -123,7 +122,7 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
           variant="outline"
           size="auto"
           className="rounded active:scale-[0.98]"
-          onAbort={() => router.push("/")}
+          onClick={() => router.push("/")}
           disabled={updatePinMutation.isLoading}
         >
           Cancel

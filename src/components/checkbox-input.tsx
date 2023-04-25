@@ -3,6 +3,7 @@ import {
   type Control,
   type FieldValues,
   type Path,
+  type PathValue,
 } from "react-hook-form"
 
 import { Checkbox } from "@/components/ui/checkbox"
@@ -13,6 +14,7 @@ interface CheckboxInputProps<
 > {
   control: Control<TFieldValues, TContext>
   name: Path<TFieldValues>
+  defaultChecked?: PathValue<TFieldValues, Path<TFieldValues>>
   id: string
   label: string
 }
@@ -20,6 +22,7 @@ interface CheckboxInputProps<
 const CheckboxInput = <TFieldValues extends FieldValues>({
   control,
   name,
+  defaultChecked = false as PathValue<TFieldValues, Path<TFieldValues>>,
   id,
   label,
 }: CheckboxInputProps<TFieldValues>) => {
@@ -27,11 +30,12 @@ const CheckboxInput = <TFieldValues extends FieldValues>({
     <Controller
       control={control}
       name={name}
+      defaultValue={defaultChecked}
       render={({ field: { value, onChange } }) => (
         <div className="flex items-center space-x-2">
           <Checkbox
             id={id}
-            onChange={(value) => {
+            onCheckedChange={(value) => {
               onChange(value)
             }}
             checked={value}

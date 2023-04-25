@@ -94,6 +94,13 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
     refetchOnWindowFocus: false,
   })
 
+  // my shows query
+  const myShowsQuery = profileStore.profile
+    ? api.myList.getAll.useQuery(profileStore.profile.id, {
+        enabled: !!userQuery.data,
+      })
+    : null
+
   // add show mutation
   const addShowMutation = api.myList.create.useMutation({
     onSuccess: () => {
@@ -189,38 +196,38 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                   onClick={() => {
                     !userQuery.data && router.push("/login")
 
-                    modalStore.show &&
-                      profileStore.profile &&
-                      (isAdded
-                        ? removeShowMuation.mutate({
-                            id: modalStore.show.id,
-                            profileId: profileStore.profile.id,
-                          })
-                        : addShowMutation.mutate({
-                            profileId: profileStore.profile.id,
-                            id: modalStore.show.id,
-                            name: modalStore.show.name ?? "",
-                            title: modalStore.show.title ?? "",
-                            original_title:
-                              modalStore.show.original_title ?? "",
-                            poster_path: modalStore.show.poster_path ?? "",
-                            backdrop_path: modalStore.show.backdrop_path ?? "",
-                            overview: modalStore.show.overview ?? "",
-                            original_language:
-                              modalStore.show.original_language,
-                            media_type:
-                              modalStore.show.media_type === "tv"
-                                ? "tv"
-                                : "movie",
-                            popularity: modalStore.show.popularity,
-                            vote_average: modalStore.show.vote_average,
-                            vote_count: modalStore.show.vote_count,
-                            release_date: modalStore.show.release_date ?? "",
-                            first_air_date:
-                              modalStore.show.first_air_date ?? "",
-                            adult: modalStore.show.adult,
-                            video: modalStore.show.video,
-                          }))
+                    if (!modalStore.show || !profileStore.profile) return
+
+                    isAdded ||
+                    myShowsQuery?.data?.find(
+                      (item) => item.id === modalStore.show?.id
+                    )
+                      ? removeShowMuation.mutate({
+                          id: modalStore.show.id,
+                          profileId: profileStore.profile.id,
+                        })
+                      : addShowMutation.mutate({
+                          profileId: profileStore.profile.id,
+                          id: modalStore.show.id,
+                          name: modalStore.show.name ?? "",
+                          title: modalStore.show.title ?? "",
+                          original_title: modalStore.show.original_title ?? "",
+                          poster_path: modalStore.show.poster_path ?? "",
+                          backdrop_path: modalStore.show.backdrop_path ?? "",
+                          overview: modalStore.show.overview ?? "",
+                          original_language: modalStore.show.original_language,
+                          media_type:
+                            modalStore.show.media_type === "tv"
+                              ? "tv"
+                              : "movie",
+                          popularity: modalStore.show.popularity,
+                          vote_average: modalStore.show.vote_average,
+                          vote_count: modalStore.show.vote_count,
+                          release_date: modalStore.show.release_date ?? "",
+                          first_air_date: modalStore.show.first_air_date ?? "",
+                          adult: modalStore.show.adult,
+                          video: modalStore.show.video,
+                        })
                   }}
                   disabled={
                     !userQuery.data ||
@@ -229,7 +236,10 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     mutationCount > 0
                   }
                 >
-                  {isAdded ? (
+                  {isAdded ||
+                  myShowsQuery?.data?.find(
+                    (item) => item.id === modalStore.show?.id
+                  ) ? (
                     <Icons.check className="h-5 w-5" aria-hidden="true" />
                   ) : (
                     <Icons.add className="h-5 w-5" aria-hidden="true" />

@@ -70,7 +70,7 @@ model Profile {
     id         String   @id @default(cuid())
     userId     String
     name       String
-    email      String?  @unique
+    email      String?
     pin        Int?
     icon       Icon     @relation(fields: [iconId], references: [id], onDelete: Cascade)
     language   LANGUAGE @default(ENGLISH)
