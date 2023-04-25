@@ -21,7 +21,6 @@ const server = z.object({
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
-  STRIPE_PUBLISHABLE_KEY: z.string(),
   STRIPE_API_KEY: z.string(),
   STRIPE_WEBHOOK_SECRET: z.string(),
   STRIPE_MOBILE_PRICE_ID: z.string(),
@@ -54,7 +53,6 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NEXT_PUBLIC_TMDB_API_KEY: process.env.NEXT_PUBLIC_TMDB_API_KEY,
-  STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
   STRIPE_API_KEY: process.env.STRIPE_API_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   STRIPE_MOBILE_PRICE_ID: process.env.STRIPE_MOBILE_PRICE_ID,

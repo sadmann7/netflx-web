@@ -1,24 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next"
+import { headers } from "next/headers"
 import { env } from "@/env.mjs"
 import { prisma } from "@/server/db"
-import rawBody from "raw-body"
 import type Stripe from "stripe"
 
 import { stripe } from "@/lib/stripe"
 
-export const config = {
-  api: {
-    // Turn off the body parser so we can access raw body for verification.
-    bodyParser: false,
-  },
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const body = await rawBody(req)
-  const signature = req.headers["stripe-signature"] as string
+export async function POST(req: Request) {
+  const body = await req.text()
+  const signature = headers().get("Stripe-Signature") as string
 
   let event: Stripe.Event
 
@@ -29,13 +18,12 @@ export default async function handler(
       env.STRIPE_WEBHOOK_SECRET ?? ""
     )
   } catch (error) {
-    return res
-      .status(400)
-      .send(
-        `Webhook Error: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      )
+    return new Response(
+      `Webhook Error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`,
+      { status: 400 }
+    )
   }
 
   const session = event.data.object as Stripe.Checkout.Session
@@ -84,5 +72,5 @@ export default async function handler(
     })
   }
 
-  return res.json({})
+  return new Response(null, { status: 200 })
 }
