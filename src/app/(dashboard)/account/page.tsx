@@ -6,7 +6,7 @@ import { prisma } from "@/server/db"
 import { getCurrentUser } from "@/lib/session"
 import { stripe } from "@/lib/stripe"
 import { getPlanDetails, getUserSubscriptionPlan } from "@/lib/subscription"
-import Account from "@/components/account"
+import AccountForm from "@/components/form/account-form"
 
 export const metadata: Metadata = {
   title: "Account",
@@ -50,7 +50,7 @@ export default async function AccountPage() {
 
   return (
     <section className="container w-full max-w-3xl pb-16 pt-10">
-      <Account
+      <AccountForm
         subscriptionPlan={subscriptionPlan}
         subPlanDetails={subPlanDetails}
         subStartDate={subStartDate}

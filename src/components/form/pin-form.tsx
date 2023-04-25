@@ -82,15 +82,17 @@ const PinForm = () => {
           Your PIN must be 4 numbers.
         </div>
       </fieldset>
-      <Link
-        href={`/account/reset-pin/${profileStore.profile?.id ?? ""}`}
-        className={buttonVariants({
-          variant: "ghost",
-          className: "mt-10 rounded-none",
-        })}
-      >
-        Forgot PIN?
-      </Link>
+      {profileStore.profile && (
+        <Link
+          href={`/account/reset-pin/${profileStore.profile.id}`}
+          className={buttonVariants({
+            variant: "ghost",
+            className: "mt-10 rounded-none",
+          })}
+        >
+          Forgot PIN?
+        </Link>
+      )}
     </div>
   )
 }

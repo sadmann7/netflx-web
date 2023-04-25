@@ -29,19 +29,19 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 
-interface AccountProps {
+interface AccountFormProps {
   subscriptionPlan: UserSubscriptionPlan | null
   subPlanDetails?: SubscriptionPlan
   subStartDate: number | null
   isCanceled: boolean
 }
 
-const Account = ({
+const AccountForm = ({
   subscriptionPlan,
   subPlanDetails,
   subStartDate,
   isCanceled,
-}: AccountProps) => {
+}: AccountFormProps) => {
   const [isLoading, setIsLoading] = React.useState(false)
 
   async function handleSubscription() {
@@ -215,7 +215,7 @@ const Account = ({
   )
 }
 
-export default Account
+export default AccountForm
 
 const schema = z.object({
   email: z.string().optional(),

@@ -1,9 +1,11 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { notFound, redirect } from "next/navigation"
 import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
+import ResetPinForm from "@/components/form/reset-pin-form"
 
 export const metadata: Metadata = {
   title: "Reset Profile Pin",
@@ -35,6 +37,13 @@ export default async function ResetPinPage({ params }: ResetPinPageProps) {
       language: true,
       gameHandle: true,
       pin: true,
+      icon: {
+        select: {
+          id: true,
+          title: true,
+          href: true,
+        },
+      },
     },
   })
 
@@ -43,11 +52,24 @@ export default async function ResetPinPage({ params }: ResetPinPageProps) {
   }
 
   return (
-    <section className="container min-h-screen w-full max-w-5xl items-center justify-center pb-16 pt-10">
-      <div>
-        <h1 className="text-center text-3xl font-medium sm:text-4xl">
+    <section className="container min-h-screen w-full max-w-6xl space-y-8 pb-16 pt-10">
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-center text-2xl font-medium sm:text-3xl">
           Profile Lock
         </h1>
+        <Image
+          src={profile.icon.href}
+          alt={profile.icon.title}
+          width={48}
+          height={48}
+          className="rounded object-cover"
+        />
+      </div>
+      <div className="space-y-6">
+        <h2 className="text-xl font-medium sm:text-2xl">
+          Lock this profile by creating a 4-digit pin.
+        </h2>
+        <ResetPinForm profile={profile} />
       </div>
     </section>
   )
