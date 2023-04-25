@@ -28,6 +28,7 @@ export default async function AddProfilePage() {
       language: true,
       gameHandle: true,
       pin: true,
+      email: true,
       icon: true,
     },
   })

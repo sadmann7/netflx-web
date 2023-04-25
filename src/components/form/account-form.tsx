@@ -220,7 +220,7 @@ export default AccountForm
 const schema = z.object({
   email: z.string().optional(),
   language: z.nativeEnum(LANGUAGE),
-  pin: z.number().optional(),
+  pin: z.number().optional().nullable(),
 })
 type Inputs = z.infer<typeof schema>
 
@@ -254,7 +254,7 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
       iconId: profile?.icon?.id,
       language: data.language,
       email: data.email,
-      pin: data.pin,
+      pin: data.pin ?? null,
     })
   }
 

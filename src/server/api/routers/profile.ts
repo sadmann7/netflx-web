@@ -99,20 +99,46 @@ export const profileRouter = createTRPCRouter({
         name: z.string(),
         iconId: z.string(),
         language: z.nativeEnum(LANGUAGE),
-        gameHandle: z.string().optional(),
-        email: z.string().optional(),
-        pin: z.number().optional(),
+        gameHandle: z.string().optional().nullable(),
+        email: z.string().optional().nullable(),
+        pin: z.number().optional().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const profile = await ctx.prisma.profile.findFirst({
+      // check if user has a profile with the same name
+      const profileName = await ctx.prisma.profile.findFirst({
+        where: { name: input.name },
+      })
+      if (profileName && profileName.name && profileName.id !== input.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Profile name is already taken",
+        })
+      }
+
+      // check if user has a profile with the same email
+      const profileEmail = await ctx.prisma.profile.findFirst({
         where: { email: input.email },
       })
-
-      if (profile && profile.email && profile.id !== input.id) {
+      if (profileEmail && profileEmail.email && profileEmail.id !== input.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Email is already taken",
+        })
+      }
+
+      // check if user has a profile with the same game handle
+      const profileGameHandle = await ctx.prisma.profile.findFirst({
+        where: { gameHandle: input.gameHandle },
+      })
+      if (
+        profileGameHandle &&
+        profileGameHandle.gameHandle &&
+        profileGameHandle.id !== input.id
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Game handle is already taken",
         })
       }
 
@@ -124,7 +150,7 @@ export const profileRouter = createTRPCRouter({
           language: input.language,
           gameHandle: input.gameHandle,
           email: input.email,
-          pin: input.pin ? input.pin : null,
+          pin: input.pin,
         },
       })
       return updatedProfile
@@ -134,7 +160,7 @@ export const profileRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        pin: z.number().optional(),
+        pin: z.number().optional().nullable(),
         pinStatus: z.boolean(),
       })
     )

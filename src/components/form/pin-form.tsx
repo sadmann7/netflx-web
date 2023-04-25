@@ -25,6 +25,8 @@ const PinForm = () => {
     }
   }
 
+  console.log(profileStore.profile)
+
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center gap-8">
       <Button

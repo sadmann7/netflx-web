@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useProfileStore } from "@/stores/profile"
 import type { PickedProfile } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type SubmitHandler } from "react-hook-form"
@@ -14,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const schema = z.object({
-  pin: z.number().optional(),
+  pin: z.number().optional().nullable(),
   pinStatus: z.boolean(),
 })
 
@@ -28,10 +29,23 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
   const router = useRouter()
   const apiUtils = api.useContext()
 
+  // profile query
+  const profileQuery = api.profile.getOne.useQuery(profile.id, {
+    enabled: !!profile.id,
+  })
+
   // update pin mutation
   const updatePinMutation = api.profile.updatePin.useMutation({
     onSuccess: async () => {
       await apiUtils.profile.getAll.invalidate()
+      await apiUtils.profile.getOne.invalidate()
+      profileQuery.data &&
+        useProfileStore.setState({
+          profile: {
+            ...profileQuery.data,
+            pin: watch("pinStatus") ? (watch("pin") as number) : null,
+          },
+        })
       router.push("/")
       toast.success("Pin updated")
     },
@@ -52,7 +66,7 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
 
     await updatePinMutation.mutateAsync({
       id: profile.id,
-      pin: data.pin,
+      pin: data.pinStatus ? data.pin : null,
       pinStatus: data.pinStatus,
     })
   }
@@ -76,29 +90,30 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
           </p>
         )}
       </fieldset>
-      {profile.pin && (
-        <fieldset className="grid w-full items-start gap-2">
-          <label htmlFor="pin" className="sr-only">
-            Profile Lock PIN
-          </label>
-          <Input
-            id="pin"
-            type="text"
-            placeholder="Profile Lock PIN"
-            className="max-w-[6.25rem] rounded-none"
-            {...register("pin", {
-              setValueAs: (v: string) =>
-                v === "" ? undefined : parseInt(v, 10),
-            })}
-            defaultValue={profile?.pin}
-          />
-          {formState.errors.pin && (
-            <p className="text-sm text-red-500 dark:text-red-500">
-              {formState.errors.pin.message}
-            </p>
-          )}
-        </fieldset>
-      )}
+      {profile.pin &&
+        (watch("pinStatus") === undefined || watch("pinStatus")) && (
+          <fieldset className="grid w-full items-start gap-2">
+            <label htmlFor="pin" className="sr-only">
+              Profile Lock PIN
+            </label>
+            <Input
+              id="pin"
+              type="text"
+              placeholder="Profile Lock PIN"
+              className="max-w-[6.25rem] rounded-none"
+              {...register("pin", {
+                setValueAs: (v: string) =>
+                  v === "" ? undefined : parseInt(v, 10),
+              })}
+              defaultValue={profile?.pin}
+            />
+            {formState.errors.pin && (
+              <p className="text-sm text-red-500 dark:text-red-500">
+                {formState.errors.pin.message}
+              </p>
+            )}
+          </fieldset>
+        )}
 
       <div className="mt-20 flex items-center justify-center gap-2">
         <Button

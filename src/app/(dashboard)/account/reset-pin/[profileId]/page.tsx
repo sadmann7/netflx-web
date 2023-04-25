@@ -36,6 +36,7 @@ export default async function ResetPinPage({ params }: ResetPinPageProps) {
       name: true,
       language: true,
       gameHandle: true,
+      email: true,
       pin: true,
       icon: {
         select: {

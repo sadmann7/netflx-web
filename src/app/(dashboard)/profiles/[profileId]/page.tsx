@@ -37,6 +37,7 @@ export default async function EditProfilePage({
       name: true,
       language: true,
       gameHandle: true,
+      email: true,
       pin: true,
       icon: {
         select: {

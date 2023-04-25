@@ -68,6 +68,7 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
       iconId: icon.id,
       language: data.language,
       gameHandle: data.gameHandle,
+      email: profile?.email ?? null,
     })
   }
 
