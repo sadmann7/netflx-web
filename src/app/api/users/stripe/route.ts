@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     const randomIcon =
       unusedIcons && unusedIcons[Math.floor(Math.random() * unusedIcons.length)]
 
-    // TODO: check if stripeSession.payment_status === "paid"
+    // TODO: check if payment is successful before creating profile
     if (!existingProfile) {
       await prisma.profile.create({
         data: {

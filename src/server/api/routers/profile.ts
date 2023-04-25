@@ -18,16 +18,13 @@ export const profileRouter = createTRPCRouter({
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const profiles = await ctx.prisma.profile.findMany({
-        where: {
-          id: {
-            not: input,
-          },
-        },
+        where: { userId: ctx.session.user.id },
         include: {
           icon: true,
         },
       })
-      return profiles
+      const otherProfiles = profiles.filter((profile) => profile.id !== input)
+      return otherProfiles
     }),
 
   getOne: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
