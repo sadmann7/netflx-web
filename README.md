@@ -1,28 +1,55 @@
-# Create T3 App
+# [Netflx OTT](https://netflx-web.vercel.app/)
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is a Netflix clone project built with the [T3 Stack](https://create.t3.gg/) and bootstrapped with `create-t3-app`.
 
-## What's next? How do I make an app with this?
+[![Netflx OTT](./public/screenshot.png)](https://netflx-web.vercel.app/)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Tech Stack
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
+- [Next.js](https://nextjs.org) App router and server components
 - [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
+- [Stripe](https://stripe.com)
 
-## Learn More
+## Features
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Authentication with NextAuth.js
+- Subscription with Stripe
+- Profile creation for individual users with rsc, tRPC, and Prisma
+- Pin verfication for profies
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Installation
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/sadmann7/netflx-web
+```
+
+### 2. Install dependencies
+
+```bash
+yarn install
+```
+
+### 3. Create a `.env` file
+
+Create a `.env` file in the root directory and add the environment variables as shown in the `.env.example` file.
+
+### 4. Run the application
+
+```bash
+yarn run dev
+```
+
+### 5. Listen for stripe events
+
+```bash
+yarn run stripe:listen
+```
 
 ## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Follow the deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
