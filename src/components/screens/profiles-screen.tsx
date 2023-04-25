@@ -10,8 +10,6 @@ import type { Session } from "next-auth"
 import { api } from "@/lib/api/api"
 import PinForm from "@/components/form/pin-form"
 import { Icons } from "@/components/icons"
-import SiteFooter from "@/components/layouts/site-footer"
-import SiteHeader from "@/components/layouts/site-header"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -118,13 +116,7 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
     )
   }
 
-  return (
-    <div className="flex min-h-screen flex-col">
-      <SiteHeader session={session} />
-      <main className="flex-1">{children}</main>
-      <SiteFooter />
-    </div>
-  )
+  return <>{children}</>
 }
 
 export default ProfilesScreen

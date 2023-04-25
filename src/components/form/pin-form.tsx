@@ -1,24 +1,28 @@
 import * as React from "react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useProfileStore } from "@/stores/profile"
 import PinInput from "react-pin-input"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 const PinForm = () => {
+  const router = useRouter()
   const profileStore = useProfileStore()
 
   const [error, setError] = React.useState<string | null>(null)
 
   function handleSubmit(value: string) {
     if (!profileStore.profile) return
-    setError(null)
 
-    profileStore.profile.pin === Number(value)
-      ? profileStore.setPinForm(false)
-      : setError("Incorrect PIN")
+    if (profileStore.profile.pin === Number(value)) {
+      setError(null)
+      profileStore.setPinForm(false)
+      router.push("/")
+    } else {
+      setError("Incorrect PIN")
+    }
   }
 
   return (
@@ -82,17 +86,24 @@ const PinForm = () => {
           Your PIN must be 4 numbers.
         </div>
       </fieldset>
-      {profileStore.profile && (
-        <Link
-          href={`/account/reset-pin/${profileStore.profile.id}`}
-          className={buttonVariants({
-            variant: "ghost",
-            className: "mt-10 rounded-none",
-          })}
-        >
-          Forgot PIN?
-        </Link>
-      )}
+      <Button
+        aria-label="Navigate to reset pin page"
+        type="button"
+        variant="ghost"
+        className="mt-10 rounded-none"
+        onClick={() => {
+          if (!profileStore.profile) return
+          router.push(`/account/reset-pin/${profileStore.profile.id}`)
+          setTimeout(() => {
+            useProfileStore.setState({
+              pinForm: false,
+            })
+          }, 250)
+        }}
+        disabled={!profileStore.profile}
+      >
+        Forgot PIN?
+      </Button>
     </div>
   )
 }

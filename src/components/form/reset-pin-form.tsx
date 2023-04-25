@@ -122,7 +122,7 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
           variant="outline"
           size="auto"
           className="rounded active:scale-[0.98]"
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/account")}
           disabled={updatePinMutation.isLoading}
         >
           Cancel

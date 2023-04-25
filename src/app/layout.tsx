@@ -6,6 +6,8 @@ import { absoluteUrl, cn } from "@/lib/utils"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ToastWrapper from "@/components/ui/toast-wrapper"
 import "@/styles/globals.css"
+import { getSession } from "@/lib/session"
+import ProfilesScreen from "@/components/screens/profiles-screen"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -76,7 +78,9 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const session = await getSession()
+
   return (
     <TRPCProvider>
       <html
@@ -88,7 +92,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <head />
         <body className="min-h-screen">
-          {children}
+          <ProfilesScreen session={session}>{children}</ProfilesScreen>
           <ToastWrapper />
           <TailwindIndicator />
         </body>
