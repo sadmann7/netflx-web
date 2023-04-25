@@ -54,7 +54,7 @@ export default async function ResetPinPage({ params }: ResetPinPageProps) {
 
   return (
     <section className="container min-h-screen w-full max-w-6xl space-y-8 pb-16 pt-10">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-center text-2xl font-medium sm:text-3xl">
           Profile Lock
         </h1>

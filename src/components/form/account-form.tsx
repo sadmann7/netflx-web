@@ -220,7 +220,13 @@ export default AccountForm
 const schema = z.object({
   email: z.string().optional(),
   language: z.nativeEnum(LANGUAGE),
-  pin: z.number().optional().nullable(),
+  pin: z
+    .number()
+    .refine((v) => v >= 1000 && v <= 9999, {
+      message: "Your PIN must be 4 numbers.",
+    })
+    .optional()
+    .nullable(),
 })
 type Inputs = z.infer<typeof schema>
 
@@ -254,6 +260,7 @@ const ProfileCard = ({ profile }: { profile: ProfileWithIcon }) => {
       iconId: profile?.icon?.id,
       language: data.language,
       email: data.email,
+      gameHandle: profile?.gameHandle ?? null,
       pin: data.pin ?? null,
     })
   }

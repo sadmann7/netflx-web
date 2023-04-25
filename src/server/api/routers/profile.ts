@@ -160,7 +160,11 @@ export const profileRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        pin: z.number().optional().nullable(),
+        pin: z
+          .number()
+          .refine((v) => v >= 1000 && v <= 9999)
+          .optional()
+          .nullable(),
         pinStatus: z.boolean(),
       })
     )

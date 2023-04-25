@@ -15,7 +15,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const schema = z.object({
-  pin: z.number().optional().nullable(),
+  pin: z
+    .number()
+    .refine((v) => v >= 1000 && v <= 9999, {
+      message: "Your PIN must be 4 numbers.",
+    })
+    .optional()
+    .nullable(),
   pinStatus: z.boolean(),
 })
 
@@ -37,14 +43,16 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
   // update pin mutation
   const updatePinMutation = api.profile.updatePin.useMutation({
     onSuccess: async () => {
-      await apiUtils.profile.getAll.invalidate()
       await apiUtils.profile.getOne.invalidate()
+      await apiUtils.profile.getAll.invalidate()
+      await apiUtils.profile.getOthers.invalidate()
       profileQuery.data &&
         useProfileStore.setState({
           profile: {
             ...profileQuery.data,
-            pin: watch("pinStatus") ? (watch("pin") as number) : null,
+            pin: watch("pinStatus") ? watch("pin") ?? null : null,
           },
+          pinForm: watch("pinStatus"),
         })
       router.push("/")
       toast.success("Pin updated")
@@ -66,17 +74,17 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
 
     await updatePinMutation.mutateAsync({
       id: profile.id,
-      pin: data.pinStatus ? data.pin : null,
+      pin: data.pinStatus ? data.pin ?? null : null,
       pinStatus: data.pinStatus,
     })
   }
 
   return (
     <form
-      className="grid w-full gap-5"
+      className="grid w-full gap-8"
       onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
     >
-      <fieldset className="grid w-full items-start gap-2">
+      <fieldset className="grid w-full items-start gap-2.5">
         <CheckboxInput
           control={control}
           name="pinStatus"
@@ -90,9 +98,9 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
           </p>
         )}
       </fieldset>
-      {profile.pin &&
+      {(watch("pin") === undefined || watch("pin")) &&
         (watch("pinStatus") === undefined || watch("pinStatus")) && (
-          <fieldset className="grid w-full items-start gap-2">
+          <fieldset className="grid w-full items-start gap-2.5">
             <label htmlFor="pin" className="sr-only">
               Profile Lock PIN
             </label>
@@ -105,7 +113,7 @@ const ResetPinForm = ({ profile }: ResetPinFormProps) => {
                 setValueAs: (v: string) =>
                   v === "" ? undefined : parseInt(v, 10),
               })}
-              defaultValue={profile?.pin}
+              defaultValue={profile?.pin ? profile.pin : ""}
             />
             {formState.errors.pin && (
               <p className="text-sm text-red-500 dark:text-red-500">

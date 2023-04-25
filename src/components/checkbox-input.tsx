@@ -39,10 +39,11 @@ const CheckboxInput = <TFieldValues extends FieldValues>({
               onChange(value)
             }}
             checked={value}
+            className="h-5 w-5"
           />
           <label
             htmlFor={id}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {label}
           </label>

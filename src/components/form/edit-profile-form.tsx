@@ -26,7 +26,7 @@ const schema = z.object({
     message: "Must be at least 1 character",
   }),
   language: z.nativeEnum(LANGUAGE),
-  gameHandle: z.string().optional(),
+  gameHandle: z.string().optional().nullable(),
 })
 type Inputs = z.infer<typeof schema>
 
