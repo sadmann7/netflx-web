@@ -15,7 +15,7 @@ const ErrorScreen = ({ error, reset }: ErrorScreenProps) => {
     >
       <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
         <Icons.warning
-          className="h-28 w-28 animate-pulse text-red-500 dark:text-red-500"
+          className="h-28 w-28 text-red-500 dark:text-red-500"
           aria-hidden="true"
         />
         <h1 className="text-center text-2xl font-bold text-red-500 dark:text-red-500 sm:text-2xl lg:text-3xl">

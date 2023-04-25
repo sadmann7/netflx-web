@@ -22,7 +22,7 @@ const SiteFooter = () => {
                     })}
                   >
                     {item.icon && <item.icon className="h-6 w-6" />}
-                    <span className="sr-only">Twitter</span>
+                    <span className="sr-only">{item.title}</span>
                   </div>
                 </Link>
               )

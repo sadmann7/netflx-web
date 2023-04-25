@@ -5,11 +5,14 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useMounted } from "@/hooks/use-mounted"
 import { useProfileStore } from "@/stores/profile"
+import { AnimatePresence, motion } from "framer-motion"
 import type { Session } from "next-auth"
 
 import { api } from "@/lib/api/api"
 import PinForm from "@/components/form/pin-form"
 import { Icons } from "@/components/icons"
+import SiteFooter from "@/components/layouts/site-footer"
+import SiteHeader from "@/components/layouts/site-header"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -39,15 +42,29 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
 
   if (profileStore.pinForm && mounted) {
     return (
-      <div className="container w-full max-w-screen-2xl">
-        <PinForm />
-      </div>
+      <AnimatePresence>
+        <motion.div
+          className="container w-full max-w-screen-2xl"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.3 }}
+        >
+          <PinForm />
+        </motion.div>
+      </AnimatePresence>
     )
   }
 
   if (session && !profileStore.profile && mounted) {
     return (
-      <div className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8">
+      <motion.div
+        className="container flex min-h-screen w-full max-w-5xl flex-col items-center justify-center space-y-8"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.3 }}
+      >
         <h1 className="text-center text-3xl font-medium sm:text-4xl">
           {`Who's`} watching?
         </h1>
@@ -80,7 +97,7 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
                         alt={profile.icon.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 
-                    (max-width: 1200px) 50vw, 33vw"
+                          (max-width: 1200px) 50vw, 33vw"
                         priority
                         className="object-cover"
                       />
@@ -104,19 +121,26 @@ const ProfilesScreen = ({ session, children }: ProfilesScreenProps) => {
         </div>
         <Button
           aria-label="Navigate to manage profiles page"
+          type="button"
           variant="outline"
           size="auto"
           className="rounded-none"
-          onClick={() => void router.push("/profiles")}
+          onClick={() => router.push("/profiles")}
           disabled={profilesQuery.isLoading || profilesQuery.isError}
         >
           Manage Profiles
         </Button>
-      </div>
+      </motion.div>
     )
   }
 
-  return <>{children}</>
+  return (
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader session={session} />
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
+    </div>
+  )
 }
 
 export default ProfilesScreen

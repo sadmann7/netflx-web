@@ -53,10 +53,7 @@ const ExpandableSearchbar = <TData extends object>({
   }, [closeInput, setData, setQuery])
 
   return (
-    <fieldset className={cn("relative", containerClassName)}>
-      <label htmlFor={id} className="sr-only">
-        Search shows
-      </label>
+    <div className={cn("relative", containerClassName)}>
       <Input
         ref={inputRef}
         id={id}
@@ -92,7 +89,7 @@ const ExpandableSearchbar = <TData extends object>({
           aria-hidden="true"
         />
       </Button>
-    </fieldset>
+    </div>
   )
 }
 

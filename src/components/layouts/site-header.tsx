@@ -3,7 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useMounted } from "@/hooks/use-mounted"
 import { useProfileStore } from "@/stores/profile"
 import { useSearchStore } from "@/stores/search"
@@ -33,6 +33,7 @@ interface SiteHeaderProps {
 }
 
 const SiteHeader = ({ session }: SiteHeaderProps) => {
+  const router = useRouter()
   const path = usePathname()
   const mounted = useMounted()
   const [isScrolled, setIsScrolled] = React.useState(false)
@@ -112,6 +113,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
+                    aria-label="Account menu trigger"
                     variant="ghost"
                     className="h-auto shrink-0 px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 [&[data-state=open]>svg]:rotate-180"
                   >
@@ -142,12 +144,13 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                       className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                     >
                       <Button
-                        key={profile.id}
+                        aria-label={profile.name}
                         variant="ghost"
                         className="h-auto w-full justify-between space-x-2 px-2 hover:bg-transparent focus:ring-0 focus:ring-offset-0 active:scale-100 dark:hover:bg-transparent"
                         onClick={() => {
+                          router.push("/")
                           useProfileStore.setState({
-                            profile: profile,
+                            profile,
                             pinForm: profile.pin ? true : false,
                           })
                         }}
@@ -226,8 +229,8 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
               </DropdownMenu>
             ) : (
               <Link
-                href="/login"
                 aria-label="Sign in"
+                href="/login"
                 className={cn(
                   buttonVariants({
                     variant: "brand",

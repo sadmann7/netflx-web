@@ -28,6 +28,7 @@ const PinForm = () => {
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center gap-8">
       <Button
+        aria-label="Close menu"
         variant="ghost"
         size="sm"
         className="absolute right-0 top-8 rounded-none"
@@ -74,9 +75,6 @@ const PinForm = () => {
             scale: 1.1,
             transition: "scale 0.3s ease",
           }}
-          onChange={(value) => {
-            console.log(isNaN(Number(value)))
-          }}
           onComplete={(value) => handleSubmit(value)}
           autoSelect={true}
           focus
@@ -94,11 +92,6 @@ const PinForm = () => {
         onClick={() => {
           if (!profileStore.profile) return
           router.push(`/account/reset-pin/${profileStore.profile.id}`)
-          setTimeout(() => {
-            useProfileStore.setState({
-              pinForm: false,
-            })
-          }, 250)
         }}
         disabled={!profileStore.profile}
       >
