@@ -145,17 +145,18 @@ const AccountForm = ({
             <div className="flex flex-col gap-2.5">
               <p>You are not currently subscribed to any plan.</p>
               <p>
-                Some errors must have occured during the subscription process.
+                Some errors must have occured during the subscription process,
+                or you might have canceled your subscription.
               </p>
               <p>
-                Click{" "}
+                Either way, you can subscribe again by clicking{" "}
                 <Link
                   href="/login/plans"
                   className="cursor-pointer text-blue-400 hover:underline"
                 >
                   here
-                </Link>{" "}
-                to subscribe.
+                </Link>
+                .
               </p>
             </div>
           ) : (

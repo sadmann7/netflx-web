@@ -17,8 +17,19 @@ interface EditUserFormProps {
 }
 
 const schema = z.object({
-  email: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  email: z.string().email(),
+  phoneNumber: z
+    .string()
+    .refine((value) => {
+      const regex =
+        value === ""
+          ? /^$/
+          : /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+      return regex.test(value)
+    }, "Invalid phone number")
+
+    .optional()
+    .nullable(),
 })
 type Inputs = z.infer<typeof schema>
 
@@ -29,7 +40,7 @@ const EditUserForm = ({ user }: EditUserFormProps) => {
   const updateUserMutation = api.user.update.useMutation({
     onSuccess: async () => {
       await apiUtils.user.getCurrent.invalidate()
-      toast.success("Profile updated successfully")
+      toast.success("Account updated successfully")
     },
     onError: (error) => {
       toast.error(error.message)
@@ -47,7 +58,10 @@ const EditUserForm = ({ user }: EditUserFormProps) => {
     await updateUserMutation.mutateAsync({
       id: user.id,
       email: data.email,
-      phoneNumber: data.phoneNumber,
+      phoneNumber:
+        data.phoneNumber && data.phoneNumber.length > 0
+          ? data.phoneNumber
+          : null,
     })
   }
 
@@ -76,7 +90,7 @@ const EditUserForm = ({ user }: EditUserFormProps) => {
             type="text"
             placeholder="Account Email"
             className="rounded-none"
-            {...register("email")}
+            {...register("email", { required: true })}
             defaultValue={user.email as string}
           />
           {formState.errors.email && (
