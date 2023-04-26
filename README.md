@@ -6,7 +6,7 @@ This is a Netflix clone project built with the [T3 Stack](https://create.t3.gg/)
 
 ## Tech Stack
 
-- [Next.js](https://nextjs.org) App router and server components
+- [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
