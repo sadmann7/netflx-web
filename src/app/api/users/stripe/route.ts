@@ -77,7 +77,7 @@ export async function POST(req: Request) {
       where: {
         NOT: {
           profiles: {
-            some: {
+            every: {
               userId: session.user.id,
             },
           },

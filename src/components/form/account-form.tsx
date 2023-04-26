@@ -141,9 +141,12 @@ const AccountForm = ({
             <Icons.chevronRight className="h-5 w-5 text-neutral-500" />
           </Link>
           <Separator className="bg-neutral-700" />
-          {subscriptionPlan === null ? (
+          {!subscriptionPlan?.stripeSubscriptionId ? (
             <div className="flex flex-col gap-2.5">
               <p>You are not currently subscribed to any plan.</p>
+              <p>
+                Some errors must have occured during the subscription process.
+              </p>
               <p>
                 Click{" "}
                 <Link
@@ -164,21 +167,40 @@ const AccountForm = ({
             </p>
           )}
           <Separator className="bg-neutral-700" />
-          <Button
-            type="button"
-            aria-label="Cancel membership"
-            variant="flat"
-            className="rounded-none"
-            onClick={() => void handleSubscription()}
-          >
-            {isLoading && (
-              <Icons.spinner
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
-            )}
-            {isCanceled ? "Renew Membership" : "Cancel Membership"}
-          </Button>
+          {subscriptionPlan ? (
+            <Button
+              type="button"
+              aria-label="Cancel membership"
+              variant="flat"
+              className="rounded-none"
+              onClick={() => void handleSubscription()}
+            >
+              {isLoading && (
+                <Icons.spinner
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
+                />
+              )}
+              {isCanceled ? "Renew Membership" : "Cancel Membership"}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              aria-label="Subscribe to membership"
+              variant="flat"
+              className="rounded-none"
+              onClick={() => void handleSubscription()}
+            >
+              {isLoading && (
+                <Icons.spinner
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
+                />
+              )}
+              Subscribe
+            </Button>
+          )}
+
           <Separator className="bg-neutral-600" />
           <div className="space-y-5">
             <h2 className="text-lg text-neutral-400 sm:text-xl">

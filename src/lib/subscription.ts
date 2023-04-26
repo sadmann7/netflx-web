@@ -55,9 +55,9 @@ export async function getUserSubscriptionPlan(
 export function getPlanDetails(planName: string) {
   const plan = subscriptionPlans.find((plan) => plan.name === planName)
 
-  if (!plan) {
-    throw new Error("Plan not found")
-  }
+  // if (!plan) {
+  //   throw new Error("Plan not found")
+  // }
 
   return plan
 }
