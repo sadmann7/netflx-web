@@ -1,3 +1,4 @@
+import { useProfileStore } from "@/stores/profile"
 import type { SiteConfig } from "@/types"
 
 import { absoluteUrl } from "@/lib/utils"
@@ -52,6 +53,11 @@ export const siteConfig: SiteConfig = {
       icon: Icons.edit,
     },
     {
+      title: "Exit Profile",
+      icon: Icons.externalLink,
+      onClick: () => useProfileStore.setState({ profile: null }),
+    },
+    {
       title: "Account",
       href: "/account",
       icon: Icons.user,
@@ -63,7 +69,6 @@ export const siteConfig: SiteConfig = {
     },
     {
       title: "Sign Out of Netflix",
-      href: "/api/auth/signout",
     },
   ],
   footerItems: [

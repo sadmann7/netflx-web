@@ -181,11 +181,8 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                   ))}
                   {siteConfig.profileDropdownItems.map(
                     (item, index) =>
-                      item.href &&
-                      item !==
-                        siteConfig.profileDropdownItems[
-                          siteConfig.profileDropdownItems.length - 1
-                        ] && (
+                      item.title !== "Sign Out of Netflix" &&
+                      (item.href ? (
                         <DropdownMenuItem
                           key={index}
                           asChild
@@ -201,16 +198,28 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                             <span className="line-clamp-1">{item.title}</span>
                           </Link>
                         </DropdownMenuItem>
-                      )
+                      ) : (
+                        <DropdownMenuItem
+                          key={index}
+                          asChild
+                          className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
+                        >
+                          <span onClick={item.onClick}>
+                            {item.icon && (
+                              <item.icon
+                                className="mr-3 h-4 w-4 text-slate-400"
+                                aria-hidden="true"
+                              />
+                            )}
+                            <span className="line-clamp-1">{item.title}</span>
+                          </span>
+                        </DropdownMenuItem>
+                      ))
                   )}
                   <DropdownMenuSeparator />
                   {siteConfig.profileDropdownItems.map(
                     (item, index) =>
-                      item.href &&
-                      item ===
-                        siteConfig.profileDropdownItems[
-                          siteConfig.profileDropdownItems.length - 1
-                        ] && (
+                      item.title === "Sign Out of Netflix" && (
                         <DropdownMenuItem
                           key={index}
                           asChild

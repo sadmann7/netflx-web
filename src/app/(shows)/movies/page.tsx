@@ -1,10 +1,8 @@
-import { Suspense } from "react"
 import type { Metadata } from "next"
 import type { CategorizedShows } from "@/types"
 
 import { getShows } from "@/lib/fetchers"
 import { getCurrentUser } from "@/lib/session"
-import LoadingScreen from "@/components/screens/loading-screen"
 import ShowsContainer from "@/components/shows-container"
 
 export const metadata: Metadata = {
@@ -50,9 +48,7 @@ export default async function MoviesPage() {
 
   return (
     <section className="pb-16 pt-10">
-      <Suspense fallback={<LoadingScreen />}>
-        <ShowsContainer user={user} shows={allShowsByCategory} />
-      </Suspense>
+      <ShowsContainer user={user} shows={allShowsByCategory} />
     </section>
   )
 }

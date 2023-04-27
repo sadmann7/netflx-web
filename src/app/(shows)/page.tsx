@@ -1,10 +1,8 @@
-import { Suspense } from "react"
 import type { CategorizedShows } from "@/types"
 
 import { getShows } from "@/lib/fetchers"
 import { getCurrentUser } from "@/lib/session"
 import Hero from "@/components/hero"
-import LoadingScreen from "@/components/screens/loading-screen"
 import ShowsContainer from "@/components/shows-container"
 
 export default async function Home() {
@@ -45,12 +43,10 @@ export default async function Home() {
 
   return (
     <section>
-      <Suspense fallback={<LoadingScreen />}>
-        <div className="pb-16 pt-10">
-          <Hero shows={allShows.netflix ?? []} />
-          <ShowsContainer user={user} shows={allShowsByCategory} />
-        </div>
-      </Suspense>
+      <div className="pb-16 pt-10">
+        <Hero shows={allShows.netflix ?? []} />
+        <ShowsContainer user={user} shows={allShowsByCategory} />
+      </div>
     </section>
   )
 }

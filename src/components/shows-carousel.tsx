@@ -91,32 +91,23 @@ const ShowsCarousel = ({ title, shows }: ShowsCarouselProps) => {
 export default ShowsCarousel
 
 const ShowCard = ({ show }: { show: Show }) => {
-  const [isHoverd, setIsHoverd] = React.useState(false)
-
-  const modalStore = useModalStore()
-
   return (
-    <div
-      className="relative aspect-video min-w-[15rem] cursor-pointer overflow-hidden rounded transition-all hover:z-20 hover:scale-125"
-      onMouseEnter={() => setIsHoverd(true)}
-      onMouseLeave={() => setIsHoverd(false)}
+    <Image
+      src={`https://image.tmdb.org/t/p/w500/${
+        show.backdrop_path ?? show.poster_path ?? ""
+      }`}
+      alt={show.title ?? show.name ?? "poster"}
+      width={240}
+      height={135}
+      loading="lazy"
+      className="aspect-video cursor-pointer object-cover transition-all hover:z-20 hover:scale-110"
       onClick={() => {
-        modalStore.setShow(show)
-        modalStore.setOpen(true)
-        modalStore.setPlay(false)
+        useModalStore.setState({
+          show: show,
+          open: true,
+          play: false,
+        })
       }}
-    >
-      <Image
-        src={`https://image.tmdb.org/t/p/w500/${
-          show.backdrop_path ?? show.poster_path ?? ""
-        }`}
-        alt={show.title ?? "poster"}
-        fill
-        sizes="(max-width: 768px) 100vw, 
-          (max-width: 1200px) 50vw, 33vw"
-        loading="lazy"
-        className={cn("h-auto w-full object-cover")}
-      />
-    </div>
+    />
   )
 }

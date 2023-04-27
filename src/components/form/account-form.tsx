@@ -169,40 +169,25 @@ const AccountForm = ({
           )}
           <Separator className="bg-neutral-700" />
           {subscriptionPlan ? (
-            <Button
-              type="button"
-              aria-label="Cancel membership"
-              variant="flat"
-              className="rounded-none"
-              onClick={() => void handleSubscription()}
-            >
-              {isLoading && (
-                <Icons.spinner
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
-              {isCanceled ? "Renew Membership" : "Cancel Membership"}
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              aria-label="Subscribe to membership"
-              variant="flat"
-              className="rounded-none"
-              onClick={() => void handleSubscription()}
-            >
-              {isLoading && (
-                <Icons.spinner
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
-              Subscribe
-            </Button>
-          )}
-
-          <Separator className="bg-neutral-600" />
+            <>
+              <Button
+                type="button"
+                aria-label="Cancel membership"
+                variant="flat"
+                className="rounded-none"
+                onClick={() => void handleSubscription()}
+              >
+                {isLoading && (
+                  <Icons.spinner
+                    className="mr-2 h-4 w-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                )}
+                {isCanceled ? "Renew Membership" : "Cancel Membership"}
+              </Button>
+              <Separator className="bg-neutral-600" />
+            </>
+          ) : null}
           <div className="space-y-5">
             <h2 className="text-lg text-neutral-400 sm:text-xl">
               PLAN DETAILS

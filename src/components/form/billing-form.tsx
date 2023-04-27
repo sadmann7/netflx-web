@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import type { UserSubscriptionPlan } from "@/types"
+import { ScrollArea } from "@radix-ui/react-scroll-area"
 import { toast } from "react-hot-toast"
 
 import { plansConfig } from "@/config/plans"
@@ -59,20 +60,24 @@ const BillingForm = ({ subscriptionPlan, isCanceled }: BillingFormProps) => {
       aria-label="Billing form for various subscription plans"
       className="h-full w-full"
     >
-      <div className="flex flex-col gap-8 overflow-x-auto">
-        <div className="flex min-w-[480px] justify-end gap-5">
-          {plansConfig.plans.map((plan, i) => (
-            <div
-              key={i}
-              className={cn(
-                "grid aspect-square w-28 cursor-default place-items-center rounded bg-red-600 font-medium",
-                selectedPlan === plan ? "opacity-100" : "opacity-70"
-              )}
-              onClick={() => setSelectedPlan(plan)}
-            >
-              {plan.name}
+      <div className="space-y-6">
+        <div className="overflow-x-auto">
+          <ScrollArea className="min-w-[30rem] py-2.5">
+            <div className="flex justify-end gap-5">
+              {plansConfig.plans.map((plan, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "grid aspect-square w-28 cursor-default place-items-center rounded bg-red-600 font-medium",
+                    selectedPlan === plan ? "opacity-100" : "opacity-70"
+                  )}
+                  onClick={() => setSelectedPlan(plan)}
+                >
+                  {plan.name}
+                </div>
+              ))}
             </div>
-          ))}
+          </ScrollArea>
         </div>
         <div className="flex flex-col gap-2 text-sm text-neutral-500 dark:text-neutral-400">
           <p>
