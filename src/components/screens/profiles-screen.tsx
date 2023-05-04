@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import type { Session } from "next-auth"
 
 import { api } from "@/lib/api/api"
-import PinForm from "@/components/form/pin-form"
+import PinForm from "@/components/forms/pin-form"
 import { Icons } from "@/components/icons"
 import SiteFooter from "@/components/layouts/site-footer"
 import SiteHeader from "@/components/layouts/site-header"

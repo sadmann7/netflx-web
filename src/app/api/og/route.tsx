@@ -1,33 +1,30 @@
-import type { PageConfig } from "next"
-import type { NextRequest } from "next/server"
+import type { ServerRuntime } from "next"
 import { ImageResponse } from "@vercel/og"
 
-export const config: PageConfig = {
-  runtime: "edge",
-}
+import { ogImageSchema } from "@/lib/validations/og"
 
-export default function handler(req: NextRequest) {
+export const runtime: ServerRuntime = "edge"
+
+export function GET(req: Request) {
   try {
-    const { searchParams } = new URL(req.url)
+    const url = new URL(req.url)
+    const parsedValues = ogImageSchema.parse(
+      Object.fromEntries(url.searchParams)
+    )
 
-    // ?title=<title>
-    const hasTitle = searchParams.has("title")
-    const title = hasTitle
-      ? searchParams.get("title")?.slice(0, 100)
-      : "My default title"
-
-    // ?description=<description>
-    const hasDescription = searchParams.has("description")
-    const description = hasDescription
-      ? searchParams.get("description")?.slice(0, 200)
-      : "My default description"
+    const { mode, title, description } = parsedValues
+    const paint = mode === "dark" ? "#fff" : "#000"
 
     return new ImageResponse(
       (
         <div
           tw="h-full w-full flex items-center justify-center flex-col"
           style={{
-            backgroundImage: "linear-gradient(to bottom, #111827, #374151)",
+            color: paint,
+            background:
+              mode === "dark"
+                ? "linear-gradient(90deg, #000 0%, #111 100%)"
+                : "white",
           }}
         >
           <div tw="flex items-center text-3xl justify-center flex-col">
@@ -49,10 +46,10 @@ export default function handler(req: NextRequest) {
               whiteSpace: "pre-wrap",
             }}
           >
-            <div tw="text-5xl font-bold tracking-tight leading-tight text-white px-8">
+            <div tw="text-5xl font-bold tracking-tight leading-tight dark:text-white px-8">
               {title}
             </div>
-            <div tw="mt-5 text-3xl text-gray-300 text-center font-normal tracking-tight leading-tight px-20">
+            <div tw="mt-5 text-3xl text-slate-400 text-center font-normal tracking-tight leading-tight px-20">
               {description}
             </div>
           </div>

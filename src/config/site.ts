@@ -1,15 +1,14 @@
 import { useProfileStore } from "@/stores/profile"
 import type { SiteConfig } from "@/types"
 
-import { absoluteUrl } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 
 export const siteConfig: SiteConfig = {
-  name: "Netflix",
+  name: "Netflix Web",
   description:
-    "An open source Netflix clone built using the new router, server components, trpc and everything new in Next.js 13.",
+    "An open source Netflix clone built using the new app router, server components, trpc, and everything new in Next.js 13.",
   url: "https://netflx-web.vercel.app",
-  ogImage: absoluteUrl("/src/pages/api/og.tsx"),
+  ogImage: "https://netflx-web.vercel.app/opengraph-image.png",
   links: {
     twitter: "https://twitter.com/sadmann17",
     github: "https://github.com/sadmann7",

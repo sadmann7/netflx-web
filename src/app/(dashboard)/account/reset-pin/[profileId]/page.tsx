@@ -5,7 +5,7 @@ import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
-import ResetPinForm from "@/components/form/reset-pin-form"
+import ResetPinForm from "@/components/forms/reset-pin-form"
 
 export const metadata: Metadata = {
   title: "Reset Profile Pin",

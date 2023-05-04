@@ -6,7 +6,7 @@ import { prisma } from "@/server/db"
 import { getCurrentUser } from "@/lib/session"
 import { stripe } from "@/lib/stripe"
 import { getPlanDetails, getUserSubscriptionPlan } from "@/lib/subscription"
-import AccountForm from "@/components/form/account-form"
+import AccountForm from "@/components/forms/account-form"
 
 export const metadata: Metadata = {
   title: "Account",

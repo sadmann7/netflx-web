@@ -4,7 +4,7 @@ import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
-import AddProfileForm from "@/components/form/add-profile-form"
+import AddProfileForm from "@/components/forms/add-profile-form"
 
 export const metadata: Metadata = {
   title: "Add Profile",

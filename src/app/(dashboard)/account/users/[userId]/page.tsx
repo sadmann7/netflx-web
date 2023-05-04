@@ -5,7 +5,7 @@ import { authOptions } from "@/server/auth"
 import { prisma } from "@/server/db"
 
 import { getCurrentUser } from "@/lib/session"
-import EditUserForm from "@/components/form/edit-user-form"
+import EditUserForm from "@/components/forms/edit-user-form"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export const metadata: Metadata = {
