@@ -8,17 +8,9 @@
 const config = {
   reactStrictMode: true,
   images: {
+    // image optimization is disabled because of exceeding the vercel hobby tier limit
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "image.tmdb.org",
-      },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-    ],
+    domains: ["image.tmdb.org", "res.cloudinary.com"],
   },
 
   /**

@@ -46,12 +46,12 @@
     "stripe": "^12.2.0",
     "superjson": "1.12.3",
     "tailwind-merge": "^1.12.0",
+    "tailwindcss-animate": "^1.0.5",
     "zod": "^3.21.4",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
-    "@tailwindcss/forms": "^0.5.3",
     "@types/eslint": "^8.21.3",
     "@types/node": "^18.16.0",
     "@types/prettier": "^2.7.2",

@@ -1,6 +1,5 @@
-import { type Config } from "tailwindcss"
-
-export default {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -17,12 +16,12 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
+          from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: 0 },
         },
       },
       animation: {
@@ -31,5 +30,5 @@ export default {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
-} satisfies Config
+  plugins: [require("tailwindcss-animate")],
+} 
