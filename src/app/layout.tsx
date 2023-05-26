@@ -6,6 +6,7 @@ import { absoluteUrl, cn } from "@/lib/utils"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ToastWrapper from "@/components/ui/toast-wrapper"
 import "@/styles/globals.css"
+import { Analytics } from "@vercel/analytics/react"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -89,6 +90,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           {children}
           <ToastWrapper />
           <TailwindIndicator />
+          <Analytics />
         </body>
       </html>
     </TRPCProvider>
