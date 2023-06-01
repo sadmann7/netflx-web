@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
@@ -10,23 +8,23 @@ import { Input, type InputProps } from "@/components/ui/input"
 
 interface DebouncedInputProps<TData extends object>
   extends Omit<InputProps, "onChange"> {
+  containerClassName?: string
   value: string | number
   onChange: (value: string | number) => void
-  debounce?: number
-  containerClassName?: string
   setQuery: (query: string) => void
   setData: (data: TData[]) => void
+  debounce?: number
 }
 
 export function DebouncedInput<TData extends object>({
+  id = "query",
+  containerClassName,
   value: initialValue,
   onChange,
-  debounce = 500,
-  containerClassName,
-  className,
-  id = "query",
-  setQuery,
   setData,
+  setQuery,
+  debounce = 500,
+  className,
   ...props
 }: DebouncedInputProps<TData>) {
   const [isOpen, setIsOpen] = React.useState(false)
