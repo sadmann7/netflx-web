@@ -8,28 +8,48 @@ import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Input, type InputProps } from "@/components/ui/input"
 
-interface ExpandableSearchbarProps<TData extends object> extends InputProps {
+interface DebouncedInputProps<TData extends object>
+  extends Omit<InputProps, "onChange"> {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
   containerClassName?: string
   setQuery: (query: string) => void
   setData: (data: TData[]) => void
-  disabled?: boolean
 }
 
-const ExpandableSearchbar = <TData extends object>({
+export function DebouncedInput<TData extends object>({
+  value: initialValue,
+  onChange,
+  debounce = 500,
   containerClassName,
   className,
   id = "query",
   setQuery,
   setData,
   ...props
-}: ExpandableSearchbarProps<TData>) => {
+}: DebouncedInputProps<TData>) {
   const [isOpen, setIsOpen] = React.useState(false)
+  const [value, setValue] = React.useState(initialValue)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   // close search input on clicking outside,
   // and optimize with useCallback hook to prevent unnecessary re-renders
   const closeInput = React.useCallback(() => setIsOpen(false), [])
   useOnClickOutside(inputRef, closeInput)
+
+  // handle debouncing
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value, debounce])
 
   // configure keyboard shortcuts
   React.useEffect(() => {
@@ -66,6 +86,8 @@ const ExpandableSearchbar = <TData extends object>({
             : "w-0 border-none",
           className
         )}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         {...props}
       />
       <Button
@@ -92,5 +114,3 @@ const ExpandableSearchbar = <TData extends object>({
     </div>
   )
 }
-
-export default ExpandableSearchbar

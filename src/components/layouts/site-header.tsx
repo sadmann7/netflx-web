@@ -15,7 +15,7 @@ import { siteConfig } from "@/config/site"
 import { api } from "@/lib/api/api"
 import { searchShows } from "@/lib/fetchers"
 import { cn } from "@/lib/utils"
-import ExpandableSearchbar from "@/components/expandable-searchbar"
+import { DebouncedInput } from "@/components/debounced-input"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/layouts/main-nav"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -47,16 +47,16 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
     return () => window.removeEventListener("scroll", changeBgColor)
   }, [isScrolled])
 
+  // search shows by query
+  async function searchShowsByQuery(value: string) {
+    searchStore.setQuery(value)
+    const shows = await searchShows(value)
+    void searchStore.setShows(shows.results)
+  }
+
   // stores
   const searchStore = useSearchStore()
   const profileStore = useProfileStore()
-
-  // search shows by query
-  async function searchShowsByQuery(e: React.ChangeEvent<HTMLInputElement>) {
-    searchStore.setQuery(e.target.value)
-    const shows = await searchShows(searchStore.query)
-    void searchStore.setShows(shows.results)
-  }
 
   // other profiles query
   const otherProfilesQuery = profileStore.profile
@@ -77,14 +77,14 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center space-x-1.5">
           {mounted ? (
-            <ExpandableSearchbar
+            <DebouncedInput
               containerClassName={cn(
                 path === "/login" || path === "/login/plans" ? "hidden" : "flex"
               )}
               setQuery={searchStore.setQuery}
               setData={searchStore.setShows}
               value={searchStore.query}
-              onChange={(e) => void searchShowsByQuery(e)}
+              onChange={(value) => void searchShowsByQuery(value.toString())}
             />
           ) : (
             <Skeleton className="aspect-square h-7 bg-neutral-700" />
