@@ -70,7 +70,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
       aria-label="Header"
       className={cn(
         "sticky top-0 z-40 w-full",
-        isScrolled ? "bg-white shadow-md dark:bg-neutral-900" : "bg-transparent"
+        isScrolled ? "bg-neutral-900 shadow-md" : "bg-transparent"
       )}
     >
       <nav className="container flex h-16 max-w-screen-2xl items-center justify-between space-x-4 sm:space-x-0">
@@ -135,13 +135,13 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                 <DropdownMenuContent
                   align="end"
                   sideOffset={20}
-                  className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800/90 dark:text-slate-200"
+                  className="w-52 overflow-y-auto overflow-x-hidden rounded-sm bg-neutral-800/90 text-slate-200 dark:bg-neutral-800/90 dark:text-slate-200"
                 >
                   {otherProfilesQuery?.data?.map((profile) => (
                     <DropdownMenuItem
                       key={profile.id}
                       asChild
-                      className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                      className="hover:bg-neutral-700 focus:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                     >
                       <Button
                         aria-label={profile.name}
@@ -186,7 +186,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         <DropdownMenuItem
                           key={index}
                           asChild
-                          className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                          className="hover:bg-neutral-700 focus:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                         >
                           <Link href={item.href}>
                             {item.icon && (
@@ -202,7 +202,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         <DropdownMenuItem
                           key={index}
                           asChild
-                          className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
+                          className="hover:bg-neutral-700 focus:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                         >
                           <span onClick={item.onClick}>
                             {item.icon && (
@@ -223,7 +223,7 @@ const SiteHeader = ({ session }: SiteHeaderProps) => {
                         <DropdownMenuItem
                           key={index}
                           asChild
-                          className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 "
+                          className="hover:bg-neutral-700 focus:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                         >
                           <span
                             className="line-clamp-1 grid place-items-center"

@@ -55,9 +55,9 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-lg font-medium text-slate-600 transition hover:text-slate-900 hover:text-opacity-70 dark:text-slate-300 dark:hover:text-slate-300 dark:hover:text-opacity-70 sm:text-sm",
+                    "flex items-center text-lg font-medium text-slate-300 transition hover:text-slate-300 hover:text-opacity-70 dark:text-slate-300 dark:hover:text-slate-300 dark:hover:text-opacity-70 sm:text-sm",
                     path === item.href &&
-                      "font-bold text-slate-900 dark:text-white",
+                      "font-bold text-white dark:text-white",
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
                   onClick={() => searchStore.setQuery("")}
@@ -72,7 +72,7 @@ export function MainNav({ items }: MainNavProps) {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="h-auto px-2 py-1.5 text-base hover:bg-transparent focus:ring-0 hover:dark:bg-neutral-800 lg:hidden"
+            className="h-auto px-2 py-1.5 text-base hover:bg-neutral-800 focus:ring-0 dark:hover:bg-neutral-800 lg:hidden"
           >
             <Icons.logo className="mr-2 h-4 w-4 text-red-600" />
             <span className="font-bold">Menu</span>
@@ -81,7 +81,7 @@ export function MainNav({ items }: MainNavProps) {
         <DropdownMenuContent
           align="start"
           sideOffset={20}
-          className="w-52 overflow-y-auto overflow-x-hidden rounded-sm dark:bg-neutral-800 dark:text-slate-200"
+          className="w-52 overflow-y-auto overflow-x-hidden rounded-sm bg-neutral-800 text-slate-200 dark:bg-neutral-800 dark:text-slate-200"
         >
           <DropdownMenuLabel>
             <Link
@@ -96,7 +96,7 @@ export function MainNav({ items }: MainNavProps) {
                 className="mr-2 h-4 w-4 text-red-600"
                 aria-hidden="true"
               />
-              {siteConfig.name}
+              <span className="text-white">{siteConfig.name}</span>
             </Link>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -105,7 +105,7 @@ export function MainNav({ items }: MainNavProps) {
               <DropdownMenuItem
                 key={index}
                 asChild
-                className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                className="hover:bg-neutral-700 focus:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
                 <Link
                   href={item.href}
@@ -124,7 +124,7 @@ export function MainNav({ items }: MainNavProps) {
               <DropdownMenuItem
                 key={index}
                 asChild
-                className="dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                className="hover:bg-neutral-700 focus:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
                 <div onClick={item.onClick}>
                   {item.icon && (

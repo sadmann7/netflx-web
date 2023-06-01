@@ -45,14 +45,14 @@ const SelectInput = <TFieldValues extends FieldValues>({
           <SelectTrigger className="w-[180px] rounded-none">
             <SelectValue placeholder={defaultValue} />
           </SelectTrigger>
-          <SelectContent className="rounded-none dark:bg-neutral-950/95">
+          <SelectContent className="rounded-none text-slate-400 bg-neutral-950/95 dark:bg-neutral-950/95">
             <SelectGroup>
               {label && <SelectLabel>{label}</SelectLabel>}
               {options.map((option) => (
                 <SelectItem
                   key={option}
                   value={option}
-                  className="dark:focus:bg-neutral-800"
+                  className="focus:bg-neutral-800 dark:focus:bg-neutral-800"
                 >
                   {formatEnum(option)}
                 </SelectItem>

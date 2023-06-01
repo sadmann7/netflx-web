@@ -202,7 +202,7 @@ const EditProfileForm = ({ profile }: EditProfileFormProps) => {
                 size="auto"
                 className={cn(
                   watch("name")?.length > 0 &&
-                    "bg-red-500 text-slate-900 dark:bg-red-600 dark:text-slate-50"
+                    "bg-red-500 text-slate-50 dark:bg-red-600 dark:text-slate-50"
                 )}
                 disabled={updateProfileMutation.isLoading}
               >

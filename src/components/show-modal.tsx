@@ -138,7 +138,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
       }}
       open={open}
     >
-      <DialogContent className="w-full overflow-hidden rounded-md p-0 text-left align-middle shadow-xl dark:bg-zinc-900 sm:max-w-3xl">
+      <DialogContent className="w-full overflow-hidden rounded-md bg-zinc-900 p-0 text-left align-middle shadow-xl dark:bg-zinc-900 sm:max-w-3xl">
         <div className="relative aspect-video">
           <div
             className={cn(
@@ -192,7 +192,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
                     isAdded ? "Remove from My List" : "Add to My List"
                   }
                   variant="ghost"
-                  className="h-auto rounded-full bg-neutral-400 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-400 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+                  className="h-auto rounded-full bg-neutral-800 p-1.5 ring-1 ring-slate-400 hover:bg-neutral-800 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
                   onClick={() => {
                     !userQuery.data && router.push("/login")
 
@@ -250,7 +250,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
             <Button
               aria-label={`${isMuted ? "Unmute" : "Mute"} video`}
               variant="ghost"
-              className="h-auto rounded-full bg-neutral-400 p-1.5 opacity-50 ring-1 ring-slate-400 hover:bg-neutral-400 hover:opacity-100 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
+              className="h-auto rounded-full bg-neutral-800 p-1.5 opacity-50 ring-1 ring-slate-400 hover:bg-neutral-800 hover:opacity-100 hover:ring-white focus:ring-offset-0 dark:bg-neutral-800 dark:hover:bg-neutral-800"
               onClick={() => setIsMuted(!isMuted)}
             >
               {isMuted ? (
@@ -282,7 +282,7 @@ const ShowModal = ({ open, setOpen }: ShowModalProps) => {
               </span>
             )}
           </div>
-          <DialogDescription className="line-clamp-3 text-xs text-slate-700 dark:text-slate-50 sm:text-sm">
+          <DialogDescription className="line-clamp-3 text-xs text-slate-50 dark:text-slate-50 sm:text-sm">
             {modalStore.show?.overview ?? "-"}
           </DialogDescription>
           <div className="flex items-center gap-2 text-xs sm:text-sm">
