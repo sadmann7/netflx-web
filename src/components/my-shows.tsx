@@ -31,6 +31,10 @@ const MyShows = ({ user }: MyShowsProps) => {
     return <ShowSkeleton variant="without-title" />
   }
 
+  if (searchStore.query.length > 0) {
+    return <ShowsGrid shows={searchStore.shows} />
+  }
+
   if (myShowsQuery?.data?.length === 0) {
     return (
       <div className="container flex w-full max-w-screen-2xl flex-col gap-2.5">
@@ -40,10 +44,6 @@ const MyShows = ({ user }: MyShowsProps) => {
         </p>
       </div>
     )
-  }
-
-  if (searchStore.query.length > 0) {
-    return <ShowsGrid shows={searchStore.shows} />
   }
 
   return (
